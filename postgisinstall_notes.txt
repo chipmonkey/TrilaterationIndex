@@ -1,0 +1,72 @@
+# Starting a postgis install with a basic ubuntu 16.04 server...
+
+# Install compilers and that sort of thing...
+sudo apt install build-essential
+sudo apt install pkg-config
+sudo apt install autoconf
+sudo apt install libreadline-dev
+sudo apt install zlib1g-dev
+
+
+# Download and build OSGeo's GEOS library
+# https://trac.osgeo.org/geos/
+wget http://download.osgeo.org/geos/geos-3.6.2.tar.bz2
+tar -xjvf geos-3.6.2.tar.bz2
+cd geos
+./configure
+make
+make check
+sudo make install
+
+
+# Download and build proj.4 : http://proj4.org/
+wget http://download.osgeo.org/proj/proj-4.9.3.tar.gz
+tar -xzvf proj-4.9.3.tar.gz
+cd proj-4.9.3
+./configure
+make
+sudo make install
+
+# Download and build GDAL
+# http://gdal.org/
+wget http://download.osgeo.org/gdal/2.2.2/gdal-2.2.2.tar.gz
+tar -xzvf gdal-2.2.2.tar.gz
+cd gdal-2.2.2
+./configure
+make
+sudo make install
+
+# Libxml2
+# http://www.xmlsoft.org/
+wget ftp://xmlsoft.org/libxml2/libxml2-2.9.5.tar.gz
+tar -xzvf libxml2-2.9.5.tar.gz
+cd libxml2-2.9.5/
+./configure
+make
+sudo make install
+
+# JSON-C
+# https://github.com/json-c/json-c/wiki
+wget https://s3.amazonaws.com/json-c_releases/releases/json-c-0.12.1.tar.gz
+tar -xzvf json-c-0.12.1.tar.gz
+cd json-c-0.12.1
+./configure
+sudo make install
+
+# PostgreSQL
+# https://wiki.postgresql.org/wiki/Developer_FAQ
+wget https://ftp.postgresql.org/pub/source/v9.6.5/postgresql-9.6.5.tar.bz2
+tar -xjvf postgresql-9.6.5.tar.bz2
+cd postgresql-9.6.5
+./configure
+udo make install
+
+
+# PostGIS
+# http://postgis.net/source/
+wget http://download.osgeo.org/postgis/source/postgis-2.3.3.tar.gz
+tar -xzvf postgis-2.3.3.tar.gz
+cd postgis-2.3.3
+./configure
+make
+sudo make install
