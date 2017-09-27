@@ -16,9 +16,11 @@ value  <- 100 * cities$pop / max(cities$pop)
 globejs(bg="black", lat=cities$lat,     long=cities$long, value=value, 
         rotationlat=-0.34,     rotationlong=-0.38, fov=30)
 
-points <- data.frame(id = 1, lat = 90.000, long=0.000)
-points <- rbind(points, c(2, 38.26, -85.76))
-points <- rbind(points, c(3, -9.42, 46.33))
+
+# The three fixed Trilateration points
+points <- data.frame(id = 1, lat = 90.000, long=0.000)  # The north pole
+points <- rbind(points, c(2, 38.26, -85.76))  # Louisville, KY
+points <- rbind(points, c(3, -9.42, 46.33))  # 
 # points <- rbind(points, c(3, -19.22, 159.93))
 
 arcs <- data.frame(cbind(points[c(1,2,3), c('lat', 'long')],
