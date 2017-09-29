@@ -49,3 +49,10 @@ draw.circle(x = -25*(sqrt(3)-2), y = tan(-pi/3)*((-25*(sqrt(3)-2))-50), radius =
   myTrilateration <- cbind(myPoints, myTrilat)
   myTrilateration
   
+  plot(x=NULL, y=NULL, xlim=c(0,100), ylim=c(0,100), asp = 1,
+       xlab='X', ylab='Y')
+  points(myTrilateration$x, myTrilateration$y)
+  draw.circle(x = 50, y = 0, radius = 1, lwd = 1, col="red")
+  draw.circle(x = 25*(2+sqrt(3)), y = tan(pi/3)*((25*(2+sqrt(3)))-50), radius = 1, lwd = 1, col="red")
+  draw.circle(x = -25*(sqrt(3)-2), y = tan(-pi/3)*((-25*(sqrt(3)-2))-50), radius = 1, lwd = 1, col="red")
+  
