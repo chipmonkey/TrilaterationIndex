@@ -35,9 +35,23 @@ draw.circle(x = -25*(sqrt(3)-2), y = tan(-pi/3)*((-25*(sqrt(3)-2))-50), radius =
     
   }
 
-  # 10 Random Points
+  # 10 Random Points (seed ensures reproducibility):
+  set.seed(1729)
   myPoints <- data.frame(x = runif(n = 10, min = 0, max = 100),
-                   y = runif(n = 10, min = 0, max = 100))
+                    y = runif(n = 10, min = 0, max = 100))
+  myPoints
+
+  #    x        y
+  # 1  58.52396 53.516719
+  # 2  43.73940 43.418684
+  # 3  57.28944  7.950161
+  # 4  35.32139 58.321179
+  # 5  86.12714 52.201894
+  # 6  41.08036 78.065907
+  # 7  51.14533 47.157734
+  # 8  15.42852 80.836340
+  # 9  85.13531 64.090063
+  # 10 99.60833 78.055071
   
   myTrilat <- data.frame(d1=NULL, d2=NULL, d3=NULL)
   for(i in 1:nrow(myPoints)) {
@@ -51,7 +65,7 @@ draw.circle(x = -25*(sqrt(3)-2), y = tan(-pi/3)*((-25*(sqrt(3)-2))-50), radius =
   
   plot(x=NULL, y=NULL, xlim=c(0,100), ylim=c(0,100), asp = 1,
        xlab='X', ylab='Y')
-  points(myTrilateration$x, myTrilateration$y)
+  points(myTrilateration$x, myTrilateration$y, col="blue", pch=16, asp=1)
   draw.circle(x = 50, y = 0, radius = 1, lwd = 1, col="red")
   draw.circle(x = 25*(2+sqrt(3)), y = tan(pi/3)*((25*(2+sqrt(3)))-50), radius = 1, lwd = 1, col="red")
   draw.circle(x = -25*(sqrt(3)-2), y = tan(-pi/3)*((-25*(sqrt(3)-2))-50), radius = 1, lwd = 1, col="red")
