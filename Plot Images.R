@@ -34,11 +34,16 @@ draw.circle(x = -25*(sqrt(3)-2), y = tan(-pi/3)*((-25*(sqrt(3)-2))-50), radius =
     return(d)
   }
 
+  # Function to generate lots of random points
+  makepoints <- function(n, min, max) {
+    set.seed(1729)
+    myPoints <- data.frame(x = runif(n = n, min = min, max = max),
+                           y = runif(n = n, min = min, max = max))
+    return(myPoints)
+  }
+
   # 10 Random Points (seed ensures reproducibility):
-  set.seed(1729)
-  myPoints <- data.frame(x = runif(n = 10, min = 0, max = 100),
-                    y = runif(n = 10, min = 0, max = 100))
-  myPoints
+  myPoints <- makepoints(10, 0, 100)
 
   #    x        y
   # 1  58.52396 53.516719
@@ -92,7 +97,7 @@ draw.circle(x = -25*(sqrt(3)-2), y = tan(-pi/3)*((-25*(sqrt(3)-2))-50), radius =
 
 # Plotting things...
   
-  plot(myTrilateration[,1])
+  plot(myTrilateration[,1], ylim=c(0,100))
   lines(myTrilateration[,1])
   points(myTrilateration[,2], col=2)
   lines(myTrilateration[,2], col=2)
@@ -103,3 +108,31 @@ draw.circle(x = -25*(sqrt(3)-2), y = tan(-pi/3)*((-25*(sqrt(3)-2))-50), radius =
   points(myTrilateration[,5], col=5)
   lines(myTrilateration[,5], col=5)
   
+  
+manyPoints <- makepoints(10000, 0, 100)
+
+maketrilat <- function(myPoints, myTri) {
+  myTrilat <- data.frame(d1=NULL, d2=NULL, d3=NULL)
+  for(i in 1:nrow(myPoints)) {
+    myTrilat[i, 'd1'] <- myDist(c(myPoints[i,'x'], myPoints[i, 'y']), c(myTri[1,'x'], myTri[1,'y']))
+    myTrilat[i, 'd2'] <- myDist(c(myPoints[i,'x'], myPoints[i, 'y']), c(myTri[2,'x'], myTri[2,'y']))
+    myTrilat[i, 'd3'] <- myDist(c(myPoints[i,'x'], myPoints[i, 'y']), c(myTri[3,'x'], myTri[3,'y']))
+  }
+  myTrilateration <- cbind(myPoints, myTrilat)
+  return(myTrilateration)
+}
+
+
+myTrilateration <- maketrilat(manyPoints, myTri)
+head(myTrilateration)
+
+plot(myTrilateration[,1], ylim=c(0,100), col=rgb(1,0,0,0.2))
+# lines(myTrilateration[,1])
+points(myTrilateration[,2], col=rgb(0,1,0,0.2))
+lines(myTrilateration[,2], col=2)
+points(myTrilateration[,3], col=rgb(0,0,1,0.2))
+lines(myTrilateration[,3], col=3)
+points(myTrilateration[,4], col=4)
+lines(myTrilateration[,4], col=4)
+points(myTrilateration[,5], col=5)
+lines(myTrilateration[,5], col=5)
