@@ -37,8 +37,13 @@ sampleLL <- read.csv('data/lat_long_synthetic.csv')
                      sampleLL$Latitude < maxlat)
 sampleLL <- sampleLL[x,]
 
+counties <- map_data('county')
+ky_counties <- subset(counties, region == "kentucky")
+
 ggplot(data = kentucky) + 
   geom_polygon(aes(x = long, y = lat, group = group), fill = "deepskyblue", color = "black") + 
   coord_fixed(1.3) +
-  geom_point(data=sampleLL, aes(x=Longitude, y=Latitude), alpha = 0.1)
+  geom_point(data=sampleLL, aes(x=Longitude, y=Latitude), alpha = 0.1) +
+  geom_polygon(data=ky_counties, aes(x=long, y=lat, group=group), fill = NA, color = "white")
+  
 
