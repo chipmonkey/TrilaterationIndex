@@ -38,7 +38,7 @@ sampleLL <- read.csv('data/lat_long_synthetic.csv')
 sampleLL <- sampleLL[x,]
 
 ggplot(data = kentucky) + 
-  geom_polygon(aes(x = long, y = lat, group = group), fill = "palegreen", color = "black") + 
+  geom_polygon(aes(x = long, y = lat, group = group), fill = "deepskyblue", color = "black") + 
   coord_fixed(1.3) +
-  geom_point(data=sampleLL, aes(x=Longitude, y=Latitude), alpha = 0.2)
+  geom_point(data=sampleLL, aes(x=Longitude, y=Latitude), alpha = 0.1)
 
