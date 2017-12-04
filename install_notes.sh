@@ -28,3 +28,5 @@ update referencepoints set st_refpoint = st_makepoint(Latitude, Longitude);
 alter table sample_categorized add column SampleID serial unique;
 alter table referencepoints add column RefID serial unique;
 
+SampleID, RefID, st_distance(s.st_geompoint, r.st_refpoint)
+into sample_ref_distances from sample_cat_gis s cross join referencepoints r;
