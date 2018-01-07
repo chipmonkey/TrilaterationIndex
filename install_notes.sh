@@ -12,21 +12,22 @@ grant all privileges on database trilateration to chipmonkey;
 \q
 
 create table sample_categorized (Latitude numeric, Longitude numeric, Category smallint);
-copy sample_categorized from '~/Documents/GradSchool/Thesis/TrilaterationIndex/data/lat_long_categorized.csv' with (FORMAT csv);
+COPY sample_categorized from '/home/chipmonkey/Documents/GradSchool/Thesis/TrilaterationIndex/data/lat_long_categorized.csv' CSV HEADER; 
+alter table sample_categorized add column SampleID serial unique;
 
-select SampleID, ST_MakePoint(Longitude, Latitude) as st_geompoint, Longitude, Latitude, category into sample_cat_gis from sample_categorized;
+select SampleID, ST_SetSRID(ST_Point(Longitude, Latitude), 4326)::geography as st_geompoint, 
+Longitude, Latitude, category into sample_cat_gis from sample_categorized;
 
-create table referencepoints (Name varchar(50), Latitude numeric, Longitude numeric, st_refpoint geometry;
+create table referencepoints (Name varchar(50), Latitude numeric, Longitude numeric, st_refpoint geography);
 
 
 insert into referencepoints (name, latitude, longitude) values ('North Pole', 90, 0);
 insert into referencepoints (name, latitude, longitude) values ('Louisville KY', 38.26, -85.76);
-insert into referencepoints (name, latitude, longitude) values ('New Caledonia', -19.22, 159.93);
+insert into referencepoints (name, latitude, longitude) values ('Phantom Sandy Island', -19.22, 159.93);
 insert into referencepoints (name, latitude, longitude) values ('Aldabra', -9.42, 46.63);
 update referencepoints set st_refpoint = st_makepoint(Latitude, Longitude);
 
-alter table sample_categorized add column SampleID serial unique;
 alter table referencepoints add column RefID serial unique;
 
-SampleID, RefID, st_distance(s.st_geompoint, r.st_refpoint)
+select SampleID, RefID, st_distance(s.st_geompoint, r.st_refpoint)
 into sample_ref_distances from sample_cat_gis s cross join referencepoints r;
