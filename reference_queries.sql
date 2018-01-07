@@ -32,7 +32,12 @@ where a.category = 10 and b.category = 11
 group by a.sampleid;
 -- 258ms
 
-create or replace function CatMinDist_timing(leftcat int, rightcat int) RETURNS numeric(18,3)
+create table query_timings (leftcat int, rightcat int, timing_ms numeric(18,3));
+alter table query_timings add column id serial primary key;
+alter table query_timings add column notes varchar(1000);
+
+
+create or replace function CatMinDist_timing(leftcat int, rightcat int, notes varchar(1000) default 'no notes') RETURNS numeric(18,3)
 AS $$
    declare StartTime timestamp;
            EndTime timestamp;
@@ -47,13 +52,29 @@ BEGIN
    group by a.sampleid;
    EndTime := clock_timestamp();
    elapsedms := cast(extract(epoch from (EndTime - StartTime)) as numeric(18,3));
+   insert into query_timings (leftcat, rightcat, timing_seconds, notes) values (leftcat, rightcat, elapsedms, notes);
    RETURN elapsedms;
 END
 $$  LANGUAGE plpgsql
 ;
 
-create table query_timings (leftcat int, rightcat int, timing_ms numeric(18,3));
+-- insert into query_timings select 9 as leftcat, 10 as rightcat, catmindist_timing(9, 10) as timing_ms;
+select 9 as leftcat, 10 as rightcat, catmindist_timing(9, 10, 'Initial Tests') as timing_ms;
 
-insert into query_timings select 9 as leftcat, 10 as rightcat, catmindist_timing(9, 10) as timing_ms;
+create index sample_cat_gix on sample_cat_gis using gist(st_geompoint);
+
+create or replace function Run_timings(notes varchar(1000) default 'run_timings') RETURNS int
+as $$
+   -- Really, no input sanitization or robustness.  It's ok.
+  declare i int;  j int;
+BEGIN
+   for i in 0..15 LOOP
+      for j in 0..15 LOOP
+         perform catmindist_timing(i, j, notes);
+      END LOOP;
+   END LOOP;
+   RETURN i;
+END
+$$ LANGUAGE plpgsql;
 
 
