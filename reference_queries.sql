@@ -35,7 +35,7 @@ group by a.sampleid;
 create table query_timings (leftcat int, rightcat int, timing_ms numeric(18,3));
 alter table query_timings add column id serial primary key;
 alter table query_timings add column notes varchar(1000);
-
+alter table query_timings add column row_stamp timestamp default now();
 
 create or replace function CatMinDist_timing(leftcat int, rightcat int, notes varchar(1000) default 'no notes') RETURNS numeric(18,3)
 AS $$
