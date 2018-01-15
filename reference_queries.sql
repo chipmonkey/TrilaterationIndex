@@ -77,4 +77,19 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
+copy query_timings to '/tmp/query_timings.csv' DELIMITER ',' CSV HEADER;
+COPY (SELECT * FROM v_category_counts) to '/tmp/category_counts.csv' DELIMITER ',' CSV HEADER;
+
+
+select scg.st_geompoint, scg.longitude, scg.latitude, scg.category,
+  st_distance(scg.st_geompoint, rp1.st_refpoint) as RefDist1,
+  st_distance(scg.st_geompoint, rp2.st_refpoint) as RefDist2,
+  st_distance(scg.st_geompoint, rp3.st_refpoint) as RefDist3,
+  st_distance(scg.st_geompoint, rp4.st_refpoint) as RefDist4
+into sample_gis_ref_dists from sample_cat_gis scg
+join referencepoints rp1 on rp1.refid = 1
+join referencepoints rp2 on rp2.refid = 2
+join referencepoints rp3 on rp3.refid = 3
+join referencepoints rp4 on rp4.refid = 4;
+-- 150000 Records in 3 seconds
 
