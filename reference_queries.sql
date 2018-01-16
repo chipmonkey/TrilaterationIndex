@@ -138,3 +138,15 @@ join referencepoints rp3 on rp3.refid = 3
 join referencepoints rp4 on rp4.refid = 4;
 -- 150000 Records in 3 seconds
 
+trilateration=# select sum(timing_seconds), notes
+from query_timings
+group by notes;
+    sum    |            notes             
+-----------+------------------------------
+     0.097 | test
+ 54866.090 | Full cycle default gis index
+ 13758.834 | Initial sqrt run
+   146.951 | GIS Index
+    29.058 | Vacuumed
+   942.526 | Initial Tests
+(6 rows)
