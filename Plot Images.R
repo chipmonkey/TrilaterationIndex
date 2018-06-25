@@ -84,18 +84,26 @@ draw.circle(x = -25*(sqrt(3)-2), y = tan(-pi/3)*((-25*(sqrt(3)-2))-50), radius =
   plot(x=NULL, y=NULL, xlim=c(0,100), ylim=c(0,100), asp = 1,
        xlab='X', ylab='Y')
   points(myTrilateration[c(2,10),'x'], myTrilateration[c(2,10),'y'], col="blue", pch=16, asp=1)
+  points(myTrilateration, col="blue", pch=16, asp=1)
+  text(myTrilateration[2,'x'], myTrilateration[2,'y'], labels = 'x2', pos=4)
+  text(myTrilateration[10,'x'], myTrilateration[10,'y'], labels = 'x10', pos=2)
+  text(myTrilateration, pos = 1)
+  
   draw.circle(x = myTri[1,'x'], y = myTri[1,'y'], radius = 1, lwd = 1, col="red")
   draw.circle(x = myTri[2,'x'], y = myTri[2,'y'], radius = 1, lwd = 1, col="red")
   draw.circle(x = myTri[3,'x'], y = myTri[3,'y'], radius = 1, lwd = 1, col="red")
+  text(myTri[1, 'x'], myTri[1, 'y'], labels = 'F1', pos=2)
+  text(myTri[2, 'x'], myTri[2, 'y'], labels = 'F2', pos=1)
+  text(myTri[3, 'x'], myTri[3, 'y'], labels = 'F3', pos=2)
   
-  draw.circle(x=myTri[1,'x'], y=myTri[1,'y'], radius=myTrilateration[2,'d1'])
-  draw.circle(x=myTri[1,'x'], y=myTri[1,'y'], radius=myTrilateration[10,'d1'])
+  draw.circle(x=myTri[1,'x'], y=myTri[1,'y'], radius=myTrilateration[2,'d1'], border="red")
+  draw.circle(x=myTri[1,'x'], y=myTri[1,'y'], radius=myTrilateration[10,'d1'], border = "red")
 
-  draw.circle(x=myTri[2,'x'], y=myTri[2,'y'], radius=myTrilateration[2,'d2'])
-  draw.circle(x=myTri[2,'x'], y=myTri[2,'y'], radius=myTrilateration[10,'d2'])
+  draw.circle(x=myTri[2,'x'], y=myTri[2,'y'], radius=myTrilateration[2,'d2'], border="blue")
+  draw.circle(x=myTri[2,'x'], y=myTri[2,'y'], radius=myTrilateration[10,'d2'], border="blue")
 
-  draw.circle(x=myTri[3,'x'], y=myTri[3,'y'], radius=myTrilateration[2,'d3'])
-  draw.circle(x=myTri[3,'x'], y=myTri[3,'y'], radius=myTrilateration[10,'d3'])
+  draw.circle(x=myTri[3,'x'], y=myTri[3,'y'], radius=myTrilateration[2,'d3'], border="green")
+  draw.circle(x=myTri[3,'x'], y=myTri[3,'y'], radius=myTrilateration[10,'d3'], border="green")
   
 
 # Triangles...

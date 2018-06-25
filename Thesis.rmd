@@ -129,19 +129,23 @@ The trilateration of those points, that is, the three points $d_1, d_2, d_3 = {d
   myTrilateration
 ```
 
+Note that we do not need to continue to store the original latitude and longitude.  We can convert the three $d_n$ distances back to Latitude and Longitude within some $\epsilon$ based on the available precision.  Geospatial coordinates in Latitude and Longitude with six digits of precision are accurate to within $<1\ meter$, and 8 digits is accuract to within $<1\ centimeter$, although this varies based on the latitude and longitude itself; latitudes closer to the equator are less accurate than those at the poles.  The distance values $d_x$ are more predictable, since they measure distances directly.  While the units in this sample are arbitrary, $F(x)$ in a real geospatial example could be in kilometers, so three decimal digits would precisely relate to $1 meter$, and so on.  This is one reason that we will later examine using the trilateration values as an outright replacement for Longitude and Latitide, and this feature is important when considering storage requirements for this data in large real-world database applications.
 
-Those $10$ points are shown here in blue with the three reference points $F_1, F_2, F_3$ in red:
+For now, continuing with the example, those $10$ points are shown here in blue with the three reference points $F_1, F_2, F_3$ in red:
 
 ```{r plot10Points, fig.align="center", echo=FALSE}
 
   plot(x=NULL, y=NULL, xlim=c(0,100), ylim=c(0,100), asp = 1,
        xlab='X', ylab='Y', main = "Sample Reference and Data Points")
-  points(myTrilateration$x, myTrilateration$y, col="blue", pch=16, asp=1)
+  points(myTrilateration, col="blue", pch=16, asp=1)
+  text(myTrilateration, pos = 1)
   
   draw.circle(x = myTri[1,'x'], y = myTri[1,'y'], radius = 1, lwd = 1, col="red")
   draw.circle(x = myTri[2,'x'], y = myTri[2,'y'], radius = 1, lwd = 1, col="red")
   draw.circle(x = myTri[3,'x'], y = myTri[3,'y'], radius = 1, lwd = 1, col="red")
-
+  text(myTri[1, 'x'], myTri[1, 'y'], labels = 'F1', pos=2)
+  text(myTri[2, 'x'], myTri[2, 'y'], labels = 'F2', pos=1)
+  text(myTri[3, 'x'], myTri[3, 'y'], labels = 'F3', pos=2)
 ```
 
 To help understand the above values, the following chart shows the distances for points $x_2$ and $x_10$ above.  Specifically, the distances $d_1$ from point $F_1$ are shown as arcs in red, the distances $d_2$ from point $F_2$ in blue, and $d_3$ from point $F_3$ in green.  
@@ -173,6 +177,10 @@ To help understand the above values, the following chart shows the distances for
   draw.circle(x=myTri[3,'x'], y=myTri[3,'y'], radius=myTrilateration[10,'d3'], border="darkgreen")
 ```
 
+
+#### Use of trilateration as an index for nearest-neighbor
+
+One of our expected benefits of this approach is an improvement in algorithms like nearest-neighbor search.
 
 
 ### Geospatial Example 
