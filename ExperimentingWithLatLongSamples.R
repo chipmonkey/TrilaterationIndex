@@ -1,7 +1,8 @@
 sampledata <- read.csv('data/lat_long_synthetic.csv')
 head(sampledata)
+library(devtools)
+install_github('chipmonkey/nnclust')
 library(nnclust)
-# install_github('chipmonkey/nnclust')
 
 mynn <- nncluster(data.matrix(sampledata), threshold = 0.2)
 
