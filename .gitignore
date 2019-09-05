@@ -35,3 +35,8 @@ vignettes/*.pdf
 
 # iPython checkpoints:
 .ipynb_checkpoints
+
+# Data Files
+*.hdf5
+*.ivecs
+*.fvecs
