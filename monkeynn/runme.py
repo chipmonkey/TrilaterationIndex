@@ -1,6 +1,6 @@
 from monkeynn import *
 from dolphinn import *
-import utils as fr
+from datautils import fvecs as fr
 
 (D1,P)=fr.fvecs_read("siftsmall/siftsmall_base.fvecs")
 (D2,Q)=fr.fvecs_read("siftsmall/siftsmall_query.fvecs")

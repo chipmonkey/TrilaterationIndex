@@ -21,7 +21,17 @@ class monkeynn:
         self.DRanges = np.dstack((minD, maxD))[0]
 
         # Generate D random D-dimensional points:
-        self.ReferencePoints = self._randomPoints(self.D, self.DRanges, self.D)
+        nReferencePoints - ceil(log(self.D))
+        self.ReferencePoints = self._randomPoints(self.D,
+                                                  self.DRanges,
+                                                  nReferencePoints)
+
+        self.myIndex = np.zeros(nReferencePoints, self.n)
+        for i, rp in enumerate(ReferencePoints):
+            for j, myP in enumerate(P):
+                myIndex[i, j] = distance.euclidean(self.ReferencPoints[i],
+                                                   self.P[j])
+        print("Myshape: {}".format(myIndex.shape))
 
     def _randomPoints(self, D, DRanges, n):
         """Generate n random D-dimensional points
@@ -36,7 +46,7 @@ class monkeynn:
         print("Population is {}x{}".format(self.n, self.D))
         print(distance.euclidean(self.ReferencePoints[0],
                                  self.P[0]))
-    
+
     def queries(self, Q, m):
         """Perform nearest neighbor queries
         Input: Q - numpy.ndarray
