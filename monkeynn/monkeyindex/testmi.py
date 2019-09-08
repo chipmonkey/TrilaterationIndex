@@ -33,11 +33,10 @@ print(x.length)
 ra = numpy.random.random_sample(size=(1000))
 x.loadmi(ra)
 print(x.mi)
-closest = x.closestN(0.8, 10)
-print(closest)
 
-print("This is an error:")
-print(x.mi[closest])
 
-print("This also generates an error:")
-closest = x.closestN(8, 10)
+
+closest = x.closestN(0.8, 20)
+print("test: closest is: {}".format(closest))
+print(ra[closest])
+

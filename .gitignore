@@ -40,3 +40,6 @@ vignettes/*.pdf
 *.hdf5
 *.ivecs
 *.fvecs
+
+# Python
+__pycache__/

@@ -60,7 +60,6 @@ class monkeyindex:
             return(lefti - 1, righti)
         dleft = tdist - self.mi['distance'][lefti]
         dright = self.mi['distance'][righti] - tdist
-        print("distances: {}, {}".format(dleft, dright))
         if (dleft <= dright):
             return(lefti-1, righti)
         return(lefti, righti+1)
@@ -76,6 +75,8 @@ class monkeyindex:
         righti = numpy.searchsorted(self.mi['distance'],
                                     tdist,
                                     side='right')
+        if(righti >= self.length):
+            righti = self.length - 1
         if(righti > 0):
             lefti = righti - 1
         else:
@@ -84,7 +85,6 @@ class monkeyindex:
         rdist = self.mi['distance'][righti] - tdist
         if (ldist < rdist):
             righti = lefti
-        print("Starting at {}".format(righti))
         if n == 1:
             print("test this... it may not work")
             return(self.mi['mindex'][righti])
@@ -93,5 +93,7 @@ class monkeyindex:
         while((righti - lefti) < n - 1):
             lefti, righti = self._getNextClosest(tdist, lefti, righti)
         print("Final lefti: {} righti: {}".format(lefti, righti))
+        print("which contains:")
+        print(self.mi[lefti:righti])
         closest = self.mi['mindex'][lefti:righti+1]
         return(closest)
