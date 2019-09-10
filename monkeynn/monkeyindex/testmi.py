@@ -3,7 +3,7 @@ import numpy
 import monkeyindex
 
 x = monkeyindex.monkeyindex(5)
-print(x.length)
+assert x.length == 5
 print(x.mi)
 print(x.mi['distance'])
 print(x.mi['distance'].shape)
@@ -32,11 +32,8 @@ x = monkeyindex.monkeyindex(1000)
 print(x.length)
 ra = numpy.random.random_sample(size=(1000))
 x.loadmi(ra)
-print(x.mi)
-
-
+# print(x.mi)
 
 closest = x.closestN(0.8, 20)
 print("test: closest is: {}".format(closest))
 print(ra[closest])
-
