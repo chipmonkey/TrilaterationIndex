@@ -16,7 +16,7 @@ class ndim:
         self.points = points
         self.n, self.m = self.points.shape
         self.refpoints = self._setrefpoints()
-        self.monkeyindex = self._buildmonkeyindex()
+        self.monkeyindexes = self._buildmonkeyindex()
 
     def _setrefpoints(self):
         """ Create reference points in m dimensions
@@ -54,12 +54,15 @@ class ndim:
 
         assert self.points.size
         assert type(self.points) == numpy.ndarray
-        x = mi.monkeyindex(self.n)
-        mydarray = self.builddistances(self.refpoints[2])
-        x.loadmi(mydarray)
-        return(x)
+        allmi = []
+        for srp in self.refpoints:
+            x = mi.monkeyindex(self.n)
+            mydarray = self._builddistances(srp)
+            x.loadmi(mydarray)
+            allmi.append(x)
+        return(allmi)
 
-    def builddistances(self, refpoint):
+    def _builddistances(self, refpoint):
         """ Create an array of distances suitable for loadmi
         Input: self needed for self.points with shape (n, m)
                refpoint is an m-dimensional point
