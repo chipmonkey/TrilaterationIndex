@@ -99,3 +99,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# No tar files by default
+*.tar.gz
+*.tgz

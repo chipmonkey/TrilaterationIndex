@@ -1,6 +1,6 @@
 import numpy
 
-from monkeyindex import mi
+from monkeynn import mi
 
 
 def test_madness():
