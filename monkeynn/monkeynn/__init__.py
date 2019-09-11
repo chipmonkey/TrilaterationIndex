@@ -8,7 +8,7 @@ designed to be used on a 0..n indexed array.  All optimizations
 are designed with that in mind.
 """
 
-from . import monkeyindex as mi
+from monkeynn import monkeyindex as mi
 
 
 def __main__():
