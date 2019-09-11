@@ -9,6 +9,7 @@ are designed with that in mind.
 """
 
 from monkeynn import monkeyindex as mi
+from monkeynn import ndim
 
 
 def __main__():
