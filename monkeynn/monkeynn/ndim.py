@@ -5,6 +5,8 @@ to facilitate fast nearest neighbor searching
 """
 
 import numpy
+import time
+
 from scipy.spatial import distance
 
 from monkeynn import monkeyindex as mi
@@ -57,8 +59,11 @@ class ndim:
         allmi = []
         for srp in self.refpoints:
             x = mi.monkeyindex(self.n)
+            print("starting builddistances: {} seconds".format(time.time()))
             mydarray = self._builddistances(srp)
+            print("loadmi: {} seconds".format(time.time()))
             x.loadmi(mydarray)
+            print("append: {} seconds".format(time.time()))
             allmi.append(x)
         return(allmi)
 
