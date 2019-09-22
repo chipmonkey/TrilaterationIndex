@@ -7,8 +7,10 @@ presently d is always a fixed float datatype, but this may be
 investigated for performance
 """
 
+import logging
 import numpy
 
+log = logging.getLogger('monkeynn')
 
 class monkeyindex:
 
@@ -27,7 +29,7 @@ class monkeyindex:
         try:
             float(inarray[self.length-1])
         except ValueError:  # pylint: disable=bare-except
-            print("Cannot convert input array to floats")
+            log.debug("Cannot convert input array to floats")
             raise
 
         self.mi['mindex'] = list(range(self.length))
@@ -86,14 +88,14 @@ class monkeyindex:
         if (ldist < rdist):
             righti = lefti
         if n == 1:
-            print("test this... it may not work")
+            log.debug("test this... it may not work")
             return(self.mi['mindex'][righti])
         if righti > 0:
             lefti, righti = self._getNextClosest(tdist, righti, righti)
         while((righti - lefti) < n - 1):
             lefti, righti = self._getNextClosest(tdist, lefti, righti)
-        print("Final lefti: {} righti: {}".format(lefti, righti))
-        print("which contains:")
-        print(self.mi[lefti:righti])
+        log.debug("Final lefti: {} righti: {}".format(lefti, righti))
+        log.debug("which contains:")
+        log.debug(self.mi[lefti:righti])
         closest = self.mi['mindex'][lefti:righti+1]
         return(closest)
