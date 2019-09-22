@@ -9,6 +9,8 @@ from monkeynn import mi
 #    with open("something.pickl", "wb") as outpickle:
 #        pickle.dump(closest, outpickle)
 
+
+# This should probably be in a @pytest.fixture
 pypath = os.path.dirname(os.path.abspath(__file__))
 cfilename = os.path.join(pypath, "testdata", "closest1000.pickl")
 racfilename = os.path.join(pypath, "testdata", "raclosest1000.pickl")

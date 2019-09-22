@@ -4,6 +4,7 @@ and associated referencepoints and monkeyindexes
 to facilitate fast nearest neighbor searching
 """
 
+import logging
 import numpy
 import time
 
@@ -11,16 +12,18 @@ from scipy.spatial import distance
 
 from monkeynn import monkeyindex as mi
 
+log = logging.getLogger('monkeynn')
+
 
 class ndim:
 
     def __init__(self, points):
         self.points = points
         self.n, self.m = self.points.shape
-        self.refpoints = self._setrefpoints()
-        self.monkeyindexes = self._buildmonkeyindex()
+        self.refpoints = self._setRefPoints()
+        self.monkeyindexes = self._buildMonkeyIndex()
 
-    def _setrefpoints(self):
+    def _setRefPoints(self):
         """ Create reference points in m dimensions
 
         Input: self.points with .shape(n, m)
@@ -42,7 +45,7 @@ class ndim:
         refpoints = self.points[numpy.random.randint(0, self.n, self.m)]
         return(refpoints)
 
-    def _buildmonkeyindex(self):
+    def _buildMonkeyIndex(self):
         """ Create related monkeyindexes:
 
         Input: self.points (ndarray of population)
@@ -59,21 +62,20 @@ class ndim:
         allmi = []
         for srp in self.refpoints:
             x = mi.monkeyindex(self.n)
-            print("starting builddistances: {} seconds".format(time.time()))
-            mydarray = self._builddistances(srp)
-            print("loadmi: {} seconds".format(time.time()))
+            log.debug("starting buildDistances: {} seconds".format(time.time()))
+            mydarray = self.buildDistances(srp)
+            log.debug("loadmi: {} seconds".format(time.time()))
             x.loadmi(mydarray)
-            print("append: {} seconds".format(time.time()))
+            log.debug("append: {} seconds".format(time.time()))
             allmi.append(x)
         return(allmi)
 
-    def _builddistances(self, refpoint):
+    def buildDistances(self, refpoint):
         """ Create an array of distances suitable for loadmi
         Input: self needed for self.points with shape (n, m)
                refpoint is an m-dimensional point
                theoretically one of self.refpoints, but eh
         """
-        d = []
-        for sp in self.points:
-            d.append(distance.euclidean(sp, refpoint))
+        d = distance.cdist(self.points, numpy.asarray([refpoint]))
+        d = d[:, 0]  # since refpoint is 1 point
         return(d)
