@@ -45,7 +45,7 @@ def test_ndimm_100():
     d = distance.cdist(x[awd], np.asarray([qpoint]))
     print(d)
     print(x[awd])
-    assert awd == 0
+    assert awd == [18, 2, 19, 12]
 
 
 def test_ndimm_100000():
