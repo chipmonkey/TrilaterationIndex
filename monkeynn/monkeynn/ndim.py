@@ -88,11 +88,13 @@ class ndim:
         qDists = self._buildDistances(self.refpoints, qPoint)
         # assert qDists.length == self.n
         print("Happy dance")
-        for (mymi, myDist) in zip(self.monkeyindexes, qDists):
+        for (myMi, myDist, myRp) in zip(self.monkeyindexes,
+                                        qDists, self.refpoints):
             print("zip:")
-            print(mymi)
+            print(myMi.mi)
             print(myDist)
-            candidateIndexes.append(mymi.allwithinradius(myDist, tdist))
+            print(myRp)
+            candidateIndexes.append(myMi.allwithinradius(myDist, tdist))
 
         print("allWithinD returning:")
         print(candidateIndexes)
