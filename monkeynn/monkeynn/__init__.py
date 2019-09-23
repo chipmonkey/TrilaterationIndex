@@ -8,9 +8,17 @@ designed to be used on a 0..n indexed array.  All optimizations
 are designed with that in mind.
 """
 
-from monkeynn import monkeyindex as mi
+import logging
+
 from monkeynn import ndim
+
+log = logging.getLogger('monkeynn')
 
 
 def __main__():
-    print("Hello MonkeyIndex")
+    log.info("Hello MonkeyIndex")
+
+
+def loadData(points):
+    mindim = ndim.ndim(points)
+    return(mindim)

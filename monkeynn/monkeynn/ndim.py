@@ -3,7 +3,6 @@ Contains a numpy ndarray
 and associated referencepoints and monkeyindexes
 to facilitate fast nearest neighbor searching
 """
-
 import logging
 import numpy
 import time
@@ -40,8 +39,6 @@ class ndim:
         assert self.m > 1
         assert self.n > self.m
 
-        # import pdb
-        # pdb.set_trace()
         refpoints = self.points[numpy.random.randint(0, self.n, self.m)]
         return(refpoints)
 
@@ -56,26 +53,55 @@ class ndim:
         Each self.mindex[i] is an index against self.points
         against the self.refpoints[i]
         """
-
         assert self.points.size
         assert type(self.points) == numpy.ndarray
         allmi = []
         for srp in self.refpoints:
             x = mi.monkeyindex(self.n)
-            log.debug("starting buildDistances: {} seconds".format(time.time()))
-            mydarray = self.buildDistances(srp)
+            log.debug("starting _buildDistances:\
+                      {} seconds".format(time.time()))
+            mydarray = self._buildDistances(self.points, srp)
             log.debug("loadmi: {} seconds".format(time.time()))
             x.loadmi(mydarray)
             log.debug("append: {} seconds".format(time.time()))
             allmi.append(x)
         return(allmi)
 
-    def buildDistances(self, refpoint):
+    def _buildDistances(self, tpoints, refpoint):
         """ Create an array of distances suitable for loadmi
         Input: self needed for self.points with shape (n, m)
                refpoint is an m-dimensional point
                theoretically one of self.refpoints, but eh
         """
-        d = distance.cdist(self.points, numpy.asarray([refpoint]))
+        d = distance.cdist(tpoints, numpy.asarray([refpoint]))
         d = d[:, 0]  # since refpoint is 1 point
         return(d)
+
+    def allWithinD(self, qPoint, tdist):
+        """ Return all points from self.points
+        that are within tdist (inclusive) of qPoint
+        """
+        candidateIndexes = []
+        print("qPoint:")
+        print(qPoint)
+        print(qPoint.shape)
+        qDists = self._buildDistances(self.refpoints, qPoint)
+        # assert qDists.length == self.n
+        print("Happy dance")
+        for (mymi, myDist) in zip(self.monkeyindexes, qDists):
+            print("zip:")
+            print(mymi)
+            print(myDist)
+            candidateIndexes.append(mymi.allwithinradius(myDist, tdist))
+
+        print("allWithinD returning:")
+        print(candidateIndexes)
+        commonIndexes = set(candidateIndexes[0])
+        for myCandidates in zip(candidateIndexes):
+            print(type(myCandidates))
+            print(myCandidates[0])
+            commonIndexes = commonIndexes.intersection(set(myCandidates[0]))
+
+        print(commonIndexes)
+        print(type(commonIndexes))
+        return list(commonIndexes)

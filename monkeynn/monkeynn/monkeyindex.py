@@ -1,8 +1,8 @@
 """ Base class
 and all the fun that comes with it
 A basic 2d array with
-0..n in [1:] and
-d_i in [:i+1]
+"mindex" as 0..n in [1:] and
+"distance" d_i in [:i+1]
 presently d is always a fixed float datatype, but this may be
 investigated for performance
 """
@@ -11,6 +11,7 @@ import logging
 import numpy
 
 log = logging.getLogger('monkeynn')
+
 
 class monkeyindex:
 
@@ -66,7 +67,7 @@ class monkeyindex:
             return(lefti-1, righti)
         return(lefti, righti+1)
 
-    def closestN(self, tdist, n):
+    def miClosestN(self, tdist, n):
         """ Returns the mindexes of the n
         points in a monkeyindex with distance values
         closest to the target "tdist"

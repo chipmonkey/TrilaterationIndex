@@ -1,9 +1,11 @@
 ---
 title: "Trilateration Index - Masters Thesis"
 author: "Chip Lynch"
-institute: "University of Louisville"
 date: "6/24/2018"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
+institute: University of Louisville
 ---
 
 ```{r setup, include=FALSE}

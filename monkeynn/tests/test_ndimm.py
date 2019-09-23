@@ -1,13 +1,15 @@
-import numpy
+import numpy as np
+import pytest
 import time
 
 from monkeynn import ndim
+from scipy.spatial import distance
 
 
-def test_ndimm():
+def test_ndimm_100():
     start_time = time.time()
-    numpy.random.seed(1729)
-    x = numpy.random.randint(1, 100, (20, 3))
+    np.random.seed(1729)
+    x = np.random.randint(1, 100, (20, 3))
 
     t_refpoints = [[60, 36, 66],
                    [41, 35, 33],
@@ -22,29 +24,49 @@ def test_ndimm():
                   63.68673331, 67.48333128, 73.33484847, 78.5684415,
                   80.51086883, 87.41281371]
 
-    numpy.set_printoptions(threshold=numpy.inf)
+    np.set_printoptions(threshold=np.inf)
     xndim = ndim.ndim(x)
-    numpy.testing.assert_array_equal(xndim.refpoints, t_refpoints)
+    np.testing.assert_array_equal(xndim.refpoints, t_refpoints)
     # print(t_mipoints.shape)
     print("xndim.monkeyindex:")
-    print(xndim.monkeyindexes)
     print(xndim.monkeyindexes[0].mi.shape)
     print(xndim.monkeyindexes[0].mi['mindex'])
     print(xndim.monkeyindexes[0].mi['distance'])
-    print("yep")
-    numpy.testing.assert_array_almost_equal(xndim.monkeyindexes[0].mi['mindex'],
-                                            t_mindex)
-    numpy.testing.assert_array_almost_equal(xndim.monkeyindexes[0].mi['distance'],
-                                            t_distance)
+    np.testing.assert_array_almost_equal(xndim.monkeyindexes[0].mi['mindex'],
+                                         t_mindex)
+    np.testing.assert_array_almost_equal(xndim.monkeyindexes[0].mi['distance'],
+                                         t_distance)
     print("time: {} seconds".format(time.time() - start_time))
 
+    xndim = ndim.ndim(x)
+    qpoint = np.asarray([60, 36, 66])
+    tdist = 20
+    awd = xndim.allWithinD(qpoint, tdist)
+    d = distance.cdist(x[awd], np.asarray([qpoint]))
+    print(d)
+    print(x[awd])
+    assert awd == 0
 
+
+def test_ndimm_100000():
     start_time = time.time()
-    numpy.random.seed(1729)
-    x = numpy.random.randint(1, 1000, (100000, 3))
+    np.random.seed(1729)
+    x = np.random.randint(1, 1000, (100000, 3))
     xndim = ndim.ndim(x)
     print(xndim.monkeyindexes[0].length)
     print("time: {} seconds".format(time.time() - start_time))
 
+
+@pytest.mark.skip("High performance test.")
+def test_ndimm_10000000():
+    start_time = time.time()
+    np.random.seed(1729)
+    x = np.random.randint(1, 100000, (10000000, 3))
+    xndim = ndim.ndim(x)
+    print(xndim.monkeyindexes[0].length)
+    print("time: {} seconds".format(time.time() - start_time))
+
+
 if __name__ == "__main__":
-    test_ndimm()
+    test_ndimm_100()
+    test_ndimm_100000()

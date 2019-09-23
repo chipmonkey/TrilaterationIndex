@@ -3,7 +3,7 @@ import os
 import numpy
 import pickle
 
-from monkeynn import mi
+import monkeynn.monkeyindex as mi
 
 # Saved pickle file originally with something like:
 #    with open("something.pickl", "wb") as outpickle:
@@ -33,15 +33,15 @@ def test_madness_5():
     y = x.allwithinradius(5, 2)
     numpy.testing.assert_array_equal(y, [4, 3, 2])
 
-    closest = x.closestN(4, 2)
+    closest = x.miClosestN(4, 2)
     numpy.testing.assert_array_equal(closest, [4, 3])
 
-    closest = x.closestN(4, 3)
+    closest = x.miClosestN(4, 3)
     numpy.testing.assert_array_equal(closest, [4, 3, 2])
     print(closest)
     print(x.mi[closest])
 
-    closest = x.closestN(-5, 2)
+    closest = x.miClosestN(-5, 2)
     print(closest)
     print(x.mi[closest])
 
@@ -52,7 +52,7 @@ def test_madness_1000():
     ra = numpy.random.random_sample(size=(1000))
     x.loadmi(ra)
 
-    closest = x.closestN(0.8, 20)
+    closest = x.miClosestN(0.8, 20)
     numpy.testing.assert_array_equal(testclosest, closest)
     numpy.testing.assert_array_almost_equal(ra[closest], testclosestra)
 
