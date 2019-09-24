@@ -6,7 +6,7 @@ from monkeynn import ndim
 from scipy.spatial import distance
 
 
-def test_ndimm_100():
+def test_ndim_100():
     start_time = time.time()
     np.random.seed(1729)
     x = np.random.randint(1, 100, (20, 3))
@@ -54,7 +54,7 @@ def test_ndimm_100():
     assert ewd == [2]
 
 
-def test_ndimm_100000():
+def test_ndim_100000():
     start_time = time.time()
     np.random.seed(1729)
     x = np.random.randint(1, 1000, (100000, 3))
@@ -64,7 +64,7 @@ def test_ndimm_100000():
 
 
 @pytest.mark.skip("High performance test.")
-def test_ndimm_10000000():
+def test_ndim_10000000():
     start_time = time.time()
     np.random.seed(1729)
     x = np.random.randint(1, 100000, (10000000, 3))
@@ -74,5 +74,5 @@ def test_ndimm_10000000():
 
 
 if __name__ == "__main__":
-    test_ndimm_100()
-    test_ndimm_100000()
+    test_ndim_100()
+    test_ndim_100000()
