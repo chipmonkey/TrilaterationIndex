@@ -22,6 +22,9 @@ class ndim:
         self.refpoints = self._setRefPoints()
         self.monkeyindexes = self._buildMonkeyIndex()
 
+    def addQPoints(self, qpoints):
+        self.qpoints = qpoints
+
     def _setRefPoints(self):
         """ Create reference points in m dimensions
 
@@ -77,33 +80,39 @@ class ndim:
         d = d[:, 0]  # since refpoint is 1 point
         return(d)
 
-    def allWithinD(self, qPoint, tdist):
+    def approxWithinD(self, qPoint, tdist):
         """ Return all points from self.points
-        that are within tdist (inclusive) of qPoint
+        that are within tdist (inclusive) of qPoint.
+        This is an APPROXIMATE result.  It returns the list
+        of points which are within tdist of qPoint
+        _along each refpoint line_
         """
         candidateIndexes = []
-        print("qPoint:")
-        print(qPoint)
-        print(qPoint.shape)
         qDists = self._buildDistances(self.refpoints, qPoint)
-        # assert qDists.length == self.n
-        print("Happy dance")
         for (myMi, myDist, myRp) in zip(self.monkeyindexes,
-                                        qDists, self.refpoints):
-            print("zip:")
-            print(myMi.mi)
-            print(myDist)
-            print(myRp)
+                                        qDists,
+                                        self.refpoints):
             candidateIndexes.append(myMi.allwithinradius(myDist, tdist))
 
-        print("allWithinD returning:")
-        print(candidateIndexes)
         commonIndexes = set(candidateIndexes[0])
         for myCandidates in zip(candidateIndexes):
-            print(type(myCandidates))
-            print(myCandidates[0])
             commonIndexes = commonIndexes.intersection(set(myCandidates[0]))
 
-        print(commonIndexes)
-        print(type(commonIndexes))
         return list(commonIndexes)
+
+    def allWithinD(self, qPoint, tdist):
+        """ Return all points from self.points
+        that are within tdist (inclusive) of qPoint.
+        This works by starting with approxWithinD to get the
+        initial list of approximate points and then
+        calculates the precise distance to verify the results.
+        """
+        approxIndexes = self.approxWithinD(qPoint, tdist)
+        dists = distance.cdist(self.points[approxIndexes],
+                               numpy.asarray([qPoint]))
+        exactIndexes = []
+        for (ind, dist) in zip(approxIndexes, dists):
+            if dist[0] <= tdist:
+                exactIndexes.append(ind)
+
+        return(exactIndexes)

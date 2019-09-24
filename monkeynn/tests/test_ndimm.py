@@ -41,11 +41,17 @@ def test_ndimm_100():
     xndim = ndim.ndim(x)
     qpoint = np.asarray([60, 36, 66])
     tdist = 20
-    awd = xndim.allWithinD(qpoint, tdist)
+
+    # Approx within distance
+    awd = xndim.approxWithinD(qpoint, tdist)
+    assert awd == [18, 2, 19, 12]
     d = distance.cdist(x[awd], np.asarray([qpoint]))
     print(d)
     print(x[awd])
-    assert awd == [18, 2, 19, 12]
+
+    # Exact within distance
+    ewd = xndim.allWithinD(qpoint, tdist)
+    assert ewd == [2]
 
 
 def test_ndimm_100000():
