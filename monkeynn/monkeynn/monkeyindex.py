@@ -67,6 +67,38 @@ class monkeyindex:
             return(lefti-1, righti)
         return(lefti, righti+1)
 
+    def genClosestMi(self, tdist):
+        """ Given a target distance tdist
+        generate (in the python sense) the index of
+        miPoints in order of proximity to tdist
+
+        same as _getNextClosest, but a generator
+        """
+        righti = self.miClosestN(tdist, 1)
+        lefti = righti
+        yield(lefti)
+
+        print("stuff:")
+        print(lefti, righti, self.length - 1)
+
+        while (lefti > 0 or righti < self.length - 1):
+            if lefti == 0:
+                righti = righti + 1
+                yield(righti)
+                continue
+            if righti == self.length - 1:
+                lefti = lefti - 1
+                yield(lefti)
+                continue
+            dleft = tdist - self.mi['distance'][lefti]
+            dright = self.mi['distance'][righti] - tdist
+            if (dleft <= dright):
+                lefti = lefti - 1
+                yield(lefti)
+            else:
+                righti = righti + 1
+                yield(righti)
+
     def miClosestN(self, tdist, n):
         """ Returns the mindexes of the n
         points in a monkeyindex with distance values

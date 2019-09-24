@@ -45,6 +45,18 @@ def test_madness_5():
     print(closest)
     print(x.mi[closest])
 
+    mygen = x.genClosestMi(3)
+    val = next(mygen)
+    assert val == 4
+    val = next(mygen)
+    assert val == 3
+    val = next(mygen)
+    assert val == 2
+    val = next(mygen)
+    assert val == 1
+    val = next(mygen)
+    assert val == 0
+
 
 def test_madness_1000():
     x = mi.monkeyindex(1000)
