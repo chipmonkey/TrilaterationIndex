@@ -78,25 +78,35 @@ class monkeyindex:
         lefti = righti
         yield(lefti)
 
-        print("stuff:")
-        print(lefti, righti, self.length - 1)
+        print("lefti, righti:")
+        print(lefti, righti)
 
-        while (lefti > 0 or righti < self.length - 1):
+        while (lefti >= 0 and righti <= self.length - 1):
+            if lefti == 0 and righti == self.length - 1:
+                return
             if lefti == 0:
                 righti = righti + 1
+                print("a) lefti, righti:")
+                print(lefti, righti)
                 yield(righti)
                 continue
             if righti == self.length - 1:
                 lefti = lefti - 1
+                print("b) lefti, righti:")
+                print(lefti, righti)
                 yield(lefti)
                 continue
             dleft = tdist - self.mi['distance'][lefti]
             dright = self.mi['distance'][righti] - tdist
             if (dleft <= dright):
                 lefti = lefti - 1
+                print("c) lefti, righti:")
+                print(lefti, righti)
                 yield(lefti)
             else:
                 righti = righti + 1
+                print("d) lefti, righti:")
+                print(lefti, righti)
                 yield(righti)
 
     def miClosestN(self, tdist, n):
@@ -110,6 +120,10 @@ class monkeyindex:
         righti = numpy.searchsorted(self.mi['distance'],
                                     tdist,
                                     side='right')
+        #  if n == 1:
+        #      print("n was 1")
+        #      closest = self.mi['mindex'][righti]
+        #      return(closest)
         if(righti >= self.length):
             righti = self.length - 1
         if(righti > 0):
@@ -117,18 +131,32 @@ class monkeyindex:
         else:
             lefti = righti
         ldist = tdist - self.mi['distance'][lefti]
+        print("ldist: {}".format(ldist))
         rdist = self.mi['distance'][righti] - tdist
+        print("rdist: {}".format(rdist))
         if (ldist < rdist):
+            print("righti {} shoud now be lefti {}".format(righti, lefti))
             righti = lefti
+        print('Closest self.mi["distance"] to \
+              {} is {} ({})'.format(tdist,
+                                    self.mi['distance'][righti],
+                                    righti))
+        # Do we need this next if?
         if n == 1:
-            log.debug("test this... it may not work")
+            print("n was 1")
             return(self.mi['mindex'][righti])
         if righti > 0:
             lefti, righti = self._getNextClosest(tdist, righti, righti)
         while((righti - lefti) < n - 1):
+            print("stuff {},{},{},{}"
+                  .format(lefti, righti,
+                          self.mi['distance'][lefti],
+                          self.mi['distance'][righti]))
             lefti, righti = self._getNextClosest(tdist, lefti, righti)
         log.debug("Final lefti: {} righti: {}".format(lefti, righti))
         log.debug("which contains:")
         log.debug(self.mi[lefti:righti])
         closest = self.mi['mindex'][lefti:righti+1]
+        print("closest, lefti, righti")
+        print(closest, lefti, righti)
         return(closest)

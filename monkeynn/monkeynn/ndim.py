@@ -3,6 +3,8 @@ Contains a numpy ndarray
 and associated referencepoints and monkeyindexes
 to facilitate fast nearest neighbor searching
 """
+
+import itertools
 import logging
 import numpy
 import time
@@ -70,6 +72,13 @@ class ndim:
             allmi.append(x)
         return(allmi)
 
+    def _pointDistance(self, tpoint, refpoint):
+        """ Returns the euclidean distance
+        between two n-dimensional points
+        """
+        d = distance.euclidean(tpoint, refpoint)
+        return(d)
+
     def _buildDistances(self, tpoints, refpoint):
         """ Create an array of distances suitable for loadmi
         Input: self needed for self.points with shape (n, m)
@@ -117,7 +126,7 @@ class ndim:
 
         return(exactIndexes)
 
-    def approxNN(self, qpoint, n):
+    def approxNN(self, qPoint, n):
         """ Pseudo Code!
 
         Pick n points which are the closest to qPoint
@@ -126,9 +135,6 @@ class ndim:
         Remember these are the minimum overall distances possible.
         So track maxD as the maximum of those n distances.  This is the
         lowest possible cutoff of distance for the n nearest neighbors.
-
-        You know I should make a generator that spits out the next closest
-        hmmm...
 
         Compute the real distances of those n points from qPoint.
 
@@ -146,5 +152,20 @@ class ndim:
         qDists = self._buildDistances(self.refpoints, qPoint)
 
         firstMi = self.monkeyindexes[0]
+        print("Debugging approxNN")
+        print(candidateIndexes)
+        print(qPoint)
+        print(qDists)
+        print(qDists[0])
+        print(firstMi)
+        print(firstMi.mi)
 
+        topn = itertools.islice(firstMi.genClosestMi(qDists[0]), n)
+        topn = firstMi.miClosestN(qDists[0], n)
+        print("top {}".format(n))
+        print(list(topn))
+
+#         for sMi in firstMi.genClosestMi(qDists[0]):
+#             print(sMi, self.points[sMi], firstMi.mi[sMi])
+#             print(self._pointDistance(self.points[sMi], qPoint))
         return 1

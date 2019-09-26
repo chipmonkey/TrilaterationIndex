@@ -53,6 +53,10 @@ def test_ndim_100():
     ewd = xndim.allWithinD(qpoint, tdist)
     assert ewd == [2]
 
+    # approxNN
+    ann = xndim.approxNN(qpoint, 4)
+    assert ann == [1]
+
 
 def test_ndim_100000():
     start_time = time.time()
@@ -76,3 +80,4 @@ def test_ndim_10000000():
 if __name__ == "__main__":
     test_ndim_100()
     test_ndim_100000()
+    test_ndim_10000000()
