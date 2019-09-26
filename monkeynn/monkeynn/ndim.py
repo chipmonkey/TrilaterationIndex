@@ -142,4 +142,9 @@ class ndim:
         Repeat the last few steps until the guaranteed pool
         has N values in it.  These are the guaranteed Nearest Neighbors.
         """
+        candidateIndexes = []
+        qDists = self._buildDistances(self.refpoints, qPoint)
+
+        firstMi = self.monkeyindexes[0]
+
         return 1
