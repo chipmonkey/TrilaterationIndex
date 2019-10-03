@@ -53,9 +53,9 @@ class ndim:
         Input: self.points (ndarray of population)
                self.refpoints (ndarray of reference points)
 
-        Effect: self.mindexes (array of monkeyindexes)
+        Effect: self.monkeyindexes (array of monkeyindexes)
 
-        Each self.mindex[i] is an index against self.points
+        Each self.monkeyindex[i] is an index against self.points
         against the self.refpoints[i]
         """
         assert self.points.size
@@ -127,10 +127,10 @@ class ndim:
         return(exactIndexes)
 
     def approxNN(self, qPoint, n):
-        """ Pseudo Code!
-
-        Pick n points which are the closest to qPoint
-        ALONG THE FIRST MONKEYINDEX.  This is superfast.
+        """
+        Pick n pindexes which are the closest to qPoint
+        ALONG THE FIRST MONKEYINDEX.  This is superfast
+        because monkeyindexes are sorted by that distance.
 
         Remember these are the minimum overall distances possible.
         So track maxD as the maximum of those n distances.  This is the
@@ -153,12 +153,19 @@ class ndim:
 
         firstMi = self.monkeyindexes[0]
         print("Debugging approxNN")
-        print(candidateIndexes)
-        print(qPoint)
-        print(qDists)
-        print(qDists[0])
-        print(firstMi)
-        print(firstMi.mi)
+        print("candidateIndexes:", candidateIndexes)
+        print("qPoint:", qPoint)
+        print("qDists:", qDists)
+        print("firstMi:", firstMi)
+        print("firstMi.mi:", firstMi.mi)
+
+        miGen = firstMi.genClosestMi(qDists[0])
+        topn = []
+
+        while len(topn) < n:
+            print("len: ", len(topn))
+            topn.append(next(miGen))
+        print("top {}".format(topn))
 
         topn = itertools.islice(firstMi.genClosestMi(qDists[0]), n)
         topn = firstMi.miClosestN(qDists[0], n)
@@ -169,3 +176,4 @@ class ndim:
 #             print(sMi, self.points[sMi], firstMi.mi[sMi])
 #             print(self._pointDistance(self.points[sMi], qPoint))
         return 1
+        return topn

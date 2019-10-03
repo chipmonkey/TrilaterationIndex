@@ -15,7 +15,7 @@ def test_ndim_100():
                    [41, 35, 33],
                    [52, 77, 13]]
 
-    t_mindex = [2, 19, 18, 12,  9,  3,  1, 13, 10,  8, 15,
+    t_pindex = [2, 19, 18, 12,  9,  3,  1, 13, 10,  8, 15,
                 5, 14,  4,  0,  6,  7, 16, 17, 11]
 
     t_distance = [0.0, 20.51828453, 22.38302929, 31.1608729, 32.55764119,
@@ -30,10 +30,10 @@ def test_ndim_100():
     # print(t_mipoints.shape)
     print("xndim.monkeyindex:")
     print(xndim.monkeyindexes[0].mi.shape)
-    print(xndim.monkeyindexes[0].mi['mindex'])
+    print(xndim.monkeyindexes[0].mi['pindex'])
     print(xndim.monkeyindexes[0].mi['distance'])
-    np.testing.assert_array_almost_equal(xndim.monkeyindexes[0].mi['mindex'],
-                                         t_mindex)
+    np.testing.assert_array_almost_equal(xndim.monkeyindexes[0].mi['pindex'],
+                                         t_pindex)
     np.testing.assert_array_almost_equal(xndim.monkeyindexes[0].mi['distance'],
                                          t_distance)
     print("time: {} seconds".format(time.time() - start_time))
@@ -55,7 +55,7 @@ def test_ndim_100():
 
     # approxNN
     ann = xndim.approxNN(qpoint, 4)
-    assert ann == [1]
+    np.testing.assert_array_equal(ann, [10, 2, 5, 19])
 
 
 def test_ndim_100000():

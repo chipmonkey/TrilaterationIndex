@@ -1,11 +1,3 @@
-""" Base class
-and all the fun that comes with it
-A basic 2d array with
-"mindex" as 0..n in [1:] and
-"distance" d_i in [:i+1]
-presently d is always a fixed float datatype, but this may be
-investigated for performance
-"""
 
 import logging
 import numpy
@@ -18,13 +10,13 @@ class monkeyindex:
     def __init__(self, length):
         self.length = length
         self.mi = numpy.zeros((length),
-                              dtype=[('mindex', int), ('distance', float)])
+                              dtype=[('pindex', int), ('distance', float)])
 
     def loadmi(self, inarray):
         """  Populate the index
         requires an input array of distances
         values must be compatible with float(inarray[0..n])
-        input array is assumed to be in index order (0..n)
+        input array is assumed to be in pindex order (0..n)
         the resulting self.mi object is sorted by distance
         """
         try:
@@ -33,24 +25,25 @@ class monkeyindex:
             log.debug("Cannot convert input array to floats")
             raise
 
-        self.mi['mindex'] = list(range(self.length))
+        self.mi['pindex'] = list(range(self.length))
         self.mi['distance'] = inarray[:]
         self.mi.sort(order='distance')
+        print("monkeyindex.mi:", self.mi)
 
     def allwithinradius(self, tdist, radius):
-        """ Returns array of mindexes within radius of target tdist
+        """ Returns array of pindexes within radius of target tdist
         Is this making efficient use of the fact that self.mi is sorted?
         """
         indexes = numpy.where((self.mi['distance'] <= (tdist + radius)) &
                               (self.mi['distance'] >= (tdist - radius)))
         indexes = indexes[0].astype('int')
 
-        values = self.mi['mindex'][indexes]
+        values = self.mi['pindex'][indexes]
         return(values)
 
     def _getNextClosest(self, tdist, lefti, righti):
         """ Given a target distance tdist
-        and current indexes of mi (NOT mindexes) lefti and righti
+        and current mindexes of mi (NOT pindexes) lefti and righti
         return a new (lefti, righti) tuple including one more i
         which includes the next most closest mi['distance'] to tdist
         """
@@ -67,16 +60,14 @@ class monkeyindex:
             return(lefti-1, righti)
         return(lefti, righti+1)
 
-    def genClosestMi(self, tdist):
+    def genClosestPi(self, tdist):
         """ Given a target distance tdist
-        generate (in the python sense) the index of
-        miPoints in order of proximity to tdist
-
-        same as _getNextClosest, but a generator
+        generate (in the python sense) the pindex of
+        mi points in order of proximity to tdist
         """
         righti = self.miClosestN(tdist, 1)
         lefti = righti
-        yield(lefti)
+        yield(self.mi['pindex'][lefti])
 
         print("lefti, righti:")
         print(lefti, righti)
@@ -88,13 +79,13 @@ class monkeyindex:
                 righti = righti + 1
                 print("a) lefti, righti:")
                 print(lefti, righti)
-                yield(righti)
+                yield(self.mi['pindex'][righti])
                 continue
             if righti == self.length - 1:
                 lefti = lefti - 1
                 print("b) lefti, righti:")
                 print(lefti, righti)
-                yield(lefti)
+                yield(self.mi['pindex'][lefti])
                 continue
             dleft = tdist - self.mi['distance'][lefti]
             dright = self.mi['distance'][righti] - tdist
@@ -102,15 +93,15 @@ class monkeyindex:
                 lefti = lefti - 1
                 print("c) lefti, righti:")
                 print(lefti, righti)
-                yield(lefti)
+                yield(self.mi['pindex'][lefti])
             else:
                 righti = righti + 1
                 print("d) lefti, righti:")
                 print(lefti, righti)
-                yield(righti)
+                yield(self.mi['pindex'][righti])
 
     def miClosestN(self, tdist, n):
-        """ Returns the mindexes of the n
+        """ Returns the pindexes of the n
         points in a monkeyindex with distance values
         closest to the target "tdist"
         """
@@ -122,7 +113,7 @@ class monkeyindex:
                                     side='right')
         #  if n == 1:
         #      print("n was 1")
-        #      closest = self.mi['mindex'][righti]
+        #      closest = self.mi['pindex'][righti]
         #      return(closest)
         if(righti >= self.length):
             righti = self.length - 1
@@ -130,13 +121,18 @@ class monkeyindex:
             lefti = righti - 1
         else:
             lefti = righti
+
+        # debug:
         ldist = tdist - self.mi['distance'][lefti]
+        print("lefti, righti: {}, {}".format(lefti, righti))
         print("ldist: {}".format(ldist))
         rdist = self.mi['distance'][righti] - tdist
         print("rdist: {}".format(rdist))
+
         if (ldist < rdist):
             print("righti {} shoud now be lefti {}".format(righti, lefti))
             righti = lefti
+
         print('Closest self.mi["distance"] to \
               {} is {} ({})'.format(tdist,
                                     self.mi['distance'][righti],
@@ -144,7 +140,7 @@ class monkeyindex:
         # Do we need this next if?
         if n == 1:
             print("n was 1")
-            return(self.mi['mindex'][righti])
+            return(self.mi['pindex'][righti])
         if righti > 0:
             lefti, righti = self._getNextClosest(tdist, righti, righti)
         while((righti - lefti) < n - 1):
@@ -156,7 +152,7 @@ class monkeyindex:
         log.debug("Final lefti: {} righti: {}".format(lefti, righti))
         log.debug("which contains:")
         log.debug(self.mi[lefti:righti])
-        closest = self.mi['mindex'][lefti:righti+1]
+        closest = self.mi['pindex'][lefti:righti+1]
         print("closest, lefti, righti")
         print(closest, lefti, righti)
         return(closest)
