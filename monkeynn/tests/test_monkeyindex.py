@@ -35,15 +35,15 @@ def test_madness_5():
     y = x.allwithinradius(5, 2)
     numpy.testing.assert_array_equal(y, [4, 3, 2])
 
-    closest = x.miClosestN(4, 2)
+    closest = x.miClosestNPi(4, 2)
     numpy.testing.assert_array_equal(closest, [4, 3])
 
-    closest = x.miClosestN(4, 3)
+    closest = x.miClosestNPi(4, 3)
     numpy.testing.assert_array_equal(closest, [4, 3, 2])
     print(closest)
     print(x.mi[closest])
 
-    closest = x.miClosestN(-5, 2)
+    closest = x.miClosestNPi(-5, 2)
     print(closest)
     print(x.mi[closest])
 
@@ -59,11 +59,17 @@ def test_madness_8():
     val = next(mygen)
     assert val == 6
     val = next(mygen)
-    assert val == 3
-    val = next(mygen)
     assert val == 1
     val = next(mygen)
+    assert val == 3
+    val = next(mygen)
+    assert val == 0
+    val = next(mygen)
     assert val == 2
+    val = next(mygen)
+    assert val == 5
+    val = next(mygen)
+    assert val == 7
 
 
 def test_madness_1000():
@@ -72,7 +78,7 @@ def test_madness_1000():
     ra = numpy.random.random_sample(size=(1000))
     x.loadmi(ra)
 
-    closest = x.miClosestN(0.8, 20)
+    closest = x.miClosestNPi(0.8, 20)
     numpy.testing.assert_array_equal(testclosest, closest)
     numpy.testing.assert_array_almost_equal(ra[closest], testclosestra)
 

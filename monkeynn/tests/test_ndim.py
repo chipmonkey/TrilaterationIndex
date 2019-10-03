@@ -58,6 +58,7 @@ def test_ndim_100():
     np.testing.assert_array_equal(ann, [10, 2, 5, 19])
 
 
+@pytest.mark.skip("High performance test.")
 def test_ndim_100000():
     start_time = time.time()
     np.random.seed(1729)

@@ -65,8 +65,10 @@ class monkeyindex:
         generate (in the python sense) the pindex of
         mi points in order of proximity to tdist
         """
-        righti = self.miClosestN(tdist, 1)
+        righti = self.miClosestMindex(tdist)
         lefti = righti
+        print("lefti is {}".format(lefti))
+        print("self.mi['pindex'][lefti]:", self.mi['pindex'][lefti])
         yield(self.mi['pindex'][lefti])
 
         print("lefti, righti:")
@@ -87,8 +89,8 @@ class monkeyindex:
                 print(lefti, righti)
                 yield(self.mi['pindex'][lefti])
                 continue
-            dleft = tdist - self.mi['distance'][lefti]
-            dright = self.mi['distance'][righti] - tdist
+            dleft = tdist - self.mi['distance'][lefti - 1]
+            dright = self.mi['distance'][righti + 1] - tdist
             if (dleft <= dright):
                 lefti = lefti - 1
                 print("c) lefti, righti:")
@@ -100,7 +102,33 @@ class monkeyindex:
                 print(lefti, righti)
                 yield(self.mi['pindex'][righti])
 
-    def miClosestN(self, tdist, n):
+    def miClosestMindex(self, tdist):
+        """ Returns the mindex of the closest
+        point to tdist
+        """
+        righti = numpy.searchsorted(self.mi['distance'],
+                                    tdist,
+                                    side='right')
+
+        if(righti >= self.length):
+            righti = self.length - 1
+        if(righti > 0):
+            lefti = righti - 1
+        else:
+            lefti = righti
+
+        ldist = tdist - self.mi['distance'][lefti]
+        print("lefti, righti: {}, {}".format(lefti, righti))
+        print("ldist: {}".format(ldist))
+        rdist = self.mi['distance'][righti] - tdist
+
+        if (ldist < rdist):
+            print("righti {} shoud now be lefti {}".format(righti, lefti))
+            righti = lefti
+
+        return(righti)
+
+    def miClosestNPi(self, tdist, n):
         """ Returns the pindexes of the n
         points in a monkeyindex with distance values
         closest to the target "tdist"
@@ -122,7 +150,6 @@ class monkeyindex:
         else:
             lefti = righti
 
-        # debug:
         ldist = tdist - self.mi['distance'][lefti]
         print("lefti, righti: {}, {}".format(lefti, righti))
         print("ldist: {}".format(ldist))

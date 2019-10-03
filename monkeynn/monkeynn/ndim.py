@@ -159,7 +159,7 @@ class ndim:
         print("firstMi:", firstMi)
         print("firstMi.mi:", firstMi.mi)
 
-        miGen = firstMi.genClosestMi(qDists[0])
+        miGen = firstMi.genClosestPi(qDists[0])
         topn = []
 
         while len(topn) < n:
@@ -167,12 +167,12 @@ class ndim:
             topn.append(next(miGen))
         print("top {}".format(topn))
 
-        topn = itertools.islice(firstMi.genClosestMi(qDists[0]), n)
-        topn = firstMi.miClosestN(qDists[0], n)
+        topn = itertools.islice(firstMi.genClosestPi(qDists[0]), n)
+        topn = firstMi.miClosestNPi(qDists[0], n)
         print("top {}".format(n))
         print(list(topn))
 
-#         for sMi in firstMi.genClosestMi(qDists[0]):
+#         for sMi in firstMi.genClosestPi(qDists[0]):
 #             print(sMi, self.points[sMi], firstMi.mi[sMi])
 #             print(self._pointDistance(self.points[sMi], qPoint))
         return 1
