@@ -4,7 +4,6 @@ and associated referencepoints and monkeyindexes
 to facilitate fast nearest neighbor searching
 """
 
-import itertools
 import logging
 import numpy
 import time
@@ -75,6 +74,8 @@ class ndim:
     def _pointDistance(self, tpoint, refpoint):
         """ Returns the euclidean distance
         between two n-dimensional points
+
+        TODO: memoize this maybe
         """
         d = distance.euclidean(tpoint, refpoint)
         return(d)
@@ -158,19 +159,20 @@ class ndim:
         print("qDists:", qDists)
         print("firstMi:", firstMi)
         print("firstMi.mi:", firstMi.mi)
+        print("points:", self.points)
 
-        miGen = firstMi.genClosestPi(qDists[0])
+        piGen = firstMi.genClosestPi(qDists[0])
         topn = []
 
         while len(topn) < n:
             print("len: ", len(topn))
-            topn.append(next(miGen))
+            npi = next(piGen)
+            # faster to recalculate the distance or look it up?
+            # We don't sort the monkeyindex by pindex despite having the data
+            ndist = self._pointDistance(self.points[npi], self.refpoints[0])
+            print(npi, ndist)
+            topn.append((npi, ndist))
         print("top {}".format(topn))
-
-        topn = itertools.islice(firstMi.genClosestPi(qDists[0]), n)
-        topn = firstMi.miClosestNPi(qDists[0], n)
-        print("top {}".format(n))
-        print(list(topn))
 
 #         for sMi in firstMi.genClosestPi(qDists[0]):
 #             print(sMi, self.points[sMi], firstMi.mi[sMi])
