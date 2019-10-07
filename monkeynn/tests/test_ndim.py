@@ -62,7 +62,7 @@ def test_ndim_100():
     # np.testing.assert_array_equal(ann, [10, 2, 5, 19])
 
     # exactNN
-    enn = xndim.exactNN(qpoint, 4)
+    enn = xndim.exactNN(qpoint, 5)
     assert enn == 0
 
 
