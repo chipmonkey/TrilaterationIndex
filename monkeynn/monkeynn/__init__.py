@@ -10,7 +10,8 @@ are designed with that in mind.
 
 import logging
 
-from monkeynn import ndim, monkeyindex, topNtree, dpoint
+from monkeynn import ndim, monkeyindex, dpoint, topNtree, \
+                     toplistABC, toplist
 
 log = logging.getLogger('monkeynn')
 

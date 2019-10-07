@@ -7,10 +7,12 @@ to facilitate fast nearest neighbor searching
 import logging
 import numpy
 import time
+import sys
 
 from scipy.spatial import distance
 
 from monkeynn import monkeyindex as mi
+from monkeynn.toplist import toplist
 
 log = logging.getLogger('monkeynn')
 
@@ -134,8 +136,52 @@ class ndim:
         because monkeyindexes are sorted by that distance.
 
         Remember these are the minimum overall distances possible.
-        So track maxD as the maximum of those n distances.  This is the
+        So track cutoffD as the maximum of those n distances.  This is the
         lowest possible cutoff of distance for the n nearest neighbors.
+
+        STOPPING HERE GIVES A _very_ rough approxNN
+
+        for EXACT NN...
+
+        Compute the real distances of those n points from qPoint.
+
+        Save all points with real distance <= cutoffD.
+        These points are definitely in the nearest N.
+
+        Let M be the number of points left to find.
+        Pull the _next_ closest M points from the first monkeyindex
+        (see the generator mentioned earlier).
+
+        Repeat the last few steps until the guaranteed pool
+        has N values in it.  These are the guaranteed Nearest Neighbors.
+        """
+        topn = toplist(n)
+        cutoffD = 0
+        qDists = self._buildDistances(self.refpoints, qPoint)
+
+        firstMi = self.monkeyindexes[0]
+
+        piGen = firstMi.genClosestP(qDists[0])
+
+        # Generate the first n candidates:
+        while len(topn) < n:
+            npi, ndist = next(piGen)
+            adist = self._pointDistance(self.points[npi], self.refpoints[0])
+            cutoffD = adist
+            topn.push((npi, adist))
+
+        retValues = []
+        for myPi in topn.dPList:
+            print(myPi)
+            retValues.append(myPi[0])
+            print(retValues)
+
+        return retValues, cutoffD
+
+    def exactNN(self, qPoint, n):
+        """
+        for EXACT NN... start with approxNN as before having saved maxD
+        and then...
 
         Compute the real distances of those n points from qPoint.
 
@@ -149,33 +195,28 @@ class ndim:
         Repeat the last few steps until the guaranteed pool
         has N values in it.  These are the guaranteed Nearest Neighbors.
         """
-        candidateIndexes = []
+
+        # aNN, cutoffD = self.approxNN(qPoint, n)
+        topn = toplist(n)
+
         qDists = self._buildDistances(self.refpoints, qPoint)
-
         firstMi = self.monkeyindexes[0]
-        print("Debugging approxNN")
-        print("candidateIndexes:", candidateIndexes)
-        print("qPoint:", qPoint)
-        print("qDists:", qDists)
-        print("firstMi:", firstMi)
-        print("firstMi.mi:", firstMi.mi)
-        print("points:", self.points)
-
-        piGen = firstMi.genClosestPi(qDists[0])
-        topn = []
+        piGen = firstMi.genClosestP(qDists[0])
+        minAdist = sys.float_info.max
 
         while len(topn) < n:
-            print("len: ", len(topn))
-            npi = next(piGen)
-            # faster to recalculate the distance or look it up?
-            # We don't sort the monkeyindex by pindex despite having the data
-            ndist = self._pointDistance(self.points[npi], self.refpoints[0])
-            print(npi, ndist)
-            topn.append((npi, ndist))
-        print("top {}".format(topn))
+            npi, cutoffD = next(piGen)
+            print("comparing:")
+            print(self.points[npi])
+            print(qPoint)
+            adist = self._pointDistance(self.points[npi], qPoint)
+            if adist < minAdist:
+                minAdist = adist
+            topn.push((npi, adist))
+            print(topn.maxP)
+            print("cutoff: ", cutoffD)
+            print("minAdist: ", minAdist)
 
-#         for sMi in firstMi.genClosestPi(qDists[0]):
-#             print(sMi, self.points[sMi], firstMi.mi[sMi])
-#             print(self._pointDistance(self.points[sMi], qPoint))
-        return 1
-        return topn
+        print(topn)
+
+        return(topn.dPList)

@@ -53,23 +53,23 @@ def test_madness_8():
     assert x.length == 8
     x.loadmi([1, 2, 5, 4, 3, 6, 3.5, 7])
 
-    mygen = x.genClosestPi(3)
+    mygen = x.genClosestP(3)
     val = next(mygen)
-    assert val == 4
+    assert val == (4, 3.0)
     val = next(mygen)
-    assert val == 6
+    assert val == (6, 3.5)
     val = next(mygen)
-    assert val == 1
+    assert val == (1, 2.0)
     val = next(mygen)
-    assert val == 3
+    assert val == (3, 4.0)
     val = next(mygen)
-    assert val == 0
+    assert val == (0, 1.0)
     val = next(mygen)
-    assert val == 2
+    assert val == (2, 5.0)
     val = next(mygen)
-    assert val == 5
+    assert val == (5, 6.0)
     val = next(mygen)
-    assert val == 7
+    assert val == (7, 7.0)
 
 
 def test_madness_1000():

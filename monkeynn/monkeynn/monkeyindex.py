@@ -58,34 +58,35 @@ class monkeyindex:
             return(lefti-1, righti)
         return(lefti, righti+1)
 
-    def genClosestPi(self, tdist):
+    def genClosestP(self, tdist):
         """ Given a target distance tdist
-        generate (in the python sense) the pindex of
+        generate (in the python sense) the tuple for
+        (pindex, distance) of
         mi points in order of proximity to tdist
         """
         righti = self.miClosestMindex(tdist)
         lefti = righti
-        yield(self.mi['pindex'][lefti])
+        yield(self.mi['pindex'][lefti], self.mi['distance'][lefti])
 
         while (lefti >= 0 and righti <= self.length - 1):
             if lefti == 0 and righti == self.length - 1:
                 return
             if lefti == 0:
                 righti = righti + 1
-                yield(self.mi['pindex'][righti])
+                yield(self.mi['pindex'][righti], self.mi['distance'][righti])
                 continue
             if righti == self.length - 1:
                 lefti = lefti - 1
-                yield(self.mi['pindex'][lefti])
+                yield(self.mi['pindex'][lefti], self.mi['distance'][lefti])
                 continue
             dleft = tdist - self.mi['distance'][lefti - 1]
             dright = self.mi['distance'][righti + 1] - tdist
             if (dleft <= dright):
                 lefti = lefti - 1
-                yield(self.mi['pindex'][lefti])
+                yield(self.mi['pindex'][lefti], self.mi['distance'][lefti])
             else:
                 righti = righti + 1
-                yield(self.mi['pindex'][righti])
+                yield(self.mi['pindex'][righti], self.mi['distance'][righti])
 
     def miClosestMindex(self, tdist):
         """ Returns the mindex of the closest

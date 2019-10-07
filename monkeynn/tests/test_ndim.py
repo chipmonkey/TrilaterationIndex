@@ -55,7 +55,15 @@ def test_ndim_100():
 
     # approxNN
     ann = xndim.approxNN(qpoint, 4)
-    np.testing.assert_array_equal(ann, [10, 2, 5, 19])
+    cmp = [10, 2, 5, 19]
+    assert len(ann[0]) == len(cmp)
+    assert ann[1] == 37.49666651850535
+    assert sorted(ann[0]) == sorted(cmp)  # is this performant?
+    # np.testing.assert_array_equal(ann, [10, 2, 5, 19])
+
+    # exactNN
+    enn = xndim.exactNN(qpoint, 4)
+    assert enn == 0
 
 
 @pytest.mark.skip("High performance test.")
