@@ -6,7 +6,10 @@ from monkeynn import ndim
 from scipy.spatial import distance
 
 
-def test_ndim_100():
+def test_ndim_20():
+    """ Test 20 points in 3 dimensions
+    quasi-randomly generated with integer coordinates from 1-100
+    """
     start_time = time.time()
     np.random.seed(1729)
     x = np.random.randint(1, 100, (20, 3))
@@ -63,7 +66,65 @@ def test_ndim_100():
 
     # exactNN
     enn = xndim.exactNN(qpoint, 5)
-    assert enn == 0
+    cmp = [2, 5, 12, 10, 19]
+    assert len(enn) == len(cmp)
+    assert sorted(enn) == sorted(cmp)
+
+
+def test_ndim_1000():
+    """ Test 1000 points in 5 dimensions
+    quasi-randomly generated with integer coordinates from 1-10000
+    """
+    start_time = time.time()
+    np.random.seed(1729)
+    x = np.random.randint(1, 10000, (1000, 5))
+    print(x[0:5])
+    xndim = ndim.ndim(x)
+    print(xndim.monkeyindexes[0].length)
+    print("time: {} seconds".format(time.time() - start_time))
+
+    # Approx within distance
+    qpoint = np.asarray([250, 600, 200, 50, 800])
+    print("qpoint: ", qpoint)
+    tdist = 3000
+    awd = xndim.approxWithinD(qpoint, tdist)
+    d = distance.cdist(x[awd], np.asarray([qpoint]))
+    print("awd: ", awd)
+    print("d: ", d)
+    print(x[awd])
+    assert True
+
+    # Exact within distance
+    ewd = xndim.allWithinD(qpoint, tdist)
+    print(ewd)
+    d = distance.cdist(x[awd], np.asarray([qpoint]))
+    print("d: ", d)
+
+#    alld = distance.cdist(x, np.asarray([qpoint]))
+#    print(len(alld))
+#    print(sorted(alld))
+#    assert False
+    print("time: {} seconds".format(time.time() - start_time))
+
+    # approxNN
+    ann = xndim.approxNN(qpoint, 10)
+    print(ann)
+    # cmp = [10, 2, 5, 19]
+    # assert len(ann[0]) == len(cmp)
+    # assert ann[1] == 37.49666651850535
+    # assert sorted(ann[0]) == sorted(cmp)  # is this performant?
+    # np.testing.assert_array_equal(ann, [10, 2, 5, 19])
+    print("time: {} seconds".format(time.time() - start_time))
+
+    # exactNN
+    enn = xndim.exactNN(qpoint, 5)
+    cmp = [2, 5, 12, 10, 19]
+    print(enn)
+    print(cmp)
+    # assert len(enn) == len(cmp)
+    # assert sorted(enn) == sorted(cmp)
+    print("time: {} seconds".format(time.time() - start_time))
+    assert False
 
 
 @pytest.mark.skip("High performance test.")
@@ -87,6 +148,7 @@ def test_ndim_10000000():
 
 
 if __name__ == "__main__":
-    test_ndim_100()
+    test_ndim_20()
+    test_ndim_1000()
     test_ndim_100000()
     test_ndim_10000000()

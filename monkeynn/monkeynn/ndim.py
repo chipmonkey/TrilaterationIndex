@@ -208,14 +208,18 @@ class ndim:
         print(topn.maxP().distance)
         print(cutoffD)
         while topn.maxP().distance > cutoffD:
+            print("top P dist: ", topn.maxP().distance)
             npi, cutoffD = next(piGen)
             print("comparing:")
             print(self.points[npi])
             print(qPoint)
             adist = self._pointDistance(self.points[npi], qPoint)
+            print("adist: ", adist)
             topn.push(dPoint(npi, adist))
-            print(topn.maxP)
             print("cutoff: ", cutoffD)
+
+        print("adist: ", adist)
+        print("cutoff: ", cutoffD)
 
         retValues = []
         for myPi in topn.dPList:
