@@ -108,6 +108,8 @@ class ndim:
 
         commonIndexes = set(candidateIndexes[0])
         for myCandidates in zip(candidateIndexes):
+            # print("myCandidates: ", sorted(myCandidates[0]))
+            # print("commonIndexes: ", sorted(commonIndexes))
             commonIndexes = commonIndexes.intersection(set(myCandidates[0]))
 
         return list(commonIndexes)
@@ -200,13 +202,13 @@ class ndim:
             print(qPoint)
             adist = self._pointDistance(self.points[npi], qPoint)
             topn.push(dPoint(npi, adist))
-            print(topn.maxP)
+            print("topn.maxP: ", topn.maxP().distance)
             print("cutoff: ", cutoffD)
 
         print("Phase 2:")
-        print("topn.maxP():", topn.maxP())
-        print(topn.maxP().distance)
-        print(cutoffD)
+        print("topn.maxP():", topn.maxP().distance)
+        print("topn.maxP().distance: ", topn.maxP().distance)
+        print("cutoffD: ", cutoffD)
         while topn.maxP().distance > cutoffD:
             print("top P dist: ", topn.maxP().distance)
             npi, cutoffD = next(piGen)
@@ -215,7 +217,11 @@ class ndim:
             print(qPoint)
             adist = self._pointDistance(self.points[npi], qPoint)
             print("adist: ", adist)
-            topn.push(dPoint(npi, adist))
+            exit
+            print("chip")
+            print("topnmaxdist: ", topn.maxP().distance)
+            if adist < topn.maxP().distance:
+                topn.push(dPoint(npi, adist))
             print("cutoff: ", cutoffD)
 
         print("adist: ", adist)

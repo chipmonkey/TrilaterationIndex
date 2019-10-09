@@ -6,6 +6,7 @@ from monkeynn import ndim
 from scipy.spatial import distance
 
 
+@pytest.mark.skip("High performance test.")
 def test_ndim_20():
     """ Test 20 points in 3 dimensions
     quasi-randomly generated with integer coordinates from 1-100
@@ -32,9 +33,9 @@ def test_ndim_20():
     np.testing.assert_array_equal(xndim.refpoints, t_refpoints)
     # print(t_mipoints.shape)
     print("xndim.monkeyindex:")
-    print(xndim.monkeyindexes[0].mi.shape)
-    print(xndim.monkeyindexes[0].mi['pindex'])
-    print(xndim.monkeyindexes[0].mi['distance'])
+    print("xnd.mi.shape: ", xndim.monkeyindexes[0].mi.shape)
+    print("pindex: ", xndim.monkeyindexes[0].mi['pindex'])
+    print("distance: ", xndim.monkeyindexes[0].mi['distance'])
     np.testing.assert_array_almost_equal(xndim.monkeyindexes[0].mi['pindex'],
                                          t_pindex)
     np.testing.assert_array_almost_equal(xndim.monkeyindexes[0].mi['distance'],
@@ -77,50 +78,56 @@ def test_ndim_1000():
     """
     start_time = time.time()
     np.random.seed(1729)
-    x = np.random.randint(1, 10000, (1000, 5))
-    print(x[0:5])
+    x = np.random.randint(1, 10000, (1000, 20))
+    print("x 0-10: ", x[0:10])
     xndim = ndim.ndim(x)
-    print(xndim.monkeyindexes[0].length)
+    print("length: ", xndim.monkeyindexes[0].length)
     print("time: {} seconds".format(time.time() - start_time))
 
     # Approx within distance
-    qpoint = np.asarray([250, 600, 200, 50, 800])
+    qpoint = np.asarray([5257, 5706, 6820, 9571, 5620, 7192, 1066,
+                         7555, 6024, 5096, 2058, 380, 1448, 3980,
+                         2796, 2600, 3838, 340, 9097, 9956])
     print("qpoint: ", qpoint)
     tdist = 3000
     awd = xndim.approxWithinD(qpoint, tdist)
     d = distance.cdist(x[awd], np.asarray([qpoint]))
     print("awd: ", awd)
-    print("d: ", d)
-    print(x[awd])
-    assert True
+    print("d: ", sorted(d))
+    print("x[awd]: ", x[awd])
+    assert set(awd) == set([104, 386, 619, 837])
 
     # Exact within distance
+    tdist = 13000
     ewd = xndim.allWithinD(qpoint, tdist)
-    print(ewd)
-    d = distance.cdist(x[awd], np.asarray([qpoint]))
-    print("d: ", d)
+    # print("ewd: ", ewd)
+    # print("x[ewd]: ", x[ewd])
+    d = distance.cdist(x[ewd], np.asarray([qpoint]))
+    # print("d: ", d)
+    assert set(ewd) == set([59, 172, 201, 221, 338, 378,
+                            400, 417, 643, 832, 880])
 
-#    alld = distance.cdist(x, np.asarray([qpoint]))
-#    print(len(alld))
-#    print(sorted(alld))
-#    assert False
     print("time: {} seconds".format(time.time() - start_time))
 
     # approxNN
     ann = xndim.approxNN(qpoint, 10)
-    print(ann)
-    # cmp = [10, 2, 5, 19]
+    print("ann: ", ann)
+    cmp = [136, 808, 935, 720, 978, 624, 752, 254, 603, 186]
     # assert len(ann[0]) == len(cmp)
     # assert ann[1] == 37.49666651850535
     # assert sorted(ann[0]) == sorted(cmp)  # is this performant?
     # np.testing.assert_array_equal(ann, [10, 2, 5, 19])
     print("time: {} seconds".format(time.time() - start_time))
+    assert ann[0] == cmp
 
     # exactNN
     enn = xndim.exactNN(qpoint, 5)
     cmp = [2, 5, 12, 10, 19]
-    print(enn)
-    print(cmp)
+    print("enn: ", enn)
+    d = distance.cdist(x[enn], np.asarray([qpoint]))
+    dall = distance.cdist(x, np.asarray([qpoint]))
+    print("d: ", sorted(d))
+    print("dall: ", sorted(dall))
     # assert len(enn) == len(cmp)
     # assert sorted(enn) == sorted(cmp)
     print("time: {} seconds".format(time.time() - start_time))

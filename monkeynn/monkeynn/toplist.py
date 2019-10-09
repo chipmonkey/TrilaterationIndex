@@ -25,7 +25,7 @@ class toplist(toplistABC):
         if self.count == 0:
             return None
         else:
-            print(self.count)
+            print("toplist.count :", self.count)
             return self.dPList[self.count-1]
 
     def push(self, newContent):
@@ -37,8 +37,12 @@ class toplist(toplistABC):
         self.dPList.insert(targetIndex, newContent)
         self.count = self.count + 1
         if self.count > self.numItems:
+            print("len: ", len(self.dPList))
             self.dPList = self.dPList[0:self.numItems]
             self.count = self.count - 1
+        print("dPList: ")
+        for x in self.dPList:
+            print(x.distance)
 
     def pop(self, cContent):
         """ find an element in the list that == cContent
