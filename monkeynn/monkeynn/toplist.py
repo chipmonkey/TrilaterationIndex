@@ -40,9 +40,6 @@ class toplist(toplistABC):
             print("len: ", len(self.dPList))
             self.dPList = self.dPList[0:self.numItems]
             self.count = self.count - 1
-        print("dPList: ")
-        for x in self.dPList:
-            print(x.distance)
 
     def pop(self, cContent):
         """ find an element in the list that == cContent

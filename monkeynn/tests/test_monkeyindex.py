@@ -27,7 +27,7 @@ def test_madness_5():
     assert x.length == 5
     x.loadmi([1, 2, 5, 4, 3])
 
-    print("test - x.mi", x.mi)
+    print("x.mi", x.mi)
 
     y = x.allwithinradius(2, 1)
     numpy.testing.assert_array_equal(y, [0, 1, 4])
@@ -55,21 +55,21 @@ def test_madness_8():
 
     mygen = x.genClosestP(3)
     val = next(mygen)
-    assert val == (4, 3.0)
+    assert val == (4, 0)
     val = next(mygen)
-    assert val == (6, 3.5)
+    assert val == (6, 0.5)
     val = next(mygen)
-    assert val == (1, 2.0)
+    assert val == (1, 1.0)
     val = next(mygen)
-    assert val == (3, 4.0)
+    assert val == (3, 1.0)
     val = next(mygen)
-    assert val == (0, 1.0)
+    assert val == (0, 2.0)
     val = next(mygen)
-    assert val == (2, 5.0)
+    assert val == (2, 2.0)
     val = next(mygen)
-    assert val == (5, 6.0)
+    assert val == (5, 3.0)
     val = next(mygen)
-    assert val == (7, 7.0)
+    assert val == (7, 4.0)
 
 
 def test_madness_1000():

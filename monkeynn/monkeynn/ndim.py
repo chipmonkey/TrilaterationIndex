@@ -108,8 +108,6 @@ class ndim:
 
         commonIndexes = set(candidateIndexes[0])
         for myCandidates in zip(candidateIndexes):
-            # print("myCandidates: ", sorted(myCandidates[0]))
-            # print("commonIndexes: ", sorted(commonIndexes))
             commonIndexes = commonIndexes.intersection(set(myCandidates[0]))
 
         return list(commonIndexes)
@@ -138,7 +136,7 @@ class ndim:
         because monkeyindexes are sorted by that distance.
 
         Remember these are the minimum overall distances possible.
-        So track cutoffD as the maximum of those n distances.  This is the
+        So track minqrdist as the maximum of those n distances.  This is the
         lowest possible cutoff of distance for the n nearest neighbors.
 
         STOPPING HERE GIVES A _very_ rough approxNN
@@ -156,17 +154,16 @@ class ndim:
 
         # Generate the first n candidates:
         while topn.count < n:
-            npi, ndist = next(piGen)
+            npi, minqrdist = next(piGen)
             adist = self._pointDistance(self.points[npi],
                                         self.refpoints[rindex])
-            cutoffD = adist
+            if adist > cutoffD:
+                cutoffD = adist
             topn.push(dPoint(npi, adist))
 
         retValues = []
         for myPi in topn.dPList:
-            print(myPi)
             retValues.append(myPi.pindex)
-            print(retValues)
 
         return retValues, cutoffD
 
@@ -189,6 +186,7 @@ class ndim:
         """
 
         # aNN, cutoffD = self.approxNN(qPoint, n)
+        chipcount = 0
         topn = toplist(n)
 
         qDists = self._buildDistances(self.refpoints, qPoint)
@@ -196,36 +194,32 @@ class ndim:
         piGen = firstMi.genClosestP(qDists[0])
 
         while len(topn) < n:
-            npi, cutoffD = next(piGen)
-            print("comparing:")
-            print(self.points[npi])
-            print(qPoint)
+            npi, minqrdist = next(piGen)
             adist = self._pointDistance(self.points[npi], qPoint)
             topn.push(dPoint(npi, adist))
-            print("topn.maxP: ", topn.maxP().distance)
-            print("cutoff: ", cutoffD)
 
         print("Phase 2:")
         print("topn.maxP():", topn.maxP().distance)
         print("topn.maxP().distance: ", topn.maxP().distance)
-        print("cutoffD: ", cutoffD)
-        while topn.maxP().distance > cutoffD:
+        print("minqrdist: ", minqrdist)
+        while topn.maxP().distance <= minqrdist:
             print("top P dist: ", topn.maxP().distance)
-            npi, cutoffD = next(piGen)
+            npi, minqrdist = next(piGen)
             print("comparing:")
             print(self.points[npi])
             print(qPoint)
             adist = self._pointDistance(self.points[npi], qPoint)
             print("adist: ", adist)
             exit
-            print("chip")
+            print("chip:", chipcount)
+            chipcount = chipcount + 1
             print("topnmaxdist: ", topn.maxP().distance)
             if adist < topn.maxP().distance:
                 topn.push(dPoint(npi, adist))
-            print("cutoff: ", cutoffD)
+            print("cutoff: ", minqrdist)
 
         print("adist: ", adist)
-        print("cutoff: ", cutoffD)
+        print("cutoff: ", minqrdist)
 
         retValues = []
         for myPi in topn.dPList:
