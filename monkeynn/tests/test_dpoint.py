@@ -7,4 +7,5 @@ def testdPoint():
     assert dp1 != dp2
     assert dp2 > dp1
     assert dp2 >= dp1
-
+    assert dp1 < dp2
+    assert dp1 <= dp2

@@ -31,3 +31,11 @@ class dPoint:
 
     def __ge__(self, other):
         return self.distance >= other.distance
+
+    def __repr__(self):
+        return "<dPoint pindex: %s and distance: %5.2f>" \
+            % (self.pindex, self.distance)
+
+    def __str__(self):
+        return "dPoint with pindex: %s and distance: %5.2f" \
+            % (self.pindex, self.distance)

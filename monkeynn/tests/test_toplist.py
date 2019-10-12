@@ -1,4 +1,5 @@
 from monkeynn.toplist import toplist
+from monkeynn.dpoint import dPoint
 
 
 def test_pushpop():
@@ -60,3 +61,31 @@ def test_pushpop():
     assert x.dPList == [5, 5]
     assert x.count == 2
     assert x.maxP() == 5
+
+
+def testPushdPoint():
+    """ There was a weird failure with this in real life
+    that was apparently not uncovered in earlier testing
+    which is why this is here.
+    """
+    dp1 = dPoint(2, 0.0)
+    dp2 = dPoint(19, 20.52)
+    dp3 = dPoint(7, 73.33)
+    dp4 = dPoint(12, 31.16)
+
+    x = toplist(5)
+    assert x.numItems == 5
+    assert x.count == 0
+    assert x.maxP() is None
+
+    x.push(dp1)
+    assert x.dPList == [dp1]
+    assert x.count == 1
+
+    x.push(dp2)
+    assert x.dPList == [dp1, dp2]
+    x.push(dp3)
+    assert x.dPList == [dp1, dp2, dp3]
+    x.push(dp4)
+    assert dp4 < dp3
+    assert x.dPList == [dp1, dp2, dp4, dp3]

@@ -1,11 +1,11 @@
 """ Base monkeynn.ndim class
-Contains a numpy ndarray
+Contains a np ndarray
 and associated referencepoints and monkeyindexes
 to facilitate fast nearest neighbor searching
 """
 
 import logging
-import numpy
+import numpy as np
 import time
 
 from scipy.spatial import distance
@@ -45,7 +45,8 @@ class ndim:
         assert self.m > 1
         assert self.n > self.m
 
-        refpoints = self.points[numpy.random.randint(0, self.n, self.m)]
+        np.random.seed(1729)
+        refpoints = self.points[np.random.randint(0, self.n, self.m)]
         return(refpoints)
 
     def _buildMonkeyIndex(self):
@@ -60,7 +61,7 @@ class ndim:
         against the self.refpoints[i]
         """
         assert self.points.size
-        assert type(self.points) == numpy.ndarray
+        assert type(self.points) == np.ndarray
         allmi = []
         for srp in self.refpoints:
             x = mi.monkeyindex(self.n)
@@ -82,13 +83,14 @@ class ndim:
         d = distance.euclidean(tpoint, refpoint)
         return(d)
 
-    def _buildDistances(self, tpoints, refpoint):
+    @staticmethod
+    def _buildDistances(tpoints, refpoint):
         """ Create an array of distances suitable for loadmi
         Input: self needed for self.points with shape (n, m)
                refpoint is an m-dimensional point
                theoretically one of self.refpoints, but eh
         """
-        d = distance.cdist(tpoints, numpy.asarray([refpoint]))
+        d = distance.cdist(tpoints, np.asarray([refpoint]))
         d = d[:, 0]  # since refpoint is 1 point
         return(d)
 
@@ -121,7 +123,7 @@ class ndim:
         """
         approxIndexes = self.approxWithinD(qPoint, tdist)
         dists = distance.cdist(self.points[approxIndexes],
-                               numpy.asarray([qPoint]))
+                               np.asarray([qPoint]))
         exactIndexes = []
         for (ind, dist) in zip(approxIndexes, dists):
             if dist[0] <= tdist:
@@ -135,7 +137,8 @@ class ndim:
         ALONG THE FIRST MONKEYINDEX.  This is superfast
         because monkeyindexes are sorted by that distance.
 
-        Remember these are the minimum overall distances possible.
+        Remember these are the minimum distances possible
+        (compared to the actual distance between qpoint and P[i]).
         So track minqrdist as the maximum of those n distances.  This is the
         lowest possible cutoff of distance for the n nearest neighbors.
 
@@ -165,7 +168,7 @@ class ndim:
         for myPi in topn.dPList:
             retValues.append(myPi.pindex)
 
-        return retValues, cutoffD
+        return retValues
 
     def exactNN(self, qPoint, n):
         """
@@ -202,14 +205,18 @@ class ndim:
         print("topn.maxP():", topn.maxP().distance)
         print("topn.maxP().distance: ", topn.maxP().distance)
         print("minqrdist: ", minqrdist)
-        while topn.maxP().distance <= minqrdist:
+        # While the best possible distance is smaller
+        # Than the worst known closest (topn) distance
+        # The next candidate _could_ be a nearest-n neighbor
+        while minqrdist <= topn.maxP().distance:
             print("top P dist: ", topn.maxP().distance)
             npi, minqrdist = next(piGen)
-            print("comparing:")
-            print(self.points[npi])
-            print(qPoint)
+            # print("comparing:")
+            # print(self.points[npi])
+            # print(qPoint)
             adist = self._pointDistance(self.points[npi], qPoint)
-            print("adist: ", adist)
+            print("adist for point {} is {} and minqrdist is {} "
+                  .format(npi, adist, minqrdist))
             exit
             print("chip:", chipcount)
             chipcount = chipcount + 1

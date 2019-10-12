@@ -25,7 +25,6 @@ class toplist(toplistABC):
         if self.count == 0:
             return None
         else:
-            print("toplist.count :", self.count)
             return self.dPList[self.count-1]
 
     def push(self, newContent):
@@ -36,10 +35,9 @@ class toplist(toplistABC):
         targetIndex = self._searchIndex(newContent)
         self.dPList.insert(targetIndex, newContent)
         self.count = self.count + 1
-        if self.count > self.numItems:
-            print("len: ", len(self.dPList))
+        while self.count > self.numItems:
             self.dPList = self.dPList[0:self.numItems]
-            self.count = self.count - 1
+            self.count = self.numItems
 
     def pop(self, cContent):
         """ find an element in the list that == cContent
@@ -53,8 +51,8 @@ class toplist(toplistABC):
             myLeft = []
             myRight = self.dPList[targetIndex+1:]
         else:
-            myLeft = self.dPList[0:targetIndex-1]
-            myRight = self.dPList[targetIndex:]
+            myLeft = self.dPList[0:targetIndex]
+            myRight = self.dPList[targetIndex+1:]
         self.dPList = myLeft + myRight
         self.count = self.count - 1
 
@@ -75,15 +73,15 @@ class toplist(toplistABC):
         i = 0
 
         if len(self.dPList) == 0:
-            return(i)
+            return(0)
 
         if self.dPList[0] >= cContent:
-            return(i)
+            return(0)
 
         while i < len(self.dPList) and self.dPList[i] < cContent:
             i = i + 1
 
-        return(i+1)
+        return(i)
 
     def search(self, cContent):
         """ find an element in the list
