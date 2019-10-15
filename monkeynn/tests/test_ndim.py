@@ -90,6 +90,8 @@ def test_ndim_20():
     assert ewd == [2]
 
     # approxNN
+    print("Hi chip, here is your monkeyindex[0]:")
+    print(xndim.monkeyindexes[0])
     ann = xndim.approxNN(qpoint, 4)
     print("ann: ", ann)
     cmp = [2, 7, 12, 19]
@@ -118,7 +120,7 @@ def test_exactNN_8():
     assert sorted(enn) == sorted(cmp)
 
 
-# @pytest.mark.skip("High performance test.")
+@pytest.mark.skip("High performance test.")
 def test_ndim_1000():
     """ Test 1000 points in 5 dimensions
     quasi-randomly generated with integer coordinates from 1-10000
@@ -219,6 +221,7 @@ def test_ndim_10000000():
 
 if __name__ == "__main__":
     test_ndim_20()
-    test_ndim_1000()
-    test_ndim_100000()
-    test_ndim_10000000()
+    test_exactNN_8()
+    # test_ndim_1000()
+    # test_ndim_100000()
+    # test_ndim_10000000()

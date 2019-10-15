@@ -11,6 +11,14 @@ class monkeyindex:
         self.mi = numpy.zeros((length),
                               dtype=[('pindex', int), ('distance', float)])
 
+    def __repr__(self):
+        return "<monkeyindex length: %d and mi: %s" \
+            % (self.length, self.mi)
+
+    def __str__(self):
+        return "monkeyindex with length: %d and mi: %s" \
+            % (self.length, self.mi)
+
     def loadmi(self, inarray):
         """  Populate the index
         requires an input array of distances

@@ -193,6 +193,7 @@ class ndim:
         topn = toplist(n)
 
         qDists = self._buildDistances(self.refpoints, qPoint)
+        print("qPdists: ", qDists)
         firstMi = self.monkeyindexes[0]
         piGen = firstMi.genClosestP(qDists[0])
 
