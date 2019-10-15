@@ -210,22 +210,21 @@ class ndim:
         # Than the worst known closest (topn) distance
         # The next candidate _could_ be a nearest-n neighbor
         while minqrdist <= topn.maxP().distance:
-            print("top P dist: ", topn.maxP().distance)
             npi, minqrdist = next(piGen)
             # print("comparing:")
             # print(self.points[npi])
             # print(qPoint)
             adist = self._pointDistance(self.points[npi], qPoint)
-            print("adist for point {} is {} and minqrdist is {} "
-                  .format(npi, adist, minqrdist))
+            print("{} - adist for p[{}]={}, minqrdist is {}, topnmaxdist: {}"
+                  .format(chipcount, npi, adist, minqrdist,
+                          topn.maxP().distance))
             exit
-            print("chip:", chipcount)
             chipcount = chipcount + 1
-            print("topnmaxdist: ", topn.maxP().distance)
             if adist < topn.maxP().distance:
                 topn.push(dPoint(npi, adist))
-            print("cutoff: ", minqrdist)
+            # print("cutoff: ", minqrdist)
 
+        print("chip:", chipcount)
         print("adist: ", adist)
         print("cutoff: ", minqrdist)
 

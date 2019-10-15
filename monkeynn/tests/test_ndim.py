@@ -139,8 +139,8 @@ def test_ndim_1000():
     print("qpoint: ", qpoint)
 
 #     # Approx within distance
-#     This is bizarre in high dimensions...
-#     Must implenent awd2 to use more than jus tone refpoint
+#     This is bizarre in high dimensions with few points...
+#     Must implement awd2 to use more than jus tone refpoint
 #     tdist = 5000
 #     awd = xndim.approxWithinD(qpoint, tdist)
 #     print("xr0: ", xndim.refpoints[0])
@@ -191,7 +191,7 @@ def test_ndim_1000():
     d = distance.cdist(x[enn], np.asarray([qpoint]))
     dall = distance.cdist(x, np.asarray([qpoint]))
     print("d: ", sorted(d))
-    print("denn: ", sorted(dall[ann]))
+    print("denn: ", sorted(dall[enn]))
     # print("dall: ", sorted(dall))
     # assert len(enn) == len(cmp)
     # assert sorted(enn) == sorted(cmp)
@@ -209,7 +209,7 @@ def test_ndim_100000():
     print("time: {} seconds".format(time.time() - start_time))
 
 
-@pytest.mark.skip("High performance test.")
+# @pytest.mark.skip("High performance test.")
 def test_ndim_10000000():
     start_time = time.time()
     np.random.seed(1729)
@@ -217,6 +217,22 @@ def test_ndim_10000000():
     xndim = ndim.ndim(x)
     print(xndim.monkeyindexes[0].length)
     print("time: {} seconds".format(time.time() - start_time))
+
+    qpoint = np.asarray(x[0])
+    print("qpoint: ", qpoint)
+
+    # exactNN
+    enn = xndim.exactNN(qpoint, 5)
+    print("enn: ", enn)
+    d = distance.cdist(x[enn], np.asarray([qpoint]))
+    dall = distance.cdist(x, np.asarray([qpoint]))
+    print("d: ", sorted(d))
+    print("denn: ", sorted(dall[enn]))
+    # print("dall: ", sorted(dall))
+    # assert len(enn) == len(cmp)
+    # assert sorted(enn) == sorted(cmp)
+    print("time: {} seconds".format(time.time() - start_time))
+    assert False
 
 
 if __name__ == "__main__":
