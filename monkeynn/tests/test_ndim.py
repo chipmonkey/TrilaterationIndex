@@ -199,6 +199,27 @@ def test_ndim_1000():
     assert False
 
 
+def test_ndim_1000_ann_mmi():
+    """ Test 1000 points in 5 dimensions
+    quasi-randomly generated with integer coordinates from 1-10000
+    """
+    start_time = time.time()
+    np.random.seed(1729)
+    x = np.random.randint(1, 10000, (1000, 20))
+    print("x 0-10: ", x[0:10])
+    xndim = ndim.ndim(x)
+    print("length: ", xndim.monkeyindexes[0].length)
+    print("time: {} seconds".format(time.time() - start_time))
+
+    qpoint = np.asarray([5257, 5706, 6820, 9571, 5620, 7192, 1066,
+                         7555, 6024, 5096, 2058, 380, 1448, 3980,
+                         2796, 2600, 3838, 340, 9097, 9956])
+    print("qpoint: ", qpoint)
+    # ann_mmi
+    xndim.approxNN_mmi(qpoint, 5)
+    assert False
+
+
 @pytest.mark.skip("High performance test.")
 def test_ndim_100000():
     start_time = time.time()
@@ -209,7 +230,7 @@ def test_ndim_100000():
     print("time: {} seconds".format(time.time() - start_time))
 
 
-# @pytest.mark.skip("High performance test.")
+@pytest.mark.skip("High performance test.")
 def test_ndim_10000000():
     start_time = time.time()
     np.random.seed(1729)

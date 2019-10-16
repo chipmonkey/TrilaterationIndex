@@ -74,7 +74,8 @@ class ndim:
             allmi.append(x)
         return(allmi)
 
-    def _pointDistance(self, tpoint, refpoint):
+    @staticmethod
+    def _pointDistance(tpoint, refpoint):
         """ Returns the euclidean distance
         between two n-dimensional points
 
@@ -172,7 +173,7 @@ class ndim:
 
     def exactNN(self, qPoint, n):
         """
-        for EXACT NN... start with approxNN as before having saved maxD
+        For EXACT NN... start with approxNN as before having saved maxD
         and then...
 
         Compute the real distances of those n points from qPoint.
@@ -235,3 +236,39 @@ class ndim:
             print(retValues)
 
         return retValues
+
+    def approxNN_mmi(self, qPoint, n):
+        """
+        Same as exactNN except we iterate over ALL monkeyindexes
+        equally until we find n common points in P
+
+        Save all points with real distance <= maxD.
+        These points are definitely in the nearest N.
+        """
+        qDists = self._buildDistances(self.refpoints, qPoint)
+
+        # allPiGen is a LIST of GENERATORS, one per monkeyindex...
+        # Let's see how this goes... could be a disaster
+        allPiGen = []
+        for i in range(len(qDists)):  # Is there a better way for ndarray?
+            print(i, qDists[i])
+            allPiGen.append(self.monkeyindexes[i].genClosestP(qDists[i]))
+        print(allPiGen)
+
+        votes = np.zeros((self.n),
+                         dtype=[('pindex', int), ('votes', int)])
+        votes['pindex'] = list(range(self.n))
+
+        itercount = 0
+        for omgosh in zip(*allPiGen):
+            print("itercount: ", itercount)
+            print(*omgosh)
+            print(type(omgosh))
+            for pindex, qrdist in omgosh:
+                votes['votes'][pindex] = votes['votes'][pindex] + 1
+                # print(votes)
+            itercount = itercount + 1
+            if itercount > 100:
+                break
+
+        print(votes)
