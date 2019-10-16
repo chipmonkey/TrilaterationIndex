@@ -1,4 +1,6 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
-setup(name="monkeynn",
-      packages=["monkeynn"])
+setup(
+    name="monkeynn",
+    version="0.0.1",
+    packages=["monkeynn"])
