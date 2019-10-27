@@ -217,7 +217,15 @@ def test_ndim_1000_ann_mmi():
     print("qpoint: ", qpoint)
     # ann_mmi
     xndim.approxNN_mmi(qpoint, 5)
-    assert False
+    # dall = distance.cdist(x, np.asarray([qpoint]))
+    # for i in range(len(dall)):
+    #     print(i, dall[i])
+    # print("dall: ", dall)
+    # enn = xndim.exactNN(qpoint, 5)
+    # print("enn: ", enn)
+    # print("dall[enn]: ", dall[enn])
+
+    # assert False
 
 
 @pytest.mark.skip("High performance test.")
@@ -234,10 +242,13 @@ def test_ndim_100000():
 def test_ndim_10000000():
     start_time = time.time()
     np.random.seed(1729)
-    x = np.random.randint(1, 100000, (10000000, 3))
-    xndim = ndim.ndim(x)
+    minP = 0
+    maxP = 100000
+    x = np.random.randint(minP, maxP, (10000000, 3))
+    xndim = ndim.ndim(x, minP, maxP)
     print(xndim.monkeyindexes[0].length)
-    print("time: {} seconds".format(time.time() - start_time))
+    print("time 248: {} seconds".format(time.time() - start_time))
+    last_time = time.time()
 
     qpoint = np.asarray(x[0])
     print("qpoint: ", qpoint)
@@ -252,13 +263,18 @@ def test_ndim_10000000():
     # print("dall: ", sorted(dall))
     # assert len(enn) == len(cmp)
     # assert sorted(enn) == sorted(cmp)
-    print("time: {} seconds".format(time.time() - start_time))
-    assert False
+    print("time 263: {} seconds".format(time.time() - last_time))
+
+    # ann_2
+    # ann2 = xndim.approxNN_mmi(qpoint, 5)
+    # print("ann2:")
+    # print(ann2)
+    # assert False
 
 
 if __name__ == "__main__":
-    test_ndim_20()
-    test_exactNN_8()
+    # test_ndim_20()
+    # test_exactNN_8()
     # test_ndim_1000()
     # test_ndim_100000()
-    # test_ndim_10000000()
+    test_ndim_10000000()

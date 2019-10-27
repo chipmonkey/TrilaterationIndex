@@ -19,8 +19,10 @@ log = logging.getLogger('monkeynn')
 
 class ndim:
 
-    def __init__(self, points):
+    def __init__(self, points, minP=0, maxP=1000):
         self.points = points
+        self.minP = minP
+        self.maxP = maxP
         self.n, self.m = self.points.shape
         self.refpoints = self._setRefPoints()
         self.monkeyindexes = self._buildMonkeyIndex()
@@ -46,7 +48,12 @@ class ndim:
         assert self.n > self.m
 
         np.random.seed(1729)
-        refpoints = self.points[np.random.randint(0, self.n, self.m)]
+        # refpoints = self.points[np.random.randint(0, self.n, self.m)]
+        refpoints = np.zeros((self.m, self.m))
+        refpoints.fill(self.minP)
+        for i in range(self.m):
+            refpoints[i, i] = self.maxP
+        print("refpoints: ", refpoints)
         return(refpoints)
 
     def _buildMonkeyIndex(self):
@@ -194,7 +201,7 @@ class ndim:
         topn = toplist(n)
 
         qDists = self._buildDistances(self.refpoints, qPoint)
-        print("qPdists: ", qDists)
+        # print("qPdists: ", qDists)
         firstMi = self.monkeyindexes[0]
         piGen = firstMi.genClosestP(qDists[0])
 
@@ -262,13 +269,14 @@ class ndim:
         itercount = 0
         for omgosh in zip(*allPiGen):
             print("itercount: ", itercount)
-            print(*omgosh)
-            print(type(omgosh))
+            print("*omgosh: ", *omgosh)
+            print("type(omgosh): ", type(omgosh))
             for pindex, qrdist in omgosh:
                 votes['votes'][pindex] = votes['votes'][pindex] + 1
                 # print(votes)
             itercount = itercount + 1
-            if itercount > 100:
+            if itercount > 200:
                 break
-
-        print(votes)
+        votes.sort(order='votes')
+        print("votes: ", votes)
+        return(votes)
