@@ -1,6 +1,6 @@
 import os
 
-import numpy
+import numpy as np
 import pickle
 
 import monkeynn.monkeyindex as mi
@@ -29,21 +29,25 @@ def test_madness_5():
 
     print("x.mi", x.mi)
 
-    y = x.allWithinRadius(2, 1)
+    y = x.allWithinRadiusOld(2, 1)
+    y2 = x.allWithinRadius(2, 1)
     cy = x.countWithinRadius(2, 1)
-    numpy.testing.assert_array_equal(y, [0, 1, 4])
+    np.testing.assert_array_equal(y, [0, 1, 4])
     assert cy == len(y)
+    print("y: ", y)
+    print("y2: ", y2)
+    np.testing.assert_array_equal(y, y2)
 
     y = x.allWithinRadius(5, 2)
     cy = x.countWithinRadius(2, 1)
-    numpy.testing.assert_array_equal(y, [4, 3, 2])
+    np.testing.assert_array_equal(y, [4, 3, 2])
     assert cy == len(y)
 
     closest = x.miClosestNPi(4, 2)
-    numpy.testing.assert_array_equal(closest, [4, 3])
+    np.testing.assert_array_equal(closest, [4, 3])
 
     closest = x.miClosestNPi(4, 3)
-    numpy.testing.assert_array_equal(closest, [4, 3, 2])
+    np.testing.assert_array_equal(closest, [4, 3, 2])
     print(closest)
     print(x.mi[closest])
 
@@ -78,13 +82,13 @@ def test_madness_8():
 
 def test_madness_1000():
     x = mi.monkeyindex(1000)
-    numpy.random.seed(1729)
-    ra = numpy.random.random_sample(size=(1000))
+    np.random.seed(1729)
+    ra = np.random.random_sample(size=(1000))
     x.loadmi(ra)
 
     closest = x.miClosestNPi(0.8, 20)
-    numpy.testing.assert_array_equal(testclosest, closest)
-    numpy.testing.assert_array_almost_equal(ra[closest], testclosestra)
+    np.testing.assert_array_equal(testclosest, closest)
+    np.testing.assert_array_almost_equal(ra[closest], testclosestra)
 
 
 if __name__ == "__main__":
