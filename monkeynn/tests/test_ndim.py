@@ -32,15 +32,15 @@ x = [[14, 38, 22],
      [74, 27, 54]]
 x = np.asarray(x)
 
-pp.pprint(x)
-
-t_refpoints = [[41, 35, 33],
-               [52, 77, 13],
-               [74, 27, 54]]
-print("t_refpoints: ", t_refpoints)
+t_refpoints = [[1000, 0, 0],
+               [0, 1000, 0],
+               [0, 0, 1000]]
 
 t_pindex = [13,  8, 18,  0,  7,  2, 19, 12, 16, 10,  6,
             5,  9, 17,  3,  1, 14, 4, 15, 11]
+
+t_pindex = [4,  3,  5, 11, 15, 19, 12,  9,  1,  2,  6,
+            8, 18, 13, 10,  7,  0, 14, 17, 16]
 
 t_distance = [0.0, 20.51828453, 22.38302929, 31.1608729, 32.55764119,
               33.0, 33.52610923, 38.09199391, 39.67366885, 42.87190222,
@@ -52,6 +52,11 @@ t_distance = [0.0, 19.209373, 19.748418, 29.308702, 36.069378, 38.091994,
               39.92493, 42.426407, 43.84062, 46.78675, 47.801674,
               48.836462, 51.720402, 64.412732, 65.467549, 66.475559,
               71.965269, 73.013697, 78.746428, 79.006329]
+
+t_distance = [910.948956, 911.761482, 914.327075, 916.642242, 925.467449,
+              927.966055, 930.463863, 936.337546, 936.440067, 943.001591,
+              951.210807, 959.023462, 959.246058, 960.205707, 966.659195,
+              973.994867, 986.977203, 990.502903, 991.954636, 998.733698]
 
 qpoint = np.asarray([60, 36, 66])
 tdist = 20
@@ -80,7 +85,7 @@ def test_ndim_20():
 
     # Approx within distance
     awd = xndim.approxWithinD(qpoint, tdist)
-    assert awd == [2, 18, 12]
+    assert awd == [18, 2, 19]
     d = distance.cdist(x[awd], np.asarray([qpoint]))
     print(d)
     print(x[awd])
@@ -94,7 +99,7 @@ def test_ndim_20():
     print(xndim.monkeyindexes[0])
     ann = xndim.approxNN(qpoint, 4)
     print("ann: ", ann)
-    cmp = [2, 7, 12, 19]
+    cmp = [1, 2, 6, 9]
     dall = distance.cdist(x, np.asarray([qpoint]))
     print("dall: ", dall)
     print("dall[ann]: ", dall[ann])
@@ -199,24 +204,67 @@ def test_ndim_1000():
     assert False
 
 
-@pytest.mark.skip("High performance test.")
+def test_ndim_1000_ann_mmi():
+    """ Test 1000 points in 5 dimensions
+    quasi-randomly generated with integer coordinates from 1-10000
+    """
+    start_time = time.time()
+    np.random.seed(1729)
+    x = np.random.randint(1, 10000, (1000, 20))
+    print("x 0-10: ", x[0:10])
+    xndim = ndim.ndim(x)
+    print("length: ", xndim.monkeyindexes[0].length)
+    print("time: {} seconds".format(time.time() - start_time))
+
+    qpoint = np.asarray([5257, 5706, 6820, 9571, 5620, 7192, 1066,
+                         7555, 6024, 5096, 2058, 380, 1448, 3980,
+                         2796, 2600, 3838, 340, 9097, 9956])
+    print("qpoint: ", qpoint)
+    # ann_mmi
+    xndim.approxNN_mmi(qpoint, 5)
+    # dall = distance.cdist(x, np.asarray([qpoint]))
+    # for i in range(len(dall)):
+    #     print(i, dall[i])
+    # print("dall: ", dall)
+    # enn = xndim.exactNN(qpoint, 5)
+    # print("enn: ", enn)
+    # print("dall[enn]: ", dall[enn])
+
+    # assert False
+
+
+# @pytest.mark.skip("High performance test.")
 def test_ndim_100000():
     start_time = time.time()
     np.random.seed(1729)
     x = np.random.randint(1, 1000, (100000, 3))
-    xndim = ndim.ndim(x)
+    xndim = ndim.ndim(x, 1, 1000)
     print(xndim.monkeyindexes[0].length)
     print("time: {} seconds".format(time.time() - start_time))
+    last_time = time.time()
+
+    # Radial Within:
+    enne = xndim.exactNN_expand(qpoint, 5)
+    print("enne: ", enne)
+    print("time 273: {} seconds".format(time.time() - last_time))
+    last_time = time.time()
+
+    dewd = distance.cdist(x[enne], np.asarray([qpoint]))
+    print('dewd: ', dewd)
+    assert enne == [9508, 12882, 43491, 24888, 20276]
 
 
 # @pytest.mark.skip("High performance test.")
 def test_ndim_10000000():
     start_time = time.time()
     np.random.seed(1729)
-    x = np.random.randint(1, 100000, (10000000, 3))
-    xndim = ndim.ndim(x)
+    minP = 0
+    maxP = 100000
+    x = np.random.randint(minP, maxP, (10000000, 3))
+    xndim = ndim.ndim(x, minP, maxP)
     print(xndim.monkeyindexes[0].length)
-    print("time: {} seconds".format(time.time() - start_time))
+    print("time 261: {} seconds".format(time.time() - start_time))
+    last_time = time.time()
 
     qpoint = np.asarray(x[0])
     print("qpoint: ", qpoint)
@@ -231,13 +279,23 @@ def test_ndim_10000000():
     # print("dall: ", sorted(dall))
     # assert len(enn) == len(cmp)
     # assert sorted(enn) == sorted(cmp)
-    print("time: {} seconds".format(time.time() - start_time))
-    assert False
+    print("time 277: {} seconds".format(time.time() - last_time))
+    last_time = time.time()
+
+    # Radial Within:
+    enne = xndim.exactNN_expand(qpoint, 5)
+    print("enne: ", enne)
+    print("time 283: {} seconds".format(time.time() - last_time))
+    last_time = time.time()
+
+    dewd = distance.cdist(x[enne], np.asarray([qpoint]))
+    print('dewd: ', dewd)
+    assert enne == [0, 183006, 5693490, 5724244, 8380331]
 
 
 if __name__ == "__main__":
-    test_ndim_20()
-    test_exactNN_8()
+    # test_ndim_20()
+    # test_exactNN_8()
     # test_ndim_1000()
     # test_ndim_100000()
-    # test_ndim_10000000()
+    test_ndim_10000000()

@@ -1,1 +1,2 @@
 pytest > 5.0.0
+pytest-profiling  # needs sudo apt install graphviz

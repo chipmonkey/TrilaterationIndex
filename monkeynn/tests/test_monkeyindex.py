@@ -29,11 +29,15 @@ def test_madness_5():
 
     print("x.mi", x.mi)
 
-    y = x.allwithinradius(2, 1)
+    y = x.allWithinRadius(2, 1)
+    cy = x.countWithinRadius(2, 1)
     numpy.testing.assert_array_equal(y, [0, 1, 4])
+    assert cy == len(y)
 
-    y = x.allwithinradius(5, 2)
+    y = x.allWithinRadius(5, 2)
+    cy = x.countWithinRadius(2, 1)
     numpy.testing.assert_array_equal(y, [4, 3, 2])
+    assert cy == len(y)
 
     closest = x.miClosestNPi(4, 2)
     numpy.testing.assert_array_equal(closest, [4, 3])

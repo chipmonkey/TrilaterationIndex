@@ -22,5 +22,11 @@ x = [[14, 38, 22],
      [43, 40, 52],
      [74, 27, 54]]
 pdf = pd.DataFrame(x, columns=['x', 'y', 'z'])
-fig = px.scatter_3d(pdf)
+fig = px.scatter_3d(pdf, x='x', y='y', z='z')
+fig.show()
+
+z = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1], [1, 1, 1]]
+z = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+pz = pd.DataFrame(z, columns=['x', 'y', 'z'])
+fig = px.scatter_3d(pz, x='x', y='y', z='z')
 fig.show()
