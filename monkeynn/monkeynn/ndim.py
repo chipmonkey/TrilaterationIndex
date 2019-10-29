@@ -114,11 +114,17 @@ class ndim:
         for (myMi, myDist, myRp) in zip(self.monkeyindexes,
                                         qDists,
                                         self.refpoints):
-            candidateIndexes.append(myMi.allwithinradius(myDist, tdist))
+            candidateIndexes.append(myMi.allWithinRadius(myDist, tdist))
 
+        # Start with all elements in range of the first index
         commonIndexes = set(candidateIndexes[0])
-        for myCandidates in zip(candidateIndexes):
-            commonIndexes = commonIndexes.intersection(set(myCandidates[0]))
+
+        # Iterate over remaining indexes and save only elements (pindexes)
+        # which are common to all candidate lists
+        if len(candidateIndexes) > 1:
+            for myCandidates in zip(candidateIndexes[1:]):
+                commonIndexes = \
+                    commonIndexes.intersection(set(myCandidates[0]))
 
         return list(commonIndexes)
 
@@ -223,9 +229,9 @@ class ndim:
             # print(self.points[npi])
             # print(qPoint)
             adist = self._pointDistance(self.points[npi], qPoint)
-            print("{} - adist for p[{}]={}, minqrdist is {}, topnmaxdist: {}"
-                  .format(chipcount, npi, adist, minqrdist,
-                          topn.maxP().distance))
+            # print("{} - adist for p[{}]={}, minqrdist is {}, topnmaxdist: {}"
+            #       .format(chipcount, npi, adist, minqrdist,
+            #               topn.maxP().distance))
             exit
             chipcount = chipcount + 1
             if adist < topn.maxP().distance:
@@ -280,3 +286,30 @@ class ndim:
         votes.sort(order='votes')
         print("votes: ", votes)
         return(votes)
+
+    def exactNN_expand(self, qPoint, n, minR=0.1, growthFactor=2):
+        """
+        Starting with minR, perform allWithinD(qPoint, minR)
+        increasing minR by growthFactor (minR = minR * growthFactor)
+        until allWithinD returns more than n values
+        """
+
+        awd = self.allWithinD(qPoint, minR)
+        print("len(awd): ", len(awd))
+        while len(awd) < n:
+            minR = minR * growthFactor
+            awd = self.allWithinD(qPoint, minR)
+            print("len(awd): ", len(awd))
+
+        topn = toplist(n)
+        dawd = distance.cdist(self.points[awd], np.asarray([qPoint]))
+        for pindex, adist in zip(awd, dawd):
+            topn.push(dPoint(pindex, adist))
+
+        retValues = []
+        for myPi in topn.dPList:
+            print("myPi: ", myPi.pindex, myPi.distance)
+            retValues.append(myPi.pindex)
+            print(retValues)
+
+        return retValues

@@ -34,9 +34,9 @@ x = np.asarray(x)
 
 pp.pprint(x)
 
-t_refpoints = [[41, 35, 33],
-               [52, 77, 13],
-               [74, 27, 54]]
+t_refpoints = [[1000, 0, 0],
+               [0, 1000, 0],
+               [0, 0, 1000]]
 print("t_refpoints: ", t_refpoints)
 
 t_pindex = [13,  8, 18,  0,  7,  2, 19, 12, 16, 10,  6,
@@ -233,9 +233,20 @@ def test_ndim_100000():
     start_time = time.time()
     np.random.seed(1729)
     x = np.random.randint(1, 1000, (100000, 3))
-    xndim = ndim.ndim(x)
+    xndim = ndim.ndim(x, 1, 1000)
     print(xndim.monkeyindexes[0].length)
     print("time: {} seconds".format(time.time() - start_time))
+    last_time = time.time()
+
+    # Radial Within:
+    enne = xndim.exactNN_expand(qpoint, 5)
+    print("enne: ", enne)
+    print("time 273: {} seconds".format(time.time() - last_time))
+    last_time = time.time()
+
+    dewd = distance.cdist(x[enne], np.asarray([qpoint]))
+    print('dewd: ', dewd)
+    assert enne == [9508, 12882, 43491, 24888, 20276]
 
 
 @pytest.mark.skip("High performance test.")
@@ -247,7 +258,7 @@ def test_ndim_10000000():
     x = np.random.randint(minP, maxP, (10000000, 3))
     xndim = ndim.ndim(x, minP, maxP)
     print(xndim.monkeyindexes[0].length)
-    print("time 248: {} seconds".format(time.time() - start_time))
+    print("time 261: {} seconds".format(time.time() - start_time))
     last_time = time.time()
 
     qpoint = np.asarray(x[0])
@@ -263,7 +274,25 @@ def test_ndim_10000000():
     # print("dall: ", sorted(dall))
     # assert len(enn) == len(cmp)
     # assert sorted(enn) == sorted(cmp)
-    print("time 263: {} seconds".format(time.time() - last_time))
+    print("time 277: {} seconds".format(time.time() - last_time))
+    last_time = time.time()
+
+    # Radial Within:
+    enne = xndim.exactNN_expand(qpoint, 5)
+    print("enne: ", enne)
+    print("time 283: {} seconds".format(time.time() - last_time))
+    last_time = time.time()
+
+    dewd = distance.cdist(x[enne], np.asarray([qpoint]))
+    print('dewd: ', dewd)
+    assert enne == [0, 183006, 5693490, 5724244, 8380331]
+
+    # Radial Within:
+    # radius = 500
+    # ewd = xndim.allWithinD(qpoint, radius)
+    # print("ewd: ", ewd)
+    # print("time 273: {} seconds".format(time.time() - last_time))
+    # last_time = time.time()
 
     # ann_2
     # ann2 = xndim.approxNN_mmi(qpoint, 5)

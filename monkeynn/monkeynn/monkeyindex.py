@@ -36,7 +36,7 @@ class monkeyindex:
         self.mi['distance'] = inarray[:]
         self.mi.sort(order='distance')
 
-    def allwithinradius(self, tdist, radius):
+    def allWithinRadius(self, tdist, radius):
         """ Returns array of pindexes within radius of target tdist
         Is this making efficient use of the fact that self.mi is sorted?
         """
@@ -46,6 +46,20 @@ class monkeyindex:
 
         values = self.mi['pindex'][indexes]
         return(values)
+
+    def countWithinRadius(self, tdist, radius):
+        """ Returns the count of pindexes within radius of target tdist
+        This is efficient by finding the left and rightmost index
+        """
+        lefti = numpy.searchsorted(self.mi['distance'],
+                                   tdist - radius,
+                                   side='left')
+
+        righti = numpy.searchsorted(self.mi['distance'],
+                                    tdist + radius,
+                                    side='right')
+
+        return(righti - lefti)
 
     def _getNextClosest(self, tdist, lefti, righti):
         """ Given a target distance tdist
