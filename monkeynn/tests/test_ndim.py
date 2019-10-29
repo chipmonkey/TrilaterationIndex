@@ -32,12 +32,9 @@ x = [[14, 38, 22],
      [74, 27, 54]]
 x = np.asarray(x)
 
-pp.pprint(x)
-
 t_refpoints = [[1000, 0, 0],
                [0, 1000, 0],
                [0, 0, 1000]]
-print("t_refpoints: ", t_refpoints)
 
 t_pindex = [13,  8, 18,  0,  7,  2, 19, 12, 16, 10,  6,
             5,  9, 17,  3,  1, 14, 4, 15, 11]
@@ -294,19 +291,6 @@ def test_ndim_10000000():
     dewd = distance.cdist(x[enne], np.asarray([qpoint]))
     print('dewd: ', dewd)
     assert enne == [0, 183006, 5693490, 5724244, 8380331]
-
-    # Radial Within:
-    # radius = 500
-    # ewd = xndim.allWithinD(qpoint, radius)
-    # print("ewd: ", ewd)
-    # print("time 273: {} seconds".format(time.time() - last_time))
-    # last_time = time.time()
-
-    # ann_2
-    # ann2 = xndim.approxNN_mmi(qpoint, 5)
-    # print("ann2:")
-    # print(ann2)
-    # assert False
 
 
 if __name__ == "__main__":

@@ -48,12 +48,10 @@ class ndim:
         assert self.n > self.m
 
         np.random.seed(1729)
-        # refpoints = self.points[np.random.randint(0, self.n, self.m)]
         refpoints = np.zeros((self.m, self.m))
         refpoints.fill(self.minP)
         for i in range(self.m):
             refpoints[i, i] = self.maxP
-        print("refpoints: ", refpoints)
         return(refpoints)
 
     def _buildMonkeyIndex(self):
@@ -207,7 +205,6 @@ class ndim:
         topn = toplist(n)
 
         qDists = self._buildDistances(self.refpoints, qPoint)
-        # print("qPdists: ", qDists)
         firstMi = self.monkeyindexes[0]
         piGen = firstMi.genClosestP(qDists[0])
 
@@ -216,10 +213,11 @@ class ndim:
             adist = self._pointDistance(self.points[npi], qPoint)
             topn.push(dPoint(npi, adist))
 
-        print("Phase 2:")
-        print("topn.maxP():", topn.maxP().distance)
-        print("topn.maxP().distance: ", topn.maxP().distance)
-        print("minqrdist: ", minqrdist)
+        # print("Phase 2:")
+        # print("topn.maxP():", topn.maxP().distance)
+        # print("topn.maxP().distance: ", topn.maxP().distance)
+        # print("minqrdist: ", minqrdist)
+
         # While the best possible distance is smaller
         # Than the worst known closest (topn) distance
         # The next candidate _could_ be a nearest-n neighbor
@@ -238,16 +236,14 @@ class ndim:
                 topn.push(dPoint(npi, adist))
             # print("cutoff: ", minqrdist)
 
-        print("chip:", chipcount)
-        print("adist: ", adist)
-        print("cutoff: ", minqrdist)
+        # print("chip:", chipcount)
+        # print("adist: ", adist)
+        # print("cutoff: ", minqrdist)
 
         retValues = []
         for myPi in topn.dPList:
-            print("myPi: ", myPi.pindex, myPi.distance)
+            # print("myPi: ", myPi.pindex, myPi.distance)
             retValues.append(myPi.pindex)
-            print(retValues)
-
         return retValues
 
     def approxNN_mmi(self, qPoint, n):
@@ -257,6 +253,8 @@ class ndim:
 
         Save all points with real distance <= maxD.
         These points are definitely in the nearest N.
+
+        This doesn't work that well.
         """
         qDists = self._buildDistances(self.refpoints, qPoint)
 
@@ -264,14 +262,17 @@ class ndim:
         # Let's see how this goes... could be a disaster
         allPiGen = []
         for i in range(len(qDists)):  # Is there a better way for ndarray?
-            print(i, qDists[i])
             allPiGen.append(self.monkeyindexes[i].genClosestP(qDists[i]))
-        print(allPiGen)
+        # print(allPiGen)
 
         votes = np.zeros((self.n),
                          dtype=[('pindex', int), ('votes', int)])
         votes['pindex'] = list(range(self.n))
 
+        # Iterate a set number of times (200)
+        # and cast votes for the closest pindex based on
+        # the number of mindexes in which the pindex is within
+        # the iterated nearest points to tdist
         itercount = 0
         for omgosh in zip(*allPiGen):
             print("itercount: ", itercount)
@@ -294,18 +295,19 @@ class ndim:
         until allWithinD returns more than n values
         """
 
+        # Increase minR by growthFactor until we have >= n candidates
         awd = self.allWithinD(qPoint, minR)
-        print("len(awd): ", len(awd))
         while len(awd) < n:
             minR = minR * growthFactor
             awd = self.allWithinD(qPoint, minR)
-            print("len(awd): ", len(awd))
 
+        # Iterate over candidates to select the closest n
         topn = toplist(n)
         dawd = distance.cdist(self.points[awd], np.asarray([qPoint]))
         for pindex, adist in zip(awd, dawd):
             topn.push(dPoint(pindex, adist))
 
+        # Convert the toplist to a returnable result
         retValues = []
         for myPi in topn.dPList:
             print("myPi: ", myPi.pindex, myPi.distance)
