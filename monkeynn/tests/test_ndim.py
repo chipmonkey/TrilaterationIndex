@@ -42,6 +42,9 @@ print("t_refpoints: ", t_refpoints)
 t_pindex = [13,  8, 18,  0,  7,  2, 19, 12, 16, 10,  6,
             5,  9, 17,  3,  1, 14, 4, 15, 11]
 
+t_pindex = [4,  3,  5, 11, 15, 19, 12,  9,  1,  2,  6,
+            8, 18, 13, 10,  7,  0, 14, 17, 16]
+
 t_distance = [0.0, 20.51828453, 22.38302929, 31.1608729, 32.55764119,
               33.0, 33.52610923, 38.09199391, 39.67366885, 42.87190222,
               43.01162634, 54.09251335, 60.69596362, 62.80127387,
@@ -52,6 +55,11 @@ t_distance = [0.0, 19.209373, 19.748418, 29.308702, 36.069378, 38.091994,
               39.92493, 42.426407, 43.84062, 46.78675, 47.801674,
               48.836462, 51.720402, 64.412732, 65.467549, 66.475559,
               71.965269, 73.013697, 78.746428, 79.006329]
+
+t_distance = [910.948956, 911.761482, 914.327075, 916.642242, 925.467449,
+              927.966055, 930.463863, 936.337546, 936.440067, 943.001591,
+              951.210807, 959.023462, 959.246058, 960.205707, 966.659195,
+              973.994867, 986.977203, 990.502903, 991.954636, 998.733698]
 
 qpoint = np.asarray([60, 36, 66])
 tdist = 20
@@ -80,7 +88,7 @@ def test_ndim_20():
 
     # Approx within distance
     awd = xndim.approxWithinD(qpoint, tdist)
-    assert awd == [2, 18, 12]
+    assert awd == [18, 2, 19]
     d = distance.cdist(x[awd], np.asarray([qpoint]))
     print(d)
     print(x[awd])
@@ -94,7 +102,7 @@ def test_ndim_20():
     print(xndim.monkeyindexes[0])
     ann = xndim.approxNN(qpoint, 4)
     print("ann: ", ann)
-    cmp = [2, 7, 12, 19]
+    cmp = [1, 2, 6, 9]
     dall = distance.cdist(x, np.asarray([qpoint]))
     print("dall: ", dall)
     print("dall[ann]: ", dall[ann])
@@ -228,7 +236,7 @@ def test_ndim_1000_ann_mmi():
     # assert False
 
 
-@pytest.mark.skip("High performance test.")
+# @pytest.mark.skip("High performance test.")
 def test_ndim_100000():
     start_time = time.time()
     np.random.seed(1729)
@@ -249,7 +257,7 @@ def test_ndim_100000():
     assert enne == [9508, 12882, 43491, 24888, 20276]
 
 
-@pytest.mark.skip("High performance test.")
+# @pytest.mark.skip("High performance test.")
 def test_ndim_10000000():
     start_time = time.time()
     np.random.seed(1729)
