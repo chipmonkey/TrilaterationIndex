@@ -1,6 +1,7 @@
 import numpy as np
 import pprint
 import pytest
+from sklearn.neighbors import NearestNeighbors
 import time
 
 from monkeynn import ndim
@@ -256,14 +257,14 @@ def test_ndim_100000():
 
 # @pytest.mark.skip("High performance test.")
 def test_ndim_10000000():
-    start_time = time.time()
+    last_time = time.time()
     np.random.seed(1729)
     minP = 0
     maxP = 100000
     x = np.random.randint(minP, maxP, (10000000, 3))
     xndim = ndim.ndim(x, minP, maxP)
     print(xndim.monkeyindexes[0].length)
-    print("time 261: {} seconds".format(time.time() - start_time))
+    print("time 261: {} seconds".format(time.time() - last_time))
     last_time = time.time()
 
     qpoint = np.asarray(x[0])
@@ -291,6 +292,32 @@ def test_ndim_10000000():
     dewd = distance.cdist(x[enne], np.asarray([qpoint]))
     print('dewd: ', dewd)
     assert enne == [0, 183006, 5693490, 5724244, 8380331]
+
+    # Benchmark:
+    sknn = NearestNeighbors(n_neighbors=5, algorithm='ball_tree').fit(x)
+    print("time to fit ball_tree: {} seconds"
+          .format(time.time() - last_time))
+    last_time = time.time()
+    balldistances, ballindices = sknn.kneighbors(np.asarray([qpoint]))
+    print("time to query ball_tree: {} seconds"
+          .format(time.time() - last_time))
+    last_time = time.time()
+
+    sknn = NearestNeighbors(n_neighbors=5, algorithm='kd_tree').fit(x)
+    print("time to fit kd_tree: {} seconds"
+          .format(time.time() - last_time))
+    last_time = time.time()
+    kddistances, kdindices = sknn.kneighbors(np.asarray([qpoint]))
+    print("time to query kd_tree: {} seconds"
+          .format(time.time() - last_time))
+    last_time = time.time()
+
+    print("enne: ", enne, type(enne))
+    print("ballindices: ", ballindices[0].tolist(), type(ballindices[0]))
+    print("kdindices: ", kdindices[0].tolist(), type(kdindices[0]))
+
+    np.testing.assert_array_equal(enne, ballindices[0])
+    np.testing.assert_array_equal(enne, kdindices[0])
 
 
 if __name__ == "__main__":
