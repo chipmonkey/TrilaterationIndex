@@ -312,9 +312,19 @@ def test_ndim_10000000():
           .format(time.time() - last_time))
     last_time = time.time()
 
+    sknn = NearestNeighbors(n_neighbors=5, algorithm='brute').fit(x)
+    print("time to fit brute: {} seconds"
+          .format(time.time() - last_time))
+    last_time = time.time()
+    brutedistances, bruteindices = sknn.kneighbors(np.asarray([qpoint]))
+    print("time to query brute: {} seconds"
+          .format(time.time() - last_time))
+    last_time = time.time()
+
     print("enne: ", enne, type(enne))
     print("ballindices: ", ballindices[0].tolist(), type(ballindices[0]))
     print("kdindices: ", kdindices[0].tolist(), type(kdindices[0]))
+    print("bruteindices: ", bruteindices[0].tolist(), type(bruteindices[0]))
 
     np.testing.assert_array_equal(enne, ballindices[0])
     np.testing.assert_array_equal(enne, kdindices[0])
