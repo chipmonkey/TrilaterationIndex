@@ -263,8 +263,8 @@ def test_ndim_10000000():
     maxP = 100000
     x = np.random.randint(minP, maxP, (10000000, 3))
     xndim = ndim.ndim(x, minP, maxP)
-    print(xndim.monkeyindexes[0].length)
-    print("time 261: {} seconds".format(time.time() - last_time))
+    # print(xndim.monkeyindexes[0].length)
+    # print("time 261: {} seconds".format(time.time() - last_time))
     last_time = time.time()
 
     qpoint = np.asarray(x[0])
@@ -330,9 +330,29 @@ def test_ndim_10000000():
     np.testing.assert_array_equal(enne, kdindices[0])
 
 
+# @pytest.mark.skip("High performance test.")
+def test_scipy_10000000_100():
+    last_time = time.time()
+    np.random.seed(1729)
+    minP = 0
+    maxP = 100000
+    x = np.random.randint(minP, maxP, (10000000, 3))
+    q = np.random.randint(minP, maxP, (100, 3))  # 100 Q points
+
+    sknn = NearestNeighbors(n_neighbors=5, algorithm='brute').fit(x)
+    print("time to fit brute: {} seconds"
+          .format(time.time() - last_time))
+    last_time = time.time()
+    brutedistances, bruteindices = sknn.kneighbors(q)
+    print("time to query brute: {} seconds"
+          .format(time.time() - last_time))
+    last_time = time.time()
+
+
 if __name__ == "__main__":
     # test_ndim_20()
     # test_exactNN_8()
     # test_ndim_1000()
     # test_ndim_100000()
-    test_ndim_10000000()
+    # test_ndim_10000000()
+    test_scipy_10000000_100()

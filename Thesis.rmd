@@ -27,7 +27,7 @@ Potential applications to this approach extend to any distance-measured space, a
 
 Given an n-dimensional metric space $(M, d)$ (the universe of points $M$ in the space and a distance function $d$ which respects the triangle inequality), a typical point $X$ in the coordinate system will be described by coordinates ${x_1, x_2, …, x_n}$, which, typically, represents the decomposition of a vector $V$ from an "origin" point $O: {0, 0, … ,0}$ to $X$ into orthogonal vectors ${0,x1}, {0,x2}, …, {0,xn}$ along each of the n dimensional axes of the space.
 
-The Trilateration of such a point requires $n+1$ fixed points $F_p$ ($p$ from $1 to n+1$), no three of which occupy the same $(n-1)$-dimensional hyperplane.  The Trilateration Coordinate for the point $X$ is then: ${t_1, t_2, …, t_{n+1}}$ where $t_i$ is the distance (according to $d$) from $X$ to $F_i$ (in units applicable to the system). 
+The Trilateration of such a point requires $n+1$ fixed points $F_p$ ($p$ from $1$ to $n+1$), no three of which occupy the same $(n-1)$-dimensional hyperplane.  The Trilateration Coordinate for the point $X$ is then: ${t_1, t_2, …, t_{n+1}}$ where $t_i$ is the distance (according to $d$) from $X$ to $F_i$ (in units applicable to the system). 
 
 ***
 
@@ -35,7 +35,7 @@ The Trilateration of such a point requires $n+1$ fixed points $F_p$ ($p$ from $1
 
 Consider a 2-dimensional grid – a flattened map, a video game map, or any mathematical $x-y$ coordinate grid with boundaries.  WOLOG in this example consider the two-dimensional Euclidean space $M=\mathbb{R^2}$ and bounded by $x,y\ \epsilon\  \{0..100\}$.  Also, let us use the standard Euclidean distance function for $d$.  This is, trivially, a valid metric space.
 
-Since the space has dimension $n=2$, we need $3$ fixed points $Fp$.  While the Geospatial example on Earth has a specific prescription for the fixed points, an arbitrary space does not.  We therefore prescribe the following construction for bounded spaces: 
+Since the space has dimension $n=2$, we need $3$ fixed points $F_p$.  While the Geospatial example on Earth has a specific prescription for the fixed points, an arbitrary space does not.  We therefore prescribe the following construction for bounded spaces: 
 
 Construct a circle (hypersphere for other dimensions) with the largest area inscribable in the space.  In this example, that will be the circle centered at $(50,50)$ with radius $r=50$. 
 
