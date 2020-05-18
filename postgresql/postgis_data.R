@@ -1,4 +1,5 @@
-t1 <- read.csv('./data/lat_long_synthetic.csv')
+setwd("~/repos/TrilaterationIndex/postgresql")
+t1 <- read.csv('../data/lat_long_synthetic.csv')
 t1$Category <- 1:nrow(t1)
 head(t1)
 t1$Category <- t1$Category %% 10
@@ -17,7 +18,7 @@ head(t1$Category)
 summary(t1$Category)
 table(t1$Category)
 
-write.csv(t1, file='./data/lat_long_categorized.csv', quote = FALSE, row.names = FALSE)
+write.csv(t1, file='./endurance/input/lat_long_categorized.csv', quote = FALSE, row.names = FALSE)
 
 plot(t1$Latitude, t1$Longitude, col=t1$Category)
 
