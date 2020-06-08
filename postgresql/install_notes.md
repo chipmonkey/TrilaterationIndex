@@ -12,30 +12,6 @@ grant all privileges on database trilat to chipmonkey;
 \c trilat
 \q
 
-create table sample_categorized (Latitude numeric, Longitude numeric, Category smallint);
-COPY sample_categorized from '/home/chipmonkey/Documents/GradSchool/Thesis/TrilaterationIndex/data/lat_long_categorized.csv' CSV HEADER; 
-COPY sample_categorized from '/input/lat_long_synthetic.csv' CSV HEADER; 
-alter table sample_categorized add column SampleID serial unique;
-
-select SampleID, ST_SetSRID(ST_Point(Longitude, Latitude), 4326)::geography as st_geompoint, 
-Longitude, Latitude, category into sample_cat_gis from sample_categorized;
-
-create table referencepoints (Name varchar(50), Latitude numeric, Longitude numeric, st_refpoint geography);
-
-
-insert into referencepoints (name, latitude, longitude) values ('North Pole', 90, 0);
-insert into referencepoints (name, latitude, longitude) values ('Louisville KY', 38.26, -85.76);
-insert into referencepoints (name, latitude, longitude) values ('Phantom Sandy Island', -19.22, 159.93);
-insert into referencepoints (name, latitude, longitude) values ('Aldabra', -9.42, 46.63);
-update referencepoints set st_refpoint = st_makepoint(Latitude, Longitude);
-
-alter table referencepoints add column RefID serial unique;
-
-select SampleID, RefID, st_distance(s.st_geompoint, r.st_refpoint)
-into sample_ref_distances from sample_cat_gis s cross join referencepoints r;
-
-# The above sets up the initial data; but none of the monkey indexes
-
 ### For reference, here are the categories:
 ```
  count | category 
@@ -67,7 +43,9 @@ Some postgres things:
 ## for 1 Query Point and 10,000 data points
 via: https://postgis.net/workshops/postgis-intro/knn.html
 ```
-SELECT a.sampleid, b.sampleid
+SELECT
+  a.sampleid, b.sampleid,
+  ST_Distance(a.st_geompoint, b.st_geompoint)
 FROM
   sample_cat_gis a,
   sample_cat_gis b
@@ -168,5 +146,3 @@ Time: 27850.183 ms (00:27.850)
 # Those aren't much different
 
 ##  We need a python program for this...
-
-

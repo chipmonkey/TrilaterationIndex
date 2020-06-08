@@ -6,6 +6,7 @@ sudo apt install pkg-config
 sudo apt install autoconf
 sudo apt install libreadline-dev
 sudo apt install zlib1g-dev
+sudo apt install libpq-dev
 
 
 # Download and build OSGeo's GEOS library
