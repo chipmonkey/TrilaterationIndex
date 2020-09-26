@@ -1,0 +1,4 @@
+numpy
+-e ../monkeynn
+scipy
+# -e git://github.com/ipsarros/DolphinnPy.git#egg=dolphinn

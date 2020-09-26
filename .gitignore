@@ -104,6 +104,11 @@ target/
 *.tar.gz
 *.tgz
 
+# Test coverage files
+*.cover
+*.lprof
+*.profile
+
 # Custom stuff:
 perftests/
 cprofile.out
