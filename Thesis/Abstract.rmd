@@ -1,0 +1,9 @@
+# Using Trilateration Distances as Geospatial Coordinates, Indexes, and Geohashes
+
+### Abstract
+We present an alternative method for database indexing to improve query performance for some distance related geospatial queries base on storing distances from three fixed points as in trilateration.  This effectively creates a coordinate system – i.e. an alternative to Latitude and Longitude – where the coordinates are the trilateration distances.  We explore this alternative coordinate system and the theoretical, technical, and practical implications of using it.
+
+Initial results are promising for some use cases.  Nearest-neighbor logic is both simplified (compared to R-Tree style indexing) and performant.  Trilateration (or, more generally, "n-point lateration") is applicable to 2D, 3D, and higher dimension systems with minimal adaptation.  The system is easily extensible to common geospatial database types such as lines and polygons.  The concept of "Bounding Bands" (rather than "Bounding Boxes") is introduced for coordinate systems on spheres and ellipsoids. 
+
+Potential applications to this approach extend to any distance-measured space, and we touch on those (briefly, here, to constrain our scope).  For example, we consider applying the technique to Levenshtein distance, and even facial recognition or systems where distances do not follow the triangle inequality.
+

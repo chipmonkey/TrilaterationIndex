@@ -5,13 +5,20 @@
 init:
 	echo "Init"
 
+venv:
+	. venv/bin/activate
+
+venv/bin/activate: requirements.txt
+	test -d venv || python3 -m venv venv
+
+
 test:
 	pytest
 
 perftest: test
 	echo "Perftest"
 
-doc:
+doc: Thesis/Thesis.pdf
 	echo "Doc"
 
 build: docker-build
@@ -34,5 +41,8 @@ superclean:
 deploy:
 	docker run -d -p 8000:8000 flask-sample-one
 
-Thesis.pdf:
-	Rscript -e "rmarkdown::render('Thesis.rmd')"
+Thesis/Thesis.pdf: Thesis/*.rmd
+	Rscript -e "rmarkdown::render('Thesis/Thesis.rmd',output_file='Thesis.pdf')"
+
+readdoc:
+	evince /home/chipmonkey/repos/TrilaterationIndex/Thesis/Thesis.pdf

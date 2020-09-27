@@ -1,0 +1,39 @@
+# Appendixy stuff
+
+ 
+
+ 
+
+Alternate Database Indexes 
+
+References (I need to finish reading and digesting these): 
+
+http://ieeexplore.ieee.org/document/5437947/ 
+
+https://prezi.com/chnisgybkshy/gps-trilateration/ 
+
+https://www.maa.org/sites/default/files/pdf/cms_upload/Thompson07734.pdf 
+
+https://www.researchgate.net/publication/2689264_The_X-tree_An_Index_Structure_for_High-Dimensional_Data 
+
+http://repository.cmu.edu/cgi/viewcontent.cgi?article=1577&context=compsci 
+
+https://link.springer.com/chapter/10.1007/10849171_83 
+
+http://ieeexplore.ieee.org.echo.louisville.edu/document/7830628/ 
+
+https://link-springer-com.echo.louisville.edu/article/10.1007%2Fs11222-013-9422-4 
+
+https://en.wikipedia.org/wiki/R-tree 
+
+https://boundlessgeo.com/2012/07/making-geography-faster/ 
+
+http://ieeexplore.ieee.org.echo.louisville.edu/document/6045057/ 
+
+http://www.sciencedirect.com.echo.louisville.edu/science/article/pii/S002002550900499X?_rdoc=1&_fmt=high&_origin=gateway&_docanchor=&md5=b8429449ccfc9c30159a5f9aeaa92ffb&ccp=y 
+
+https://en.wikipedia.org/wiki/K-d_tree 
+
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.219.7269&rep=rep1&type=pdf 
+
+http://www.scholarpedia.org/article/B-tree_and_UB-tree 

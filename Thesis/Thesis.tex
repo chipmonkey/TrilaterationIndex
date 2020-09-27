@@ -1,0 +1,410 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
+            pdftitle={Trilateration Index - Masters Thesis},
+            pdfauthor={Chip Lynch},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{Trilateration Index - Masters Thesis}
+\author{Chip Lynch}
+\providecommand{\institute}[1]{}
+\institute{University of Louisville}
+\date{6/24/2018}
+
+\begin{document}
+\maketitle
+
+\section{Using Trilateration Distances as Geospatial Coordinates,
+Indexes, and
+Geohashes}\label{using-trilateration-distances-as-geospatial-coordinates-indexes-and-geohashes}
+
+\subsubsection{Abstract}\label{abstract}
+
+We present an alternative method for database indexing to improve query
+performance for some distance related geospatial queries base on storing
+distances from three fixed points as in trilateration. This effectively
+creates a coordinate system -- i.e.~an alternative to Latitude and
+Longitude -- where the coordinates are the trilateration distances. We
+explore this alternative coordinate system and the theoretical,
+technical, and practical implications of using it.
+
+Initial results are promising for some use cases. Nearest-neighbor logic
+is both simplified (compared to R-Tree style indexing) and performant.
+Trilateration (or, more generally, ``n-point lateration'') is applicable
+to 2D, 3D, and higher dimension systems with minimal adaptation. The
+system is easily extensible to common geospatial database types such as
+lines and polygons. The concept of ``Bounding Bands'' (rather than
+``Bounding Boxes'') is introduced for coordinate systems on spheres and
+ellipsoids.
+
+Potential applications to this approach extend to any distance-measured
+space, and we touch on those (briefly, here, to constrain our scope).
+For example, we consider applying the technique to Levenshtein distance,
+and even facial recognition or systems where distances do not follow the
+triangle inequality.
+
+\newpage
+
+\subsection{Trilateration Index -- General
+Definition}\label{trilateration-index-general-definition}
+
+Given an n-dimensional metric space \((M, d)\) (the universe of points
+\(M\) in the space and a distance function \(d\) which respects the
+triangle inequality), a typical point \(X\) in the coordinate system
+will be described by coordinates \({x_1, x_2, …, x_n}\), which,
+typically, represents the decomposition of a vector \(V\) from an
+``origin'' point \(O: {0, 0, … ,0}\) to \(X\) into orthogonal vectors
+\({0,x1}, {0,x2}, …, {0,xn}\) along each of the n dimensional axes of
+the space.
+
+The Trilateration of such a point requires \(n+1\) fixed points \(F_p\)
+(\(p\) from \(1\) to \(n+1\)), no three of which occupy the same
+\((n-1)\)-dimensional hyperplane. The Trilateration Coordinate for the
+point \(X\) is then: \({t_1, t_2, …, t_{n+1}}\) where \(t_i\) is the
+distance (according to \(d\)) from \(X\) to \(F_i\) (in units applicable
+to the system).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{2-D Bounded Example}\label{d-bounded-example}
+
+Consider a 2-dimensional grid -- a flattened map, a video game map, or
+any mathematical \(x-y\) coordinate grid with boundaries. WOLOG in this
+example consider the two-dimensional Euclidean space \(M=\mathbb{R^2}\)
+and bounded by \(x,y\ \epsilon\  \{0..100\}\). Also, let us use the
+standard Euclidean distance function for \(d\). This is, trivially, a
+valid metric space.
+
+Since the space has dimension \(n=2\), we need \(3\) fixed points
+\(F_p\). While the Geospatial example on Earth has a specific
+prescription for the fixed points, an arbitrary space does not. We
+therefore prescribe the following construction for bounded spaces:
+
+Construct a circle (hypersphere for other dimensions) with the largest
+area inscribable in the space. In this example, that will be the circle
+centered at \((50,50)\) with radius \(r=50\).
+
+Select the point at which the circle touches the boundary at the first
+dimension (for spaces with uneven boundary ratios, select the point at
+which the circle touches the earliest boundary \(x_i\)). Such a point is
+guaranteed to exist since the circle is largest (if it does not, then
+the circle can be expanded since there is space between every point on
+the circle and an axis, and it is not a largest possible circle).
+
+From this point, create a regular \(n+1\)-gon (triangle here) which
+touches the circle at \(n+1\) points. These are the points we will use
+as \(F_p\). They are, by construction, not all co-linear (or in general
+do not all exist on the same \(n\)-dimensional hyperplane) satisfying
+our requirement {[}proof{]}.
+
+The point \(y=0\), \(x=50\) is the first point of the equilateral
+triangle. The slope of the triangle's line is \(tan(\frac{pi}{3})\), so
+setting the equation of the circle:
+
+\((x-50)^2+(y-50)^2=50^2\) equal to the lines:
+\(y=tan(\frac{\pi}{3})(x-50)\) gives \(x=25(2+\sqrt{3})\) on the right
+and \(y=tan(\frac{-\pi}{3})(x-50)\) gives \(x=-25(\sqrt{3}-2)\) on the
+left, and of course the original \((0,50)\) point. Applying \(x\) to our
+earlier equations for \(y\) we get a final set of three points:
+
+\[F_1 = (x=50,y=0)\]
+
+\[F_2 = (x=25(2+\sqrt{3}), y=tan(\frac{\pi}{3})((25(2+\sqrt{3}))-50)\]
+
+\[F_3 = (x=-25(\sqrt{3}-2), y=tan(\frac{-\pi}{3})((-25(\sqrt{3}-2))-50) \]
+
+\begin{center}\includegraphics{Thesis_files/figure-latex/trianglePlot-1} \end{center}
+
+Remember, any three non-colinear points will do, but this construction
+spaces them fairly evenly throughout the space, which may be beneficial
+later* {[}Add section (reference) with discussions of precision and
+examples where reference points are very near one another{]}.
+
+The trilateration of any given point X in the space, now, is given by:
+
+\[T(X) = {d(F_1, X), d(F_2, X), d(F_3,X)} \]
+
+That is, the set of (three) distances \(d\) from \(X\) to \(F_1\),
+\(F_2\), and \(F_3\) respectively.
+
+\paragraph{10 Random Points}\label{random-points}
+
+As a quick example of the trilateration calculations, we use a basic
+collection of 10 data points:
+
+\begin{verbatim}
+##           x         y
+## 1  58.52396 53.516719
+## 2  43.73940 43.418684
+## 3  57.28944  7.950161
+## 4  35.32139 58.321179
+## 5  86.12714 52.201894
+## 6  41.08036 78.065907
+## 7  51.14533 47.157734
+## 8  15.42852 80.836340
+## 9  85.13531 64.090063
+## 10 99.60833 78.055071
+\end{verbatim}
+
+The trilateration of those points, that is, the three points
+\(d_1, d_2, d_3 = {d(F_1, X), d(F_2, X), d(F_3,X)}\) are (next to the
+respective \(x_n\)):
+
+\begin{verbatim}
+##           x         y       d1        d2       d3
+## 1  58.52396 53.516719 54.19130 40.877779 56.10157
+## 2  43.73940 43.418684 43.86772 58.768687 48.67639
+## 3  57.28944  7.950161 10.78615 76.108693 83.99465
+## 4  35.32139 58.321179 60.14002 60.331164 33.12763
+## 5  86.12714 52.201894 63.48392 23.900246 82.63550
+## 6  41.08036 78.065907 78.57382 52.310835 34.51806
+## 7  51.14533 47.157734 47.17164 50.520446 52.44704
+## 8  15.42852 80.836340 87.91872 78.091149 10.50105
+## 9  85.13531 64.090063 73.08916 13.627535 79.19169
+## 10 99.60833 78.055071 92.48557  7.008032 92.95982
+\end{verbatim}
+
+Note that we do not need to continue to store the original latitude and
+longitude. We can convert the three \(d_n\) distances back to Latitude
+and Longitude within some \(\epsilon\) based on the available precision.
+Geospatial coordinates in Latitude and Longitude with six digits of
+precision are accurate to within \(<1\ meter\), and 8 digits is accuract
+to within \(<1\ centimeter\), although this varies based on the latitude
+and longitude itself; latitudes closer to the equator are less accurate
+than those at the poles. The distance values \(d_x\) are more
+predictable, since they measure distances directly. While the units in
+this sample are arbitrary, \(F(x)\) in a real geospatial example could
+be in kilometers, so three decimal digits would precisely relate to
+\(1\ meter\), and so on. This is one reason that we will later examine
+using the trilateration values as an outright replacement for Longitude
+and Latitide, and this feature is important when considering storage
+requirements for this data in large real-world database applications.
+
+For now, continuing with the example, those \(10\) points are shown here
+in blue with the three reference points \(F_1, F_2, F_3\) in red:
+
+\begin{center}\includegraphics{Thesis_files/figure-latex/plot10Points-1} \end{center}
+
+To help understand the above values, the following chart shows the
+distances for points \(x_2\) and \(x_10\) above. Specifically, the
+distances \(d_1\) from point \(F_1\) are shown as arcs in red, the
+distances \(d_2\) from point \(F_2\) in blue, and \(d_3\) from point
+\(F_3\) in green.
+
+\begin{center}\includegraphics{Thesis_files/figure-latex/distanceExamples-1} \end{center}
+
+\paragraph{Use of trilateration as an index for
+nearest-neighbor}\label{use-of-trilateration-as-an-index-for-nearest-neighbor}
+
+One of our expected benefits of this approach is an improvement in
+algorithms like nearest-neighbor search.
+
+\subsubsection{Geospatial Example}\label{geospatial-example}
+
+Applying this to real sample points; let the following be the initial
+reference points on the globe:
+
+Point 1: \(90.000000, 0.000000\) (The geographic north pole)
+
+Point 2: \(38.260000, -85.760000\) (Louisville, KY on the Ohio River)
+
+Point 3: \(-19.22000, 159.93000\) (Sandy Island, New Caledonia)
+
+Optional Point 4: \(-9.42000, 46.33000\) (Aldabra)
+
+Optional Point 5: \(-48.87000, -123.39000\) (Point Nemo)
+
+Note that the reference points are defined precisely, as exact latitude
+and longitude to stated decimals (all remaining decimal points are 0).
+This is to avoid confusion, and why the derivation of the points is
+immaterial (Point Nemo, for example is actually at a nearby location
+requiring more than two digits of precision).
+
+Only three points are required for trilateration (literally; thus the
+``tri'' prefix of the term), but we include 5 points to explore the pros
+and cons of n-fold geodistance indexing for higher values of n.
+
+\subsection{Theoretical Discussion}\label{theoretical-discussion}
+
+\subsubsection{Theoretical benefits:}\label{theoretical-benefits}
+
+\textbf{Precision}: Queries are not constrained by precision choices
+dictated by the index, as can be the case in Grid Indexes and similar
+R-tree indexes. R-tree indexes improve upon naïve Grid Indexes in this
+area, by allowing the data to dictate the size of individual grid
+elements, and even Grid Indexes are normally tunable to specific data
+requirements. Still, this involves analysis of the data ahead of time
+for optimal sizing, and causes resistance to changes in the data.
+
+\textbf{Distributed Computing}: Trilateration distances can be used as
+hash values, compatible with distributed computing (I.e. MongoDB shards
+or Teradata AMP Hashes).
+
+\textbf{Geohashing}: Trilateration distances can be used as the basis
+for Geohashes, which improve somewhat on Latitude/Longitude geohashes in
+that distances between similar geohashes are more consistent in their
+proximity.
+
+\textbf{Bounding Bands}: The intersection of Bounding Bands create
+effective metaphors to bounding boxes, without having to artificially
+nest or constrain them, nor build them in advance.
+
+\textbf{Readily Indexed (B-Tree compatible)}: Trilateration distances
+can be stored in traditional B-Tree indexes, rather than R-tree indexes,
+which can improve the sorting, merging, updating, and other functions
+performed on the data.
+
+\textbf{Fault Tolerant}: This coordinate system is somewhat
+self-checking, in that many sets of coordinates that are individually
+within the correct bounds, cannot be real, and can therefore be
+identified as data quality issues. For example, a point cannot be 5
+kilometers from the north pole (fixed point F1) and 5 kilometers from
+Louisville, KY (fixed point F2) at the same time. A point stored with
+those distances could be easily identified as invalid.
+
+Theoretical shortcomings:
+
+\textbf{Index Build Cost}: Up front calculation of each trilateration is
+expensive, when translating from standard coordinates. Each point
+requires three (at least) distance calculations from fixed points and
+the sorting of the resulting three lists of distances. This results in
+\texttt{O(n*logn)} just to set up the index.
+
+*This could be mitigated by upgrading sensor devices and pushing the
+calculations back to the data acquisition step, in much the way that
+Latitude and Longitude are now trivial to calculate in practice by use
+of GPS devices. Also, we briefly discuss how GPS direct measurements
+(prior to converstion to Lat/Long) may be useful in constructing
+trilateration values.
+
+\textbf{Storage}: The storing of three distances (32- or 64- bits per
+distance) is potentially a sizeable percent increase in storage
+requirement from storing only Latitude/Longitude and some R-Tree or
+similar index structure.
+
+*Note that if the distances are stored instead of the Lat/Long, rather
+than in addition to them, storage need not increase.
+
+\textbf{Projection-Bound}: The up-front distance calculations means that
+transforming from one spatial reference system (I.e. map projection --
+geodetic -- get references to be specific) to another requires costly
+recalculations bearing no benefit from the calculation. For example a
+distance on a spherical projection of the earth between a given lat/long
+combination will be different than the distance calculated on the earth
+according to the standard WGS84 calculations).
+
+*This said, we expect in most real-world situations, cross-geodetic
+comparisons are rare.
+
+\textbf{Difficult Bounding Band Intersection}: Bounding Bands intersect
+in odd shapes, which, particularly on ellipsoids, but even on 2D grids,
+are difficult to describe mathematically. Bounding boxes on the other
+hand, while they distort on ellipsoids, are still easily understandable
+as rectangles.
+
+Figure 1 - An example problem with radio towers R1, R2, and R3, and
+various receivers. Dashed lines represent the bounding bands with +/- a
+small distance from a given receiver (center black circle)
+
+Figure 2 - A close look at the intersection of three bounding bands
+limiting an index search around a point with a search radius giving the
+circle in A. Note that the area B is an intersection of two of the three
+bands. Area C is the intersection of all three.
+
+\section{Appendixy stuff}\label{appendixy-stuff}
+
+Alternate Database Indexes
+
+References (I need to finish reading and digesting these):
+
+\url{http://ieeexplore.ieee.org/document/5437947/}
+
+\url{https://prezi.com/chnisgybkshy/gps-trilateration/}
+
+\url{https://www.maa.org/sites/default/files/pdf/cms_upload/Thompson07734.pdf}
+
+\url{https://www.researchgate.net/publication/2689264_The_X-tree_An_Index_Structure_for_High-Dimensional_Data}
+
+\url{http://repository.cmu.edu/cgi/viewcontent.cgi?article=1577\&context=compsci}
+
+\url{https://link.springer.com/chapter/10.1007/10849171_83}
+
+\url{http://ieeexplore.ieee.org.echo.louisville.edu/document/7830628/}
+
+\url{https://link-springer-com.echo.louisville.edu/article/10.1007\%2Fs11222-013-9422-4}
+
+\url{https://en.wikipedia.org/wiki/R-tree}
+
+\url{https://boundlessgeo.com/2012/07/making-geography-faster/}
+
+\url{http://ieeexplore.ieee.org.echo.louisville.edu/document/6045057/}
+
+\url{http://www.sciencedirect.com.echo.louisville.edu/science/article/pii/S002002550900499X?_rdoc=1\&_fmt=high\&_origin=gateway\&_docanchor}=\&md5=b8429449ccfc9c30159a5f9aeaa92ffb\&ccp=y
+
+\url{https://en.wikipedia.org/wiki/K-d_tree}
+
+\url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.219.7269\&rep=rep1\&type=pdf}
+
+\url{http://www.scholarpedia.org/article/B-tree_and_UB-tree}
+
+\end{document}

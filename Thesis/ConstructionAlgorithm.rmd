@@ -1,29 +1,4 @@
----
-title: "Trilateration Index - Masters Thesis"
-author: "Chip Lynch"
-date: "6/24/2018"
-output:
-  pdf_document: default
-  html_document: default
-institute: University of Louisville
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-# Using Trilateration Distances as Geospatial Coordinates, Indexes, and Geohashes
-
-### Abstract
-We present an alternative method for database indexing to improve query performance for some distance related geospatial queries base on storing distances from three fixed points as in trilateration.  This effectively creates a coordinate system – i.e. an alternative to Latitude and Longitude – where the coordinates are the trilateration distances.  We explore this alternative coordinate system and the theoretical, technical, and practical implications of using it. 
-
-Initial results are promising for some use cases.  Nearest-neighbor logic is both simplified (compared to R-Tree style indexing) and performant.  Trilateration (or, more generally, "n-point lateration") is applicable to 2D, 3D, and higher dimension systems with minimal adaptation.  The system is easily extensible to common geospatial database types such as lines and polygons.  The concept of "Bounding Bands" (rather than "Bounding Boxes") is introduced for coordinate systems on spheres and ellipsoids. 
-
-Potential applications to this approach extend to any distance-measured space, and we touch on those (briefly, here, to constrain our scope).  For example, we consider applying the technique to Levenshtein distance, and even facial recognition or systems where distances do not follow the triangle inequality.
-
-***
-
-## Trilateration Coordinate Index – General Definition 
+## Trilateration Index – General Definition 
 
 Given an n-dimensional metric space $(M, d)$ (the universe of points $M$ in the space and a distance function $d$ which respects the triangle inequality), a typical point $X$ in the coordinate system will be described by coordinates ${x_1, x_2, …, x_n}$, which, typically, represents the decomposition of a vector $V$ from an "origin" point $O: {0, 0, … ,0}$ to $X$ into orthogonal vectors ${0,x1}, {0,x2}, …, {0,xn}$ along each of the n dimensional axes of the space.
 
@@ -131,7 +106,7 @@ The trilateration of those points, that is, the three points $d_1, d_2, d_3 = {d
   myTrilateration
 ```
 
-Note that we do not need to continue to store the original latitude and longitude.  We can convert the three $d_n$ distances back to Latitude and Longitude within some $\epsilon$ based on the available precision.  Geospatial coordinates in Latitude and Longitude with six digits of precision are accurate to within $<1\ meter$, and 8 digits is accuract to within $<1\ centimeter$, although this varies based on the latitude and longitude itself; latitudes closer to the equator are less accurate than those at the poles.  The distance values $d_x$ are more predictable, since they measure distances directly.  While the units in this sample are arbitrary, $F(x)$ in a real geospatial example could be in kilometers, so three decimal digits would precisely relate to $1 meter$, and so on.  This is one reason that we will later examine using the trilateration values as an outright replacement for Longitude and Latitide, and this feature is important when considering storage requirements for this data in large real-world database applications.
+Note that we do not need to continue to store the original latitude and longitude.  We can convert the three $d_n$ distances back to Latitude and Longitude within some $\epsilon$ based on the available precision.  Geospatial coordinates in Latitude and Longitude with six digits of precision are accurate to within $<1\ meter$, and 8 digits is accuract to within $<1\ centimeter$, although this varies based on the latitude and longitude itself; latitudes closer to the equator are less accurate than those at the poles.  The distance values $d_x$ are more predictable, since they measure distances directly.  While the units in this sample are arbitrary, $F(x)$ in a real geospatial example could be in kilometers, so three decimal digits would precisely relate to $1\ meter$, and so on.  This is one reason that we will later examine using the trilateration values as an outright replacement for Longitude and Latitide, and this feature is important when considering storage requirements for this data in large real-world database applications.
 
 For now, continuing with the example, those $10$ points are shown here in blue with the three reference points $F_1, F_2, F_3$ in red:
 
@@ -223,9 +198,9 @@ Only three points are required for trilateration (literally; thus the "tri" pref
 
 Theoretical shortcomings: 
 
-**Index Build Cost**: Up front calculation of each trilateration is expensive.  Each point requires three (at least) distance calculations from fixed points. 
+**Index Build Cost**: Up front calculation of each trilateration is expensive, when translating from standard coordinates. Each point requires three (at least) distance calculations from fixed points and the sorting of the resulting three lists of distances.  This results in `O(n*logn)` just to set up the index.
 
-*This could be mitigated by upgrading sensor devices, in much the way that Latitude and Longitude are now trivial to calculate in practice by use of GPS devices.  Also, we briefly discuss how GPS direct measurements (prior to converstion to Lat/Long) may be useful in constructing trilateration values. 
+*This could be mitigated by upgrading sensor devices and pushing the calculations back to the data acquisition step, in much the way that Latitude and Longitude are now trivial to calculate in practice by use of GPS devices.  Also, we briefly discuss how GPS direct measurements (prior to converstion to Lat/Long) may be useful in constructing trilateration values. 
 
 **Storage**: The storing of three distances (32- or 64- bits per distance) is potentially a sizeable percent increase in storage requirement from storing only Latitude/Longitude and some R-Tree or similar index structure. 
 
@@ -252,41 +227,3 @@ Figure 2 - A close look at the intersection of three bounding bands limiting an 
  
 
  
-
- 
-
- 
-
-Alternate Database Indexes 
-
-References (I need to finish reading and digesting these): 
-
-http://ieeexplore.ieee.org/document/5437947/ 
-
-https://prezi.com/chnisgybkshy/gps-trilateration/ 
-
-https://www.maa.org/sites/default/files/pdf/cms_upload/Thompson07734.pdf 
-
-https://www.researchgate.net/publication/2689264_The_X-tree_An_Index_Structure_for_High-Dimensional_Data 
-
-http://repository.cmu.edu/cgi/viewcontent.cgi?article=1577&context=compsci 
-
-https://link.springer.com/chapter/10.1007/10849171_83 
-
-http://ieeexplore.ieee.org.echo.louisville.edu/document/7830628/ 
-
-https://link-springer-com.echo.louisville.edu/article/10.1007%2Fs11222-013-9422-4 
-
-https://en.wikipedia.org/wiki/R-tree 
-
-https://boundlessgeo.com/2012/07/making-geography-faster/ 
-
-http://ieeexplore.ieee.org.echo.louisville.edu/document/6045057/ 
-
-http://www.sciencedirect.com.echo.louisville.edu/science/article/pii/S002002550900499X?_rdoc=1&_fmt=high&_origin=gateway&_docanchor=&md5=b8429449ccfc9c30159a5f9aeaa92ffb&ccp=y 
-
-https://en.wikipedia.org/wiki/K-d_tree 
-
-http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.219.7269&rep=rep1&type=pdf 
-
-http://www.scholarpedia.org/article/B-tree_and_UB-tree 

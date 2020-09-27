@@ -1,0 +1,24 @@
+---
+title: "Trilateration Index - Masters Thesis"
+author: "Chip Lynch"
+date: "6/24/2018"
+output:
+  pdf_document: default
+  html_document: default
+institute: University of Louisville
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r child = 'Abstract.rmd'}
+```
+
+\newpage
+
+```{r child = 'ConstructionAlgorithm.rmd'}
+```
+
+```{r child = 'Appendix.rmd'}
+```
