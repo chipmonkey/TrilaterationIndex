@@ -5,12 +5,11 @@
 init:
 	echo "Init"
 
-venv:
+venv: venv/bin/activate
 	. venv/bin/activate
 
-venv/bin/activate: requirements.txt
+venv/bin/activate: monkeynn/requirements.txt
 	test -d venv || python3 -m venv venv
-
 
 test:
 	pytest
