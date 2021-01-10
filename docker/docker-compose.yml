@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+
+  postgres:
+    image: postgres
+    restart: always
+    networks:
+      - trilateration 
+    ports:
+      - "8432:5432"
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword 
+    volumes:
+      - ./endurance/postgres:/var/lib/postgresql/data
+
+networks:
+  trilateration:
