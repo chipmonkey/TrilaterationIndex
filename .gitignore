@@ -113,3 +113,6 @@ target/
 perftests/
 cprofile.out
 endurance/
+venv
+*.swp
+nohup.out
