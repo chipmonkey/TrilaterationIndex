@@ -1,0 +1,31 @@
+## Network Adequacy
+
+The trilateration index was originally designed to improve efficiency of the "network adequacy" problem for health care.  Network adequacy is a common legal requirement for medicare or insurance companies with constraints such as:
+
+* 90% of members must live within 50 miles of a covered emergency room
+* 80% of female members over the age of 13 must live within 25 miles of a covered OB/GYN
+* 80% of members under the age of 16 must live within 25 miles of a covered pediatrician
+* etc.
+
+Similar questions, if not legal requiremenst, show up in cellular network and satellite communication technology (numbers are illustrative):
+
+* Maximize the number of people living within 10 miles of a 5G cell tower
+* 100% of all major highways should be within 5 miles of a 4G cell tower
+* There must be at least 2 satellites within 200 km of a point 450 km directly above every ground station for satellite network connectivity at any given time
+* There must be at least 1 satellite with access to a ground station within 50 km of a point 450 km directly above as many households as possible at any given time
+
+The nearest-neighbor problem was called the "Post-Office Problem", although the system of post offices lends itself to a similar construction:
+* Ensure that all US Postal addresses are within range of a post office 
+
+and so forth.
+
+Note that these are all illustrative examples; the real "Medicare Advantage Network Adequacy Criteria Guidance" document for example, is a 75 page document.
+
+
+### Formalization of Network Adequacy
+
+We formalize the concept of "Network Adequacy" mathematically:
+
+Given a set of points $P$ and set of query points $Q$ in a metric space $M$ (where $P \cap Q$ comprises the 'network'), the network is 'adequate' for a distance $d$ and a distance function $D(a, b)$ describing the distance between points $a$ and $b$ for $a \in M$ and $b \in M$ if for every point $q$ (where $q \in Q$) $\exists$ at least one point $p$ ($p \in P$) $\ni D(p, q) <= d$.  Otherwise the network is inadequate.
+
+

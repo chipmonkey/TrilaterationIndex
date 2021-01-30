@@ -17,6 +17,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 \newpage
 
+```{r child = 'TableOfContents.rmd'}
+```
+
+```{r child = 'NetworkAdequacy.rmd'}
+```
+
+```{r child = 'NearestNeighbor.rmd'}
+```
+***
+
 ```{r child = 'ConstructionAlgorithm.rmd'}
 ```
 

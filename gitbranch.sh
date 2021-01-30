@@ -9,7 +9,7 @@ function usage {
 	exit 127
 }
  
-if [ $# -ne 1 ] || [[ $1 != *"feature/"?* ]]
+if [ $# -ne 1 ]
 then
 	usage
 fi

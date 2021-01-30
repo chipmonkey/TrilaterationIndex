@@ -112,7 +112,10 @@ target/
 # Custom stuff:
 perftests/
 cprofile.out
+<<<<<<< Updated upstream
 endurance/
 venv
 *.swp
+=======
+>>>>>>> Stashed changes
 nohup.out

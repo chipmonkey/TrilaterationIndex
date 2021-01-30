@@ -23,7 +23,11 @@ ggplot(data = states) +
 kentucky <- subset(states, region %in% "kentucky")
 
 
-sampleLL <- read.csv('data/lat_long_synthetic.csv')
+sampleLL <- read.csv('data/lat_long_categorized.csv')
+
+# Colorize
+sampleLL$Color = 'black'
+sampleLL[which(sampleLL$Category == 15),'Color'] = 'red'
 
 # Data is all over the country -- make a simple bounding box for Kentucky:
   minlong <- min(kentucky$long)
@@ -40,10 +44,14 @@ sampleLL <- sampleLL[x,]
 counties <- map_data('county')
 ky_counties <- subset(counties, region == "kentucky")
 
+
 ggplot(data = kentucky) + 
   geom_polygon(aes(x = long, y = lat, group = group), fill = "deepskyblue", color = "black") + 
   coord_fixed(1.3) +
-  geom_point(data=sampleLL, aes(x=Longitude, y=Latitude), alpha = 0.1) +
+  #  Not sure why I can't get these next two lines to work in one:
+  geom_point(data=sampleLL[sampleLL$Color=='black',], color='black', shape=16,
+             aes(x=Longitude, y=Latitude), alpha = 0.1) +
+  geom_point(data=sampleLL[sampleLL$Color=='red',], color='red', shape=16,
+             aes(x=Longitude, y=Latitude), alpha = 0.05) +
   geom_polygon(data=ky_counties, aes(x=long, y=lat, group=group), fill = NA, color = "white")
-  
 
