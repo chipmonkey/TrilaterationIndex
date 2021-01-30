@@ -11,5 +11,6 @@ services:
     volumes:
       - ./endurance/data:/var/lib/postgresql/data
       - ./endurance/input:/input
+      - ./endurance/output:/output
     environment:
       POSTGRES_PASSWORD: mysecretpassword 

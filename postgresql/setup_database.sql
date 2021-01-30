@@ -86,7 +86,7 @@ alter table query_timings add column if not exists row_stamp timestamp default n
 
 create schema if not exists funcs;
 
-create or replace function funcs.CatMinDist_timing(leftcat int, rightcat int, notes varchar(1000) default 'no notes') RETURNS numeric(18,3)
+create or replace function funcs.CatMinDist_timing(leftcat int, rightcat int, notes varchar(1000) default 'min_st_distance') RETURNS numeric(18,3)
 AS $$
    declare StartTime timestamp;
            EndTime timestamp;
@@ -176,3 +176,6 @@ $$ LANGUAGE plpgsql;
  
 select funcs.run_timings();
 select funcs.run_sq_timings();
+
+copy query_timings to '/output/query_timings.csv' DELIMITER ',' CSV HEADER;
+COPY (SELECT * FROM v_category_counts) to '/output/category_counts.csv' DELIMITER ',' CSV HEADER;
