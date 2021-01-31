@@ -26,6 +26,27 @@ Note that these are all illustrative examples; the real "Medicare Advantage Netw
 
 We formalize the concept of "Network Adequacy" mathematically:
 
-Given a set of points $P$ and set of query points $Q$ in a metric space $M$ (where $P \cap Q$ comprises the 'network'), the network is 'adequate' for a distance $d$ and a distance function $D(a, b)$ describing the distance between points $a$ and $b$ for $a \in M$ and $b \in M$ if for every point $q$ (where $q \in Q$) $\exists$ at least one point $p$ ($p \in P$) $\ni D(p, q) <= d$.  Otherwise the network is inadequate.
+#### Network Adequacy Definition
+Given a non-empty set of points $P$ and a non-empty set of query points $Q$ in a metric space $M$ (where $P \cap Q$ comprises the 'network'), the network is 'adequate' for a distance $d$ and a distance function $D(a, b)$ describing the distance between points $a$ and $b$ for $a \in M$ and $b \in M$ if for every point $q$ (where $q \in Q$) $\exists$ at least one point $p$ ($p \in P$) $\ni D(p, q) <= d$.  Otherwise the network is 'inadequate'.
 
+#### Network Adequacy Threshold Definition
+We can generalize this slightly more by describing a network as 'adequate with threshold $T$' by introducing a percent $T$ ($0<=T<=1$) such that the same network is adequate if for at least $T*|Q|$ (or $T$ percent of points in $Q$) there exists at least one point $p$ $\ni D(p, q) <= d$.
+
+In this case, if $T == 1$ we have the original case.  If $T == 0$ we have a trivial case where the network is always adequate (even if $Q$ and/or $P$ are empty, which is generally disallowed).
+
+### Existing solutions
+
+We can find no literature where this topic is solved in a particular algorighmic way.  There are numerous discussions in health care about satisfying network adequacy, but more as policy or health care topics.
+
+In general, it appears that most practical solutions are done in SQL databases which are commonly the source of member and provider data for health care datasets.  Still, there is little published here; this information is anecdotal based on the author's personal direct knowledge and informal research.
+
+Satellite and cellular network discussions of this problem appear to be proprietary.
+
+Where we can find references to actual applications, the implemented solutions tend to be iterative, exhaustive implementations of existing Nearest-Neighbor algorithms.  That is, for each point $q$, find the nearest point $p$ and if $D(p, q) < d$ count it as conforming, otherwise count it as non-conforming. We then calculate the ratio of $r = conforming / |Q|$ if $r >= T$
+
+If we set $m = |Q|$ and $n - |P|$, and if we use a Nearest-Neighbor algorithm with $O(n\ log\ n)$ then the time complexity for Network Adequacy becomes $O(mn\ log\ n)$.
+
+In the worst-case, we cannot improve on this mathematically, but we can introduce what we believe are novel algorithms, based on the Trilateration Index, which execute efficiently compared to this iterative approach, by deeply reducing the search space and number of times the distance functions must be called in typical real-world cases.
+
+### Experimental Results for Network Adequacy
 
