@@ -17,6 +17,10 @@ globejs(bg="black", lat=cities$lat,     long=cities$long, value=value,
         rotationlat=-0.34,     rotationlong=-0.38, fov=30)
 
 
+globejs(bg="black", lat=c(0),     long=c(0),
+        rotationlat=-0.34,     rotationlong=-0.38, fov=30)
+
+
 # The three fixed Trilateration points
 points <- data.frame(id = 1, lat = 90.000, long=0.000)  # The north pole
 points <- rbind(points, c(2, 38.26, -85.76))  # Louisville, KY
@@ -28,4 +32,4 @@ arcs <- data.frame(cbind(points[c(1,2,3), c('lat', 'long')],
 
 globejs(bg="blue", arcs = arcs,
         arcsHeight = 0.4, arcsLwd = 3, arcsOpacity = 0.7,
-        arcsColor = 'white', img=earth)
+        arcsColor = 'white', img=earth, fov=30)

@@ -45,3 +45,7 @@ Thesis/Thesis.pdf: Thesis/*.rmd
 
 readdoc:
 	evince /home/chipmonkey/repos/TrilaterationIndex/Thesis/Thesis.pdf
+
+# Apt packages required for python and R dependencies
+apt:
+	apt install libudunits2-dev libgdal-dev

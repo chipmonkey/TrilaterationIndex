@@ -14,10 +14,12 @@ Similar questions, if not legal requiremenst, show up in cellular network and sa
 * There must be at least 2 satellites within 200 km of a point 450 km directly above every ground station for satellite network connectivity at any given time
 * There must be at least 1 satellite with access to a ground station within 50 km of a point 450 km directly above as many households as possible at any given time
 
-The nearest-neighbor problem was called the "Post-Office Problem", although the system of post offices lends itself to a similar construction:
+The nearest-neighbor problem was called the "Post-Office Problem" in early incarnations, and the system of post offices lends itself to a similar construction:
 * Ensure that all US Postal addresses are within range of a post office 
 
 and so forth.
+
+It is worth noting that the phrase "Network Adequacy" appears in studies of electric grids bearing a meaning that is NOT related to these distance algorithms.  [@Mahdavi2011; @Ahmadi2019]
 
 Note that these are all illustrative examples; the real "Medicare Advantage Network Adequacy Criteria Guidance" document for example, is a 75 page document.
 
@@ -44,7 +46,7 @@ Satellite and cellular network discussions of this problem appear to be propriet
 
 Where we can find references to actual applications, the implemented solutions tend to be iterative, exhaustive implementations of existing Nearest-Neighbor algorithms.  That is, for each point $q$, find the nearest point $p$ and if $D(p, q) < d$ count it as conforming, otherwise count it as non-conforming. We then calculate the ratio of $r = conforming / |Q|$ if $r >= T$
 
-If we set $m = |Q|$ and $n - |P|$, and if we use a Nearest-Neighbor algorithm with $O(n\ log\ n)$ then the time complexity for Network Adequacy becomes $O(mn\ log\ n)$.
+If we set $m = |Q|$ and $n = |P|$, and if we use a Nearest-Neighbor algorithm with $O(n\ log\ n)$ then the time complexity for Network Adequacy becomes $O(mn\ log\ n)$.
 
 In the worst-case, we cannot improve on this mathematically, but we can introduce what we believe are novel algorithms, based on the Trilateration Index, which execute efficiently compared to this iterative approach, by deeply reducing the search space and number of times the distance functions must be called in typical real-world cases.
 
