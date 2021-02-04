@@ -13,4 +13,11 @@ refpoints <- data.frame(array(refpoints, dim = c(5, 3)))
 
 names(refpoints) <- c('Location', 'Latitude', 'Longitude')
 
-write.csv(refpoints, '../data/ref_points.csv')
+write.csv(refpoints, '../data/ref_lat_long.csv')
+
+
+myTri <- data.frame(id=1, x=50, y=0)
+myTri <- rbind(myTri, c(2, 25*(2+sqrt(3)), tan(pi/3)*((25*(2+sqrt(3)))-50)))
+myTri <- rbind(myTri, c(3, -25*(sqrt(3)-2), tan(-pi/3)*((-25*(sqrt(3)-2))-50)))
+
+write.csv(myTri, '../data/sample_ref_points.csv')

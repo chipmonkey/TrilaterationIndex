@@ -45,8 +45,8 @@ counties <- map_data('county')
 ky_counties <- subset(counties, region == "kentucky")
 
 
-ggplot(data = kentucky) + 
-  geom_polygon(aes(x = long, y = lat, group = group), fill = "deepskyblue", color = "black") + 
+ggplot() + 
+  geom_polygon(data=kentucky, aes(x = long, y = lat, group = group), fill = "deepskyblue", color = "black") + 
   coord_fixed(1.3) +
   #  Not sure why I can't get these next two lines to work in one:
   geom_point(data=sampleLL[sampleLL$Color=='black',], color='black', shape=16,
