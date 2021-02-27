@@ -21,6 +21,7 @@ How can we use the Trilateration Index ($TI$) to improve the performance of a si
 
 However, for large datasets with fixed points where many distances need to be calculated between them, particularly if the distance function itself is computationally intensive (such as geospatial distances on an accurate ellipsoid model of earth) [@Lambert1942 pp 125–130], we can use the $TI$ structure to create approximate distances, and provide upper and lower bounds on exact values.
 
-For example, let's take the following data:
+For example, let's take our sample data:
 
-
+```{r sampleDistance, fig.align="center", echo=FALSE}
+```

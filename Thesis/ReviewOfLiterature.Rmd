@@ -1,0 +1,18 @@
+---
+title: "Review Current Literature"
+author: "Chip Lynch"
+date: "2/26/2021"
+output: pdf_document
+---
+
+## Review of Current Literature
+
+In general, we split our current literature review into two major sections:  1. Geospatial considerations and 2. Nearest Neighbor Algorithms, and a third minor section for ancillary references outside those two areas:
+
+### Geospatial References
+
+#### Haversine
+#### Vincenty's Formula
+Vincenty's Formula is a common non-spherical numeric solution to Earth-shaped ellipsoidal distance calculations [https://arxiv.org/pdf/1109.4448.pdf] however it "fails to converge for nearly antipodal points"
+#### Karney's Formula - https://arxiv.org/abs/1109.4448
+Improvements upon Vincenty's Formula have already been implemented in Python (https://pypi.org/project/geographiclib/), which we use in our Python implementations.
