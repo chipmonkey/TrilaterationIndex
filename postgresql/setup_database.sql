@@ -17,6 +17,8 @@ alter table sample_categorized add column SampleID serial unique;
 
 -- Create copy of lat/long using PostGIS geometry
 -- Table: sample_cat_gis
+-- SRID 4326 is the WGS 84 standard earth ellipse (https://en.wikipedia.org/wiki/World_Geodetic_System)
+-- This is the default, but we specify here for completeness
 drop table if exists sample_cat_gis;
 select SampleID, ST_SetSRID(ST_Point(Longitude, Latitude), 4326)::geography as st_geompoint, 
 Longitude, Latitude, category into sample_cat_gis from sample_categorized;

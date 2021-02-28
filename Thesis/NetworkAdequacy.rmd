@@ -44,11 +44,11 @@ In general, it appears that most practical solutions are done in SQL databases w
 
 Satellite and cellular network discussions of this problem appear to be proprietary.
 
-Where we can find references to actual applications, the implemented solutions tend to be iterative, exhaustive implementations of existing Nearest-Neighbor algorithms.  That is, for each point $q$, find the nearest point $p$ and if $D(p, q) < d$ count it as conforming, otherwise count it as non-conforming. We then calculate the ratio of $r = conforming / |Q|$ if $r >= T$
+Where we can find references to actual applications, the implemented solutions tend to be iterative, exhaustive implementations of existing Nearest-Neighbor algorithms.  That is, for each point $q$, find the nearest point $p$ and if $D(p, q) < d$ count it as conforming, otherwise count it as non-conforming. We then calculate the ratio of $r = conforming / |Q|$ if $r >= T$.
 
 If we set $m = |Q|$ and $n = |P|$, and if we use a Nearest-Neighbor algorithm with $O(n\ log\ n)$ then the time complexity for Network Adequacy becomes $O(mn\ log\ n)$.
 
-In the worst-case, we cannot improve on this mathematically, but we can introduce what we believe are novel algorithms, based on the Trilateration Index, which execute efficiently compared to this iterative approach, by deeply reducing the search space and number of times the distance functions must be called in typical real-world cases.
+In the worst-case, we cannot improve on this mathematically, but we can introduce what we believe are novel algorithms, based on the Trilateration Index, which execute efficiently compared to this iterative approach, by deeply reducing the search space and number of times the distance functions must be called in typical real-world cases.  Also, trivially, it is unnecessary to find the nearest point $p$, merely prove that at least one such point exists (or none exists) for a given $q$.
 
 ### Experimental Results for Network Adequacy
 
