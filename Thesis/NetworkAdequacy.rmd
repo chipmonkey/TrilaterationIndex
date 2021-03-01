@@ -38,11 +38,11 @@ In this case, if $T == 1$ we have the original case.  If $T == 0$ we have a triv
 
 ### Existing solutions
 
-We can find no literature where this topic is solved in a particular algorighmic way.  There are numerous discussions in health care about satisfying network adequacy, but more as policy or health care topics. [@Wishner2017],[@Mahdavi2011]
+We can find no literature where this topic is solved in a particular algorighmic way.  There are numerous discussions in health care about satisfying network adequacy, but more as policy or health care topics than as computational approaches. [@Wishner2017],[@Mahdavi2011]
 
 In general, it appears that most practical solutions are done in SQL databases which are commonly the source of member and provider data for health care datasets.  Still, there is little published here; this information is anecdotal based on the author's personal direct knowledge and informal research.
 
-Satellite and cellular network discussions of this problem appear to be proprietary.
+Satellite and cellular network discussions of this problem appear to be proprietary, but again anecdotally, appear to simply apply common Nearest-Neighbor
 
 Where we can find references to actual applications, the implemented solutions tend to be iterative, exhaustive implementations of existing Nearest-Neighbor algorithms.  That is, for each point $q$, find the nearest point $p$ and if $D(p, q) < d$ count it as conforming, otherwise count it as non-conforming. We then calculate the ratio of $r = \frac{conforming} {|Q|}$ to determing whether $r >= T$ or not.
 

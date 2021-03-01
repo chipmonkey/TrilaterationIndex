@@ -1,9 +1,21 @@
 # Appendixy stuff
- 
+
+
+## Code and datasets
+
+All code including markdown and custom sample data files to generate this document are available here: https://github.com/chipmonkey/TrilaterationIndex
+
+A custom fork and branch of scikit-learn which includes the Python/Cython implementation of our Multilateration Nearest-Neighbor and related distance functions is available here: https://github.com/chipmonkey/scikit-learn/tree/feature/chip-test-index
+
+A custom fork and branch of the ANN Benchmarks code which includes hooks to our Multilateration NN implementation (from the custom scikit-learn fork) is available here: https://github.com/chipmonkey/ann-benchmarks
+
+## The rest of this appendix needs review
 
 Alternate Database Indexes 
 
 References (I need to finish reading and digesting these): 
+
+https://www.sciencedirect.com/science/article/pii/S1000936118301973
 
 http://ieeexplore.ieee.org/document/5437947/ 
 
@@ -20,8 +32,6 @@ https://link.springer.com/chapter/10.1007/10849171_83
 http://ieeexplore.ieee.org.echo.louisville.edu/document/7830628/ 
 
 https://link-springer-com.echo.louisville.edu/article/10.1007%2Fs11222-013-9422-4 
-
-https://en.wikipedia.org/wiki/R-tree 
 
 https://boundlessgeo.com/2012/07/making-geography-faster/ 
 
