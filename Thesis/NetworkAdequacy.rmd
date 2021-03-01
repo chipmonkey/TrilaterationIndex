@@ -7,7 +7,7 @@ The trilateration index was originally designed to improve efficiency of the "ne
 * 80% of members under the age of 16 must live within 25 miles of a covered pediatrician
 * etc.
 
-Similar questions, if not legal requiremenst, show up in cellular network and satellite communication technology (numbers are illustrative):
+Similar requirements, legal or otherwise, show up in cellular network and satellite communication technology (numbers are illustrative):
 
 * Maximize the number of people living within 10 miles of a 5G cell tower
 * 100% of all major highways should be within 5 miles of a 4G cell tower
@@ -38,13 +38,13 @@ In this case, if $T == 1$ we have the original case.  If $T == 0$ we have a triv
 
 ### Existing solutions
 
-We can find no literature where this topic is solved in a particular algorighmic way.  There are numerous discussions in health care about satisfying network adequacy, but more as policy or health care topics.
+We can find no literature where this topic is solved in a particular algorighmic way.  There are numerous discussions in health care about satisfying network adequacy, but more as policy or health care topics. [@Wishner2017],[@Mahdavi2011]
 
 In general, it appears that most practical solutions are done in SQL databases which are commonly the source of member and provider data for health care datasets.  Still, there is little published here; this information is anecdotal based on the author's personal direct knowledge and informal research.
 
 Satellite and cellular network discussions of this problem appear to be proprietary.
 
-Where we can find references to actual applications, the implemented solutions tend to be iterative, exhaustive implementations of existing Nearest-Neighbor algorithms.  That is, for each point $q$, find the nearest point $p$ and if $D(p, q) < d$ count it as conforming, otherwise count it as non-conforming. We then calculate the ratio of $r = conforming / |Q|$ if $r >= T$.
+Where we can find references to actual applications, the implemented solutions tend to be iterative, exhaustive implementations of existing Nearest-Neighbor algorithms.  That is, for each point $q$, find the nearest point $p$ and if $D(p, q) < d$ count it as conforming, otherwise count it as non-conforming. We then calculate the ratio of $r = \frac{conforming} {|Q|}$ to determing whether $r >= T$ or not.
 
 If we set $m = |Q|$ and $n = |P|$, and if we use a Nearest-Neighbor algorithm with $O(n\ log\ n)$ then the time complexity for Network Adequacy becomes $O(mn\ log\ n)$.
 
@@ -52,3 +52,4 @@ In the worst-case, we cannot improve on this mathematically, but we can introduc
 
 ### Experimental Results for Network Adequacy
 
+TODO: 

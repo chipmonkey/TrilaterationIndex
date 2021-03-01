@@ -1,4 +1,4 @@
-
+# The Trilateration Geospatial Index
 
 ## Trilateration Index – General Definition 
 

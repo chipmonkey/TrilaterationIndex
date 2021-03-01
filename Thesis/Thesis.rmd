@@ -3,7 +3,9 @@ title: "Trilateration Index - Masters Thesis"
 author: "Chip Lynch"
 date: "6/24/2018"
 output:
-  pdf_document: default
+  pdf_document:
+    toc: true
+    number_sections: true
   html_document: default
 institute: University of Louisville
 bibliography: bibliography.bib
@@ -21,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r child = 'TableOfContents.rmd'}
 ```
 
-```{r child = 'SimpleDistance.rmd'}
+```{r child = 'MathTheory.rmd'}
 ```
 
 ```{r child = 'NetworkAdequacy.rmd'}
@@ -29,6 +31,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r child = 'NearestNeighbor.rmd'}
 ```
+
+```{r child = 'ANN_Benchmarks.rmd'}
+```
+
+```{r child = 'ReviewOfLiterature.rmd'}
+```
+
+
+
 ***
 
 ```{r child = 'ConstructionAlgorithm.rmd'}

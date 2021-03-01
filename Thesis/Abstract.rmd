@@ -1,9 +1,11 @@
-# Using Trilateration Distances as an Alternate Coordinate System
+# Using Multilateration Distances as an Alternate Coordinate System {-}
 
-### Abstract
+### Abstract {-}
 We present an alternative method for pre-processing and storing point data (such as Geospatial data) to improve query performance for some distance related queries such as "find all points in a set $P$ within distance $d$ of query point $q$".  This pre-processing can be used to improve existing algorithms for Nearest-Neighbor (NN) searches, and lend themselves to new algorithms which offer some performance improvements and tradeoffs vs. existing algorithms.
 
-While our results show that we aren't able to reach performance of well-tuned modern graph-based NN algorithms such as FAISS and HNSW, our approach has the benefit of being easily implemented in existing SQL databases, where we see a roughly 10x performance improvement to other in-database queries, particularly on geospatial data where a single distance calculation may be significantly more expensive than in euclidean distance calculations.  In fact, on simple euclidean systems with orthogonal homogeneous axes, our approach adds little value.
+While our results show that we aren't able to reach performance of well-tuned modern graph-based NN algorithms such as FAISS and HNSW on euclidean datasets, our approach has the benefit of being easily implemented in existing SQL databases, where we see a roughly 10x performance improvement to other in-database queries. Our approach is particularly beneficial on geospatial data where a single distance calculation may be significantly more expensive than in euclidean distance calculations.
+
+Multilateration itself is a common technique in surveying and geolocation.  GPS uses the concept of detecting the distance of a device to multiple satellites to determine the location of the device; a concept known as true-range multilateration.  However while the approach is common, the distance values from multilateration are typically immediately converted to Latitude/Longitude and discarded.  Here we attempt to use those intermediate distance values to computational benefit.
 
 Our construction includes storing the distances from fixed points (typically three, as in trilateration) as an alternative to Latitude and Longitude.  This effectively creates a coordinate system where the coordinates are the trilateration distances.  We explore this alternative coordinate system and the theoretical, technical, and practical implications of using it.  Trilateration is a common concept, widely used in GPS and closely related to Triangulation used in cartography, surveying, and orienteering, although algorithmic use of these concepts for NN-style problems are scarce.  Trilateration (or, more generally, "n-point lateration") is applicable to 2D, 3D, and higher dimension systems with minimal adaptation.
 
