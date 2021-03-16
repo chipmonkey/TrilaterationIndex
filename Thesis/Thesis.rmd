@@ -26,6 +26,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r child = 'MathTheory.rmd'}
 ```
 
+```{r child = 'Experiment.rmd'}
+```
+
 ```{r child = 'NetworkAdequacy.rmd'}
 ```
 
@@ -37,7 +40,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r child = 'ReviewOfLiterature.rmd'}
 ```
-
 
 
 ***

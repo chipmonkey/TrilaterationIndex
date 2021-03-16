@@ -18,6 +18,9 @@ start = time.time()
 
 querypoint = np.asarray([[38.25, -85.50]])
 
+# This point caused a segfault for some reason... here for testing:
+segfault_point = np.asarray([[60.1850581, -149.3828765]])
+
 samples = []
 refpoints = []
 
@@ -49,11 +52,13 @@ print(f"{result} meters between bsas and paris")
 
 brute = NearestNeighbors(n_neighbors=1000, radius=0.07, algorithm='brute', metric='geodesic')
 brute.fit(samples)
+print(f"fit brute force - at time {time.time() - start} seconds")
 BF = brute.kneighbors(querypoint, 100)
 print(f"brute force results: {BF[1][0]} ({len(BF[1][0])}) - at time {time.time() - start} seconds")
 
 
 tree = KDTree(samples, metric='geodesic')
+print(f"fit KD Tree - at time {time.time() - start} seconds")
 # t = timeit.timeit(lambda: tree.query_radius(querypoint, r=0.07), number=500)
 # print(f"KDTree 500x single point time: {t}")
 tq = tree.query(querypoint, k=100)
@@ -61,11 +66,14 @@ print(f"tree query results: {tq} ({len(tq[0])}) - at time {time.time() - start} 
 
 
 trilat = TrilaterationIndex(samples, metric='geodesic')
+print(f"fit Trilat - at time {time.time() - start} seconds")
 # t = timeit.timeit(lambda: trilat.query_radius(querypoint, r=0.07), number=500)
 # print(f"Trilat 500x single point time: {t}")
 tr = trilat.query(querypoint, k=100)
 print(f"trilat.query: {tr} ({len(tr)}) - at time {time.time() - start} seconds")
 
+tseg = trilat.query(segfault_point, k=100)
+print(f"trilat.query with segfault point: {tseg} ({len(tseg)}) - at time {time.time() - start} seconds")
 
 t3 = trilat.query_expand(querypoint, k=100)
 print(f"trilat.query_expand (t3): {t3} ({len(t3)}) - at time {time.time() - start} seconds")
@@ -78,10 +86,6 @@ print(f"length match 2: {len(np.intersect1d(tq[1], t3[1]))}")
 print(f"length match 4: {len(np.intersect1d(tq[1], t4[1]))}")
 
 print(f"setdiff: {np.setdiff1d(tq[0], t3)}")
-if 18 in tq[0]:
-    print("18 in tq")
-if 18 in t3[1]:
-    print("18 in t3")
 
 # exit()
 

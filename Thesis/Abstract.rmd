@@ -1,7 +1,7 @@
 # Using Multilateration Distances as an Alternate Coordinate System {-}
 
 ### Abstract {-}
-We present an alternative method for pre-processing and storing point data (such as Geospatial data) to improve query performance for some distance related queries such as "find all points in a set $P$ within distance $d$ of query point $q$".  This pre-processing can be used to improve existing algorithms for Nearest-Neighbor (NN) searches, and lend themselves to new algorithms which offer some performance improvements and tradeoffs vs. existing algorithms.
+We present an alternative method for pre-processing and storing point data (such as Geospatial data) to improve query performance for some distance related queries such as "find all points in a set $P$ within distance $d$ of query point $q$".  This pre-processing can be used to improve existing algorithms for Nearest-Neighbor (NN) searches, and lend themselves to new algorithms which offer some performance improvements and tradeoffs vs. existing algorithms. In particular, our approach is effective when the cost of the atomic distance calculation itself is high, such as with accurate geodesic distances on earth using elliptical, rather than spherical or euclidean models of the earth.
 
 While our results show that we aren't able to reach performance of well-tuned modern graph-based NN algorithms such as FAISS and HNSW on euclidean datasets, our approach has the benefit of being easily implemented in existing SQL databases, where we see a roughly 10x performance improvement to other in-database queries. Our approach is particularly beneficial on geospatial data where a single distance calculation may be significantly more expensive than in euclidean distance calculations.
 

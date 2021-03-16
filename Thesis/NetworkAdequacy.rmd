@@ -7,6 +7,8 @@ The trilateration index was originally designed to improve efficiency of the "ne
 * 80% of members under the age of 16 must live within 25 miles of a covered pediatrician
 * etc.
 
+Note that these are all illustrative examples; the real "Medicare Advantage Network Adequacy Criteria Guidance" document for example, is a 75 page document.
+
 Similar requirements, legal or otherwise, show up in cellular network and satellite communication technology (numbers are illustrative):
 
 * Maximize the number of people living within 10 miles of a 5G cell tower
@@ -19,9 +21,7 @@ The nearest-neighbor problem was called the "Post-Office Problem" in early incar
 
 and so forth.
 
-It is worth noting that the phrase "Network Adequacy" appears in studies of electric grids bearing a meaning that is NOT related to these distance algorithms.  [@Mahdavi2011; @Ahmadi2019]
-
-Note that these are all illustrative examples; the real "Medicare Advantage Network Adequacy Criteria Guidance" document for example, is a 75 page document.
+It is worth noting that the phrase "Network Adequacy" appears in studies of electric grids bearing a meaning that is NOT related to these distance algorithms.  [@Mahdavi2011; @Ahmadi2019]  Satellite "coverage" appears similar at first, and in some cases (like GPS or Satellite Internet) asks a similar question, but often the term "coverage" has a temporal component - for example with satellite imaging - where a satellite must pass over every point it wants to cover _at some point in time_.  We do not explore this treatment for those problems with temporal components, although with some works the ideas may be extended there.
 
 
 ### Formalization of Network Adequacy
