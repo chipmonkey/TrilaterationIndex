@@ -5,22 +5,23 @@ date: "3/13/2021"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+# Experimentation
 
 ## Experimental Setup
 
 We plan several experiments for Network Adequacy in SQL databases, and Nearest Neighbor applications using Python.
 
+### Experiment 1: Python Nearest Neighbors with ANN
+
+We adapt the popular Python package scikit-learn to execute our Trilateration Index and perform nearest-neighbor search.
+We adapt the ann-benchmarks software, which is designed explicitly for comparing performance of nearest neighbor algorithms[@Amueller2020], to record results.
+
+
+### Experiment 2: SQL Nearest Neighbors
+
+### Experiment 3: SQL Network Adequacy
 
 
 ## Experimental Results
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Taa daa

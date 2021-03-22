@@ -59,4 +59,64 @@ However, for large datasets with fixed points where many distances need to be ca
 For example, let's take our sample data:
 
 ```{r sampleDistance, fig.align="center", echo=FALSE}
+data <- read.csv('../data/point_sample_10.csv')
+ref <- read.csv('../data/sample_ref_points.csv')
+ref <- ref[,2:4]
+library(rdist)
+data <- cbind(data, cdist(data, ref))[,2:6]
+names(data) <- c('x', 'y', 'd1', 'd2', 'd3')
+data <- data[order(data$d1),]
+kable(data)
+```
+
+Here, X and Y are euclidean cartesian coordinates, and d1, d2, d3 are the distances from these points to our three reference points respectively.  See [2-D Bounded Example] for more details on the construction.  Note that in this case we have sorted the data by $d1$ -- this is essential, and incurs only $O(n*log(n))$ overhead.  This equates to how database indexes or arrays will hold the data in memory.
+
+
+### Distance between two points
+If we compare points 1 and 2 here (lines 4 and 2 in the $d1$-sorted table), what can we say about those two points' distances without invoking a distance function?  If we compare the distances, we can put lower bounds on their proximity using a direct, simple application of the triangle inequality.  For example $|d1(P_1) - d1(P_2)| = |54.19130 - 43.87912| = 10.33$ which means the points can be **_no closer than_** $10.33$ units to one another.   Similarly with d2 and d3, we get $|58.76869 - 40.89001| = 17.88$ and $56.13720 - 48.68666 = 7.45054$.  So now, the points can be no closer than $17.88$ units, although they are closer relative to the $d1$ and $d3$ points.
+
+### Within/AnyWithin Distance
+
+It's similarly easy to use this mechanism to approximate answers to "which points are within distance $d$ of query point $Q$?" and, relatedly, "is there at least one point in $P$ within distance $d$ to point $Q$?".
+
+Looking back at our table, let's examine the question "which points are within distance 20 of point 5?".  Point 5 has coordinates $(86.12714, 52.201894)$, and is $63.60981$ units from $d1$.  Since we've stored the list sorted by $d1$, we can instantly limit our search to a sequential walk from points between $43.60981$ and $83.60981$ -- that is, points $(7, 1, 4, 9, 6)$ (excluding 5 itself).  This is, immediately, a 50% reduction in the dataset.
+
+While performing the walk, we look for $d2$ between $24.08779 \pm 20$ and $d3$ between $82.65970 \pm 20$.  $d2$ rules out points $(7, 4, 6)$ and $d3$ rules out $(1)$, leaving only $(9)$ for consideration. To be completely certain, we can calculate $d = \sqrt{(86.12714 - 85.13531)^2 + (64.090063 - 78.065907)^2} =$ `r sqrt((86.12714 - 85.13531)^2 + (64.090063 - 78.065907)^2)` which is, indeed, within 20.
+
+In pseudocode:
+```
+Within(d, P, TI):
+   lowi = lowest i such that TI[i, d1] > P[d1] - d
+   highi = highest i such that TI[i, d1] < P[d1] + d
+   FOR i FROM lowi to highi:
+       if TI[i, dx] between P[dx] - d and P[dx] + d for all x:
+          ADD i to CANDIDATES
+   FOR c in CANDIDATES:
+       if D(c, P) < d:
+          ADD c to RESULTS
+   RETURN RESULTS
+```
+
+If we were answering the "is there at least one point..." version, it would be easy to shortcut the sequential walk when a match is reached.
+
+### Alternate Order Indexes
+
+For an additional possible performance improvement, we can create alternate indexes which store the data in sorted order along $d2$ and $d3$ (or any/all distances for arbitarty dimensions).  We search for the low and high indexes as before, but now we do so along each sorted index (for distances to each reference point).  Once we have the lists of individual candidates from each index, we need to find any point that is common to all candidate lists.  In practice we have not seen this behave as effectively as the single-index function, but this seems to come down to the cost of merging n-lists to find common elements.
+
+In pseudocode:
+```
+WithinMulti(d, P, TI):
+   FOR each ref point rx:
+      lowi = lowest i such that TI[i, dx] > P[dx] - d
+      highi = highest i such that TI[i, dx] < P[dx] + d
+      FOR i FROM lowi to highi:
+          if TI[i, dx] between P[dx] - d and P[dx] + d:
+             ADD i to CANDIDATES[x]
+    FOR c in CANDIDATES[1]:
+      if c in CANDIDATES[x] for all x:
+          ADD c to POSSIBLE
+    FOR c in POSSIBLE:
+       if D(c, P) < d:
+          ADD c to RESULTS
+    RETURN RESULTS
 ```

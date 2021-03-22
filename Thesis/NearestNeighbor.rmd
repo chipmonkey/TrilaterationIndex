@@ -1,2 +1,24 @@
 ## Nearest Neighbor
 
+The nearest neighbor ($NN$) problem should need no introduction.  For our perspective, we talk about NN and k-NN as:
+
+Given a non-empty set of points $P$, a non-empty set of query points $Q$ in a metric space $M$, and a distance function $D(a, b)$ describing the distance between points $a$ and $b$ for $a \in M$ and $b \in M$, the "Nearest Neighbor" of a given point $q \in Q$ is the point $p \in P$ such that $D(p, q)$ is the lowest value of $D(p', q)$ over all points $p' \in P$ (i.e. $D(p, q) < D(p',q) \forall p'$ with $p \ne p'$.
+
+Note that it is possible that such a point does not exist if there are multiple points with the same lowest distance; we do not explore that situation here, as it does not affect our examination.
+
+The k-nearest neighbors ($kNN$) of a given point $q$ as above is the list of $k$ points $R = p_1..p_k \in P$ such that $D(p_k, q)$ is the lowest value of $D(p, q)$ over all $p \in P$ such that $D(p', q)$ for $p' \ne p$ and $p' \not \in R$.  It should be evident that $NN = kNN$ when $k = 1$.
+
+### A History of k-NN Solving Algorithms
+
+#### Brute-Force
+The naive approach to solving k-nn is a brute-force algorithm, iterating over every point $p in P$ and keeping track of the lowest k distances.
+
+
+#### Space Partitioning Trees
+
+Space paritioning trees use a trie to arrange points from $p$ into groups with a hierarchical search structure, such that, generally, points which are close to one another exist in nearby hierarchies.  The $k-d$ tree was described in 1975.[@Bentley1975]  This partitions a space by dividing the underlying points at the median point along one of the dimensional axes, recursively, resulting in a searchable trie.  An adaptation of this - the Ball-Tree - partitions the space into hyperspheres, rather than along dimensional axes.[@Liu2006]
+
+
+#### Graph 
+
+

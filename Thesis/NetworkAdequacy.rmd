@@ -49,7 +49,3 @@ Where we can find references to actual applications, the implemented solutions t
 If we set $m = |Q|$ and $n = |P|$, and if we use a Nearest-Neighbor algorithm with $O(n\ log\ n)$ then the time complexity for Network Adequacy becomes $O(mn\ log\ n)$.
 
 In the worst-case, we cannot improve on this mathematically, but we can introduce what we believe are novel algorithms, based on the Trilateration Index, which execute efficiently compared to this iterative approach, by deeply reducing the search space and number of times the distance functions must be called in typical real-world cases.  Also, trivially, it is unnecessary to find the nearest point $p$, merely prove that at least one such point exists (or none exists) for a given $q$.
-
-### Experimental Results for Network Adequacy
-
-TODO: 

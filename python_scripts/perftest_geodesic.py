@@ -39,7 +39,7 @@ with open('/home/chipmonkey/repos/TrilaterationIndex/data/ref_points.csv') as cs
         print(row)
         refpoints.append([row['Latitude'], row['Longitude']])
 
-from sklearn.neighbors import NearestNeighbors, KDTree
+from sklearn.neighbors import NearestNeighbors, KDTree, BallTree
 from sklearn.neighbors import TrilaterationIndex
 
 print(f"{time.time() - start} seconds since start")
@@ -62,7 +62,19 @@ print(f"fit KD Tree - at time {time.time() - start} seconds")
 # t = timeit.timeit(lambda: tree.query_radius(querypoint, r=0.07), number=500)
 # print(f"KDTree 500x single point time: {t}")
 tq = tree.query(querypoint, k=100)
-print(f"tree query results: {tq} ({len(tq[0])}) - at time {time.time() - start} seconds")
+print(f"kd query results: {tq} ({len(tq[0])}) - at time {time.time() - start} seconds")
+
+
+ball = BallTree(samples, metric='geodesic')
+print(f"fit ball Tree - at time {time.time() - start} seconds")
+bq = ball.query(querypoint, k=100)
+print(f"ball query results: {bq} ({len(bq[0])}) - at time {time.time() - start} seconds")
+
+
+ball10 = BallTree(samples, metric='geodesic', leaf_size=10)
+print(f"fit ball tree (leaf_size=10) at time {time.time() - start} seconds")
+bq10 = ball.query(querypoint, k=100)
+print(f"ball (leaf_size=10) query results: {bq10} ({len(bq10[0])}) - at time {time.time() - start} seconds")
 
 
 trilat = TrilaterationIndex(samples, metric='geodesic')
@@ -96,8 +108,14 @@ print(f"setdiff: {np.setdiff1d(tq[0], t3)}")
 # print("timing kd tree")
 # cProfile.runctx('timeit.timeit(lambda: tree.query(querypoint, k=100), number=20)', globals(), locals(), "QKDProfile_geo.prof")
 
-# print("timing trilat.query")
-# cProfile.runctx('timeit.timeit(lambda: trilat.query(querypoint, k=100), number=20)', globals(), locals(), "QTRProfile_geo.prof")
+# print("timing ball tree default leaf size:")
+# cProfile.runctx('timeit.timeit(lambda: ball.query(querypoint, k=100), number=20)', globals(), locals(), "QBallProfile_geo.prof")
+
+print("timing ball tree with leaf size 10:")
+cProfile.runctx('timeit.timeit(lambda: ball10.query(querypoint, k=100), number=20)', globals(), locals(), "QBall10Profile_geo.prof")
+
+print("timing trilat.query")
+cProfile.runctx('timeit.timeit(lambda: trilat.query(querypoint, k=100), number=20)', globals(), locals(), "QTrilatProfile_geo.prof")
 
 # print("timing query_expand")
 # cProfile.runctx('timeit.timeit(lambda: trilat.query_expand(querypoint, k=100, mfudge=5, miter=20, sscale=2), number=20)', globals(), locals(), "QT3Profile_geo.prof")
@@ -111,7 +129,18 @@ s.strip_dirs().sort_stats("cumtime").print_stats()
 s = pstats.Stats("QKDProfile_geo.prof")
 s.strip_dirs().sort_stats("cumtime").print_stats()
 
+s = pstats.Stats("QBallProfile_geo.prof")
+s.strip_dirs().sort_stats("cumtime").print_stats()
+
+s = pstats.Stats("QBall10Profile_geo.prof")
+s.strip_dirs().sort_stats("cumtime").print_stats()
+
+print("Previous Trilat results:")
 s = pstats.Stats("QTRProfile_geo.prof")
+s.strip_dirs().sort_stats("cumtime").print_stats()
+
+print("New Trilat Results:")
+s = pstats.Stats("QTrilatProfile_geo.prof")
 s.strip_dirs().sort_stats("cumtime").print_stats()
 
 s = pstats.Stats("QT3Profile_geo.prof")

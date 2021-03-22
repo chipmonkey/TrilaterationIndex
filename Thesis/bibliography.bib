@@ -112,3 +112,59 @@
     URL = {http://www.jstor.org/stable/24531873},
 }
 
+@article{Amueller2020,
+   title = {ANN-Benchmarks: A benchmarking tool for approximate nearest neighbor algorithms},
+   journal = {Information Systems},
+   volume = {87},
+   pages = {101374},
+   year = {2020},
+   issn = {0306-4379},
+   doi = {https://doi.org/10.1016/j.is.2019.02.006},
+   url = {https://www.sciencedirect.com/science/article/pii/S0306437918303685},
+   author = {Martin Aumüller and Erik Bernhardsson and Alexander Faithfull},
+   keywords = {Benchmarking, Nearest neighbor search, Evaluation},
+   abstract = {This paper describes ANN-Benchmarks, a tool for evaluating the performance of in-memory approximate nearest neighbor algorithms. It provides a standard interface for measuring the performance and quality achieved by nearest neighbor algorithms on different standard data sets. It supports several different ways of integrating k-NN algorithms, and its configuration system automatically tests a range of parameter settings for each algorithm. Algorithms are compared with respect to many different (approximate) quality measures, and adding more is easy and fast; the included plotting front-ends can visualize these as images, LaTeX plots, and websites with interactive plots. ANN-Benchmarks aims to provide a constantly updated overview of the current state of the art of k-NN algorithms. In the short term, this overview allows users to choose the correct k-NN algorithm and parameters for their similarity search task; in the longer term, algorithm designers will be able to use this overview to test and refine automatic parameter tuning. The paper gives an overview of the system, evaluates the results of the benchmark, and points out directions for future work. Interestingly, very different approaches to k-NN search yield comparable quality-performance trade-offs. The system is available at http://ann-benchmarks.com.}
+}
+
+@unknown{unknown,
+author = {Wang, Hongya and Wang, Zhizheng and Wang, Wei and Xiao, Yingyuan and Zhao, Zeng and Yang, Kaixiang},
+year = {2020},
+month = {12},
+pages = {},
+title = {A Note on Graph-Based Nearest Neighbor Search}
+}
+
+@article{Bentley1975,
+   abstract = {This paper develops the multidimensional binary search tree (or k-d tree, where k is the dimensionality of the search space) as a data structure for storage of information to be retrieved by associative searches. The k-d tree is defined and examples are given. It is shown to be quite efficient in its storage requirements. A significant advantage of this structure is that a single data structure can handle many types of queries very efficiently. Various utility algorithms are developed; their proven average running times in an n record file are: insertion, O(log n); deletion of the root, O(n(k-1)/k); deletion of a random node, O(log n); and optimization (guarantees logarithmic performance of searches), O(n log n). Search algorithms are given for partial match queries with t keys specified [proven maximum running time of O(n(k-t)/k)] and for nearest neighbor queries [empirically observed average running time of O(log n).] These performances far surpass the best currently known algorithms for these tasks. An algorithm is presented to handle any general intersection query. The main focus of this paper is theoretical. It is felt, however, that k-d trees could be quite useful in many applications, and examples of potential uses are given. © 1975, ACM. All rights reserved.},
+   author = {Jon Louis Bentley},
+   doi = {10.1145/361002.361007},
+   issn = {15577317},
+   issue = {9},
+   journal = {Communications of the ACM},
+   title = {Multidimensional Binary Search Trees Used for Associative Searching},
+   volume = {18},
+   year = {1975},
+}
+
+@article{Liu2006,
+   abstract = {This paper is about non-approximate acceleration of high-dimensional nonparametric operations such as k nearest neighbor classifiers. We attempt to exploit the fact that even if we want exact answers to nonparametric queries, we usually do not need to explicitly find the data points close to the query, but merely need to answer questions about the properties of that set of data points. This offers a small amount of computational leeway, and we investigate how much that leeway can be exploited. This is applicable to many algorithms in nonparametric statistics, memory-based learning and kernel-based learning. But for clarity, this paper concentrates on pure k-NN classification. We introduce new ball-tree algorithms that on real-world data sets give accelerations from 2-fold to 100-fold compared against highly optimized traditional ball-tree-based k-NN. These results include data sets with up to 106 dimensions and 105 records, and demonstrate non-trivial speed-ups while giving exact answers.},
+   author = {Ting Liu and Andrew W. Moore and Alexander Gray},
+   doi = {10.7551/mitpress/4908.003.0008},
+   issn = {15337928},
+   journal = {Journal of Machine Learning Research},
+   title = {New algorithms for efficient high-dimensional nonparametric classification},
+   volume = {7},
+   year = {2006},
+}
+
+@inproceedings{Amueller2014,
+   abstract = {It is shown that for cuckoo hashing with a stash as proposed by Kirsch et al. (Proc. 16th European Symposium on Algorithms (ESA), pp. 611-622, Springer, Berlin, 2008) families of very simple hash functions can be used, maintaining the favorable performance guarantees: with constant stash size s the probability of a rehash is O(1/n s+1), the lookup time and the deletion time are O(s) in the worst case, and the amortized expected insertion time is O(s) as well. Instead of the full randomness needed for the analysis of Kirsch et al. and of Kutzelnigg (Discrete Math. Theor. Comput. Sci., 12(3):81-102, 2010) (resp. Θ(logn)-wise independence for standard cuckoo hashing) the new approach even works with 2-wise independent hash families as building blocks. Both construction and analysis build upon the work of Dietzfelbinger and Woelfel (Proc. 35th ACM Symp. on Theory of Computing (STOC), pp. 629-638, 2003). The analysis, which can also be applied to the fully random case, utilizes a graph counting argument and is much simpler than previous proofs. The results can be generalized to situations where the stash size is non-constant. © 2013 Springer Science+Business Media New York.},
+   author = {Martin Aumüller and Martin Dietzfelbinger and Philipp Woelfel},
+   doi = {10.1007/s00453-013-9840-x},
+   issn = {14320541},
+   issue = {3},
+   journal = {Algorithmica},
+   title = {Explicit and efficient hash families suffice for cuckoo hashing with a stash},
+   volume = {70},
+   year = {2014},
+}

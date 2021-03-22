@@ -4,10 +4,70 @@ author: "Chip Lynch"
 date: "2/23/2021"
 output: pdf_document
 ---
+## Kentucky 2d Geodesic 150000 points:
+```{html echo=FALSE}
+<!--
+(venv38) chipmonkey@chipbuntu340 ~/repos/ann-benchmarks (feature/trilateration_index)$ ./run_trilat.sh 
+2021-03-16 18:55:43,367 - annb - INFO - running only ball
+2021-03-16 18:55:43,690 - annb - INFO - Order: [Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 400], query_argument_groups=[], disabled=True), Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 20], query_argument_groups=[], disabled=True), Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 10], query_argument_groups=[], disabled=True), Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 1000], query_argument_groups=[], disabled=True), Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 200], query_argument_groups=[], disabled=True), Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 100], query_argument_groups=[], disabled=True), Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 40], query_argument_groups=[], disabled=True)]
+Trying to instantiate ann_benchmarks.algorithms.balltree.BallTree(['geodesic', 400])
+got a train set of size (135000 * 2)
+got 15000 queries
+Built index in 242.90340185165405
+Index size:  2852.0
+Running query argument group 1 of 1...
+Run 1/5...
+Processed 1000/15000 queries...
+Processed 2000/15000 queries...
+Processed 3000/15000 queries...
+Processed 4000/15000 queries...
+Processed 5000/15000 queries...
+Processed 6000/15000 queries...
+Processed 7000/15000 queries...
+Processed 8000/15000 queries...
+Processed 9000/15000 queries...
+Processed 10000/15000 queries...
+Processed 11000/15000 queries...
+Processed 12000/15000 queries...
+Processed 13000/15000 queries...
+Processed 14000/15000 queries...
+Stoped at Wed Mar 17 16:45:17 PDT 2021  (~22 hours into the run)
+So like 5 seconds per query.  (?!)
+-->
+```
+
+## Geodesic with 25 query points:
+```{html echo=FALSE}
+<!--
+                         Name           Accuracy          QPS   Index Time
+  0:         BallTree(leaf_size=10)        1.000        2.249      258.140
+  1:        BallTree(leaf_size=100)        1.000        0.683      207.249
+  2:       BallTree(leaf_size=1000)        1.000        0.182      153.778
+  3:           TrilaterationExpand2        1.000        1.335       59.262
+  4:                   BruteForce()        1.000        0.050        0.001
+  5:           KDTree(leaf_size=10)        1.000        0.099        0.125
+  6:          KDTree(leaf_size=100)        1.000        0.096        0.106
+  7:         KDTree(leaf_size=1000)        1.000        0.089        0.085
+  8:                  Trilateration        1.000       73.119       58.857
+  9:                   TrilatExpand        1.000        0.364       58.737
+-->
+```
+
+```{r ann_geodesic_25, echo=FALSE, results ='asis'}
+library(knitr)
+times <- data.frame(Algorithm=c("BallTree(leaf_size=10)", "BallTree(leaf_size=100)", "BallTree(leaf_size=1000)",
+                            "TrilaterationExpand2", "BruteForce", "KDTree(leaf_size=10)", "KDTree(leaf_size=100)",
+                            "KDTree(leaf_size=1000)", "Trilateration", "TrilatExpand"),
+                    QPS=c(2.249, 0.683, 0.182, 1.335, 0.050, 0.099, 0.096, 0.089, 73.119, 0.364),
+                    IndexBuild=c(258.140, 207.249, 153.778, 59.262, 0.001, 0.125, 0.106, 0.085, 58.875, 58.737))
+times <- times[order(times$Algorithm),]
+kable(times[,1:3], caption="Queries Per Second and Time to Build Indexes for Geodesic (Q=150,000)")
+```
 
 
 ## Random 20-dimension euclidean distance:
-```
+```{html echo=FALSE}
+<!--
 writing output to results/random-xs-20-euclidean.png
   0:                                                 TrilatExpand        1.000      401.899
   1:                                                Trilateration        1.000       25.971
@@ -21,66 +81,61 @@ writing output to results/random-xs-20-euclidean.png
   9:                                      BallTree(leaf_size=200)        1.000     2352.948
  10:                                       BallTree(leaf_size=20)        1.000     3532.328
  11:                                                 BruteForce()        1.000      670.163
+ -->
+```
+
+```{r random-20-euclidean, echo=FALSE, results ='asis'}
+library(knitr)
+times <- data.frame(Algorithm=c("BallTree(leaf_size=10)", "BallTree(leaf_size=100)", "BallTree(leaf_size=1000)",
+                            "TrilaterationExpand2", "BruteForce", "Trilateration", "TrilatExpand"),
+                    QPS=c(3974.894, 2561.925, 2224.275, 1411.711, 670.163, 25.971, 401.899))
+times <- times[order(times$Algorithm),]
+kable(times, caption="Queries Per Second and Time to Build Indexes for 20-dimension Euclidean")
 ```
 
 ## Glove 25-dimension Angular distance
-```
+```{html echo=FALSE}
+<!--
 writing output to results/glove-25-angular.png
-  0:                             FaissIVF(n_list=2048, n_probe=1)        0.416     1938.482
-  1:                            FaissIVF(n_list=4096, n_probe=50)        0.965     1098.394
   2:                             FaissIVF(n_list=64, n_probe=200)        1.000       35.085
-  3:                               FaissIVF(n_list=64, n_probe=1)        0.664     1123.371
   4:                           FaissIVF(n_list=1024, n_probe=200)        1.000      164.781
-  5:                               FaissIVF(n_list=32, n_probe=1)        0.704      714.849
-  6:                           FaissIVF(n_list=4096, n_probe=100)        0.988      733.391
-  7:                             FaissIVF(n_list=8192, n_probe=1)        0.334     1703.636
   8:                             FaissIVF(n_list=32, n_probe=200)        1.000       35.108
-  9:                             FaissIVF(n_list=512, n_probe=50)        0.995      305.273
  10:                            FaissIVF(n_list=128, n_probe=100)        1.000       43.439
- 11:                              FaissIVF(n_list=32, n_probe=10)        0.995      108.414
- 12:                           FaissIVF(n_list=2048, n_probe=200)        0.999      295.694
- 13:                            FaissIVF(n_list=8192, n_probe=50)        0.946     1201.676
- 14:                              FaissIVF(n_list=256, n_probe=1)        0.554     1742.011
- 15:                            FaissIVF(n_list=512, n_probe=100)        0.999      166.827
  16:                             FaissIVF(n_list=64, n_probe=100)        1.000       35.081
- 17:                           FaissIVF(n_list=4096, n_probe=200)        0.997      441.810
  18:                            FaissIVF(n_list=256, n_probe=200)        1.000       44.869
- 19:                           FaissIVF(n_list=8192, n_probe=100)        0.978      932.471
- 20:                            FaissIVF(n_list=1024, n_probe=10)        0.896     1358.564
- 21:                             FaissIVF(n_list=8192, n_probe=5)        0.658     1709.966
- 22:                             FaissIVF(n_list=128, n_probe=10)        0.971      354.258
- 23:                            FaissIVF(n_list=8192, n_probe=10)        0.776     1569.960
- 24:                               FaissIVF(n_list=64, n_probe=5)        0.948      363.314
  25:                             FaissIVF(n_list=128, n_probe=50)        1.000       83.435
- 26:                              FaissIVF(n_list=128, n_probe=1)        0.607     1517.637
- 27:                             FaissIVF(n_list=1024, n_probe=1)        0.467     1894.326
- 28:                               FaissIVF(n_list=32, n_probe=5)        0.970      203.792
- 29:                             FaissIVF(n_list=256, n_probe=50)        0.998      169.421
- 30:                              FaissIVF(n_list=256, n_probe=5)        0.884      997.154
  31:                            FaissIVF(n_list=512, n_probe=200)        1.000       87.226
- 32:                             FaissIVF(n_list=512, n_probe=10)        0.925      990.031
- 33:                            FaissIVF(n_list=1024, n_probe=50)        0.990      495.363
- 34:                             FaissIVF(n_list=1024, n_probe=5)        0.805     1648.008
- 35:                            FaissIVF(n_list=2048, n_probe=50)        0.979      826.074
- 36:                             FaissIVF(n_list=256, n_probe=10)        0.952      605.637
- 37:                           FaissIVF(n_list=2048, n_probe=100)        0.994      465.453
- 38:                             FaissIVF(n_list=4096, n_probe=1)        0.375     1878.121
  39:                            FaissIVF(n_list=256, n_probe=100)        1.000       88.562
- 40:                              FaissIVF(n_list=128, n_probe=5)        0.918      591.155
  41:                             FaissIVF(n_list=32, n_probe=100)        1.000       35.103
- 42:                             FaissIVF(n_list=4096, n_probe=5)        0.708     1772.210
- 43:                              FaissIVF(n_list=512, n_probe=5)        0.845     1353.636
- 44:                           FaissIVF(n_list=8192, n_probe=200)        0.993      615.649
- 45:                            FaissIVF(n_list=4096, n_probe=10)        0.819     1693.549
- 46:                           FaissIVF(n_list=1024, n_probe=100)        0.997      300.927
  47:                            FaissIVF(n_list=128, n_probe=200)        1.000       34.741
  48:                              FaissIVF(n_list=64, n_probe=50)        1.000       44.832
- 49:                              FaissIVF(n_list=64, n_probe=10)        0.986      205.624
- 50:                            FaissIVF(n_list=2048, n_probe=10)        0.858     1608.728
- 51:                             FaissIVF(n_list=2048, n_probe=5)        0.757     1812.419
  52:                              FaissIVF(n_list=32, n_probe=50)        1.000       35.020
- 53:                              FaissIVF(n_list=512, n_probe=1)        0.507     1873.798
  54:                                         TrilaterationExpand2        1.000        6.125
  55:                                      BallTree(leaf_size=200)        1.000        8.084
  56:                                                 BruteForce()        1.000        3.765
+ -->
+```
+
+```{r glove-25-angular, echo=FALSE}
+times <- data.frame(Algorithm=c(
+"FaissIVF(n_list=64, n_probe=200)",
+"FaissIVF(n_list=1024, n_probe=200)",
+"FaissIVF(n_list=32, n_probe=200)",
+"FaissIVF(n_list=128, n_probe=100)",
+"FaissIVF(n_list=64, n_probe=100)",
+"FaissIVF(n_list=256, n_probe=200)",
+"FaissIVF(n_list=128, n_probe=50)",
+"FaissIVF(n_list=512, n_probe=200)",
+"FaissIVF(n_list=256, n_probe=100)",
+"FaissIVF(n_list=32, n_probe=100)",
+"FaissIVF(n_list=128, n_probe=200)",
+"FaissIVF(n_list=64, n_probe=50)",
+"FaissIVF(n_list=32, n_probe=50)",
+"TrilaterationExpand2",
+"BallTree(leaf_size=200)",
+"BruteForce()"),
+QPS = c(35.085, 164.781, 35.108, 43.439, 35.081, 44.869,
+83.435, 87.226, 88.562, 35.103, 34.741, 44.832, 35.020,
+6.125, 8.084, 3.765))
+kable(times, caption="Queries Per Second and Time to Build Indexes for glove-25-angular")
 ```

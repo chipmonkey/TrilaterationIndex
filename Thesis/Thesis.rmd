@@ -1,5 +1,5 @@
 ---
-title: "Trilateration Index - Masters Thesis"
+title: "Multilateration Index - Masters Thesis"
 author: "Chip Lynch"
 date: "6/24/2018"
 output:
