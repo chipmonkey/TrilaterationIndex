@@ -36,7 +36,44 @@ So like 5 seconds per query.  (?!)
 -->
 ```
 
-## Geodesic with 25 query points:
+## Geodesic query points:
+
+We have created a dataset specifically to test Geodesic queries.  The dataset is a synthetic set of 150,000 geospatial points spread across and near Kentucky with roughly the distribution of the population.
+
+```{r kentucky_map, echo=FALSE, fig.cap="Geodesic Sample Data", fig.width=6, fig.height=4, dev='png'}
+library('maps')
+library('mapproj')
+library(ggplot2)
+
+m = map("state", fill = TRUE, plot = FALSE)
+usa <- map_data("usa")
+states <- map_data("state")
+kentucky <- subset(states, region %in% "kentucky")
+sampleLL <- read.csv('../data/lat_long_synthetic.csv')
+sampleLL$Color = 'black'
+minlong <- min(kentucky$long)
+minlat <- min(kentucky$lat)
+maxlong <- max(kentucky$long)
+maxlat <- max(kentucky$lat)
+x <- which (sampleLL$Longitude > minlong &
+                   sampleLL$Longitude < maxlong &
+                   sampleLL$Latitude > minlat &
+                   sampleLL$Latitude < maxlat)
+sampleLL <- sampleLL[x,]
+
+counties <- map_data('county')
+ky_counties <- subset(counties, region == "kentucky")
+ggplot() + 
+  geom_polygon(data=kentucky, aes(x = long, y = lat, group = group), fill = "white", color = "black") + 
+  coord_fixed(1.3) +
+  #  Not sure why I can't get these next two lines to work in one:
+  geom_point(data=sampleLL[sampleLL$Color=='black',], color='black', shape=16,
+             aes(x=Longitude, y=Latitude), alpha = 0.1, size=1) +
+  geom_polygon(data=ky_counties, aes(x=long, y=lat, group=group), fill = NA, color = "white")
+```
+
+As hoped, our Trilateration algorithm really shines when applying the complex but accurate geodesic distance function.  The Trilateration algorithm is over 30 times faster than the next best candidate (the Ball Tree algorithm with leaf_size=10).  The Brute Force algorithm is unbearably slow here, which is expected since it should be calling the expensive distance function more than any other algorithm in the usual case.
+
 ```{html echo=FALSE}
 <!--
                          Name           Accuracy          QPS   Index Time
@@ -53,23 +90,35 @@ So like 5 seconds per query.  (?!)
 -->
 ```
 
-```{r ann_geodesic_25, echo=FALSE, results ='asis'}
+```{r ann_geodesic_25, echo=FALSE, fig.cap="Queries Per Second for Geodesic (Q=150,000)", fig.width=6, fig.height=3}
 library(knitr)
 times <- data.frame(Algorithm=c("BallTree(leaf_size=10)", "BallTree(leaf_size=100)", "BallTree(leaf_size=1000)",
                             "TrilaterationExpand2", "BruteForce", "KDTree(leaf_size=10)", "KDTree(leaf_size=100)",
-                            "KDTree(leaf_size=1000)", "Trilateration", "TrilatExpand"),
+                            "KDTree(leaf_size=1000)", "Trilateration", "TrilaterationExpand"),
                     QPS=c(2.249, 0.683, 0.182, 1.335, 0.050, 0.099, 0.096, 0.089, 73.119, 0.364),
                     IndexBuild=c(258.140, 207.249, 153.778, 59.262, 0.001, 0.125, 0.106, 0.085, 58.875, 58.737))
 times <- times[order(times$Algorithm),]
-kable(times[,1:3], caption="Queries Per Second and Time to Build Indexes for Geodesic (Q=150,000)")
+# kable(times[,1:3], caption="Queries Per Second and Time to Build Indexes for Geodesic (Q=150,000)")
+
+p <- ggplot(data=times, aes(x=Algorithm, y=QPS)) +
+  geom_bar(stat="identity", col='black', fill='blue') +
+  coord_flip()
+p
 ```
 
 
 ## Random 20-dimension euclidean distance:
+
+The ann-benchmark tool includes support for a randomly generated 20-dimension euclidean dataset, which is one of its most basic tests.  We note that our performance here is abysmal for the initial "Trilateration" algorithm, even failing to beat the brute force approach.  This seems to be due to the overhead we incur determining which candidates to test next.  Remember that we traded a number of subtractions and some array navigation in exchange for fewer distance function calls.  In this case, when the distance function itself is extremely fast, that overhead is a net loss.
+
+It is worth noting that we tuned the two expansion based algorithms here as well.  "TrialterationExpand" performs far better than the stock Trilateration algorithm, but still just below the Brute Force algorithm.  The "TrilaterationExpand2" algorithm, however, is actually competitive here, more than doubling the queries per second of the Brute Force approach, and reaching more than 60% as fast as some tree algorithms.
+
+For Euclidean distances, however, we cannot recommend our algorithms against competitors.
+
 ```{html echo=FALSE}
 <!--
 writing output to results/random-xs-20-euclidean.png
-  0:                                                 TrilatExpand        1.000      401.899
+  0:                                          TrilaterationExpand        1.000      401.899
   1:                                                Trilateration        1.000       25.971
   2:                                          TrilaterationApprox        0.585       71.236
   3:                                         TrilaterationExpand2        1.000     1411.711
@@ -84,16 +133,32 @@ writing output to results/random-xs-20-euclidean.png
  -->
 ```
 
-```{r random-20-euclidean, echo=FALSE, results ='asis'}
+```{r random-20-euclidean, echo=FALSE, results ='asis', fig.cap="Queries Per Second and Time to Build Indexes for 20-dimension Euclidean", fig.width=6, fig.height=3}
 library(knitr)
 times <- data.frame(Algorithm=c("BallTree(leaf_size=10)", "BallTree(leaf_size=100)", "BallTree(leaf_size=1000)",
-                            "TrilaterationExpand2", "BruteForce", "Trilateration", "TrilatExpand"),
+                            "TrilaterationExpand2", "BruteForce", "Trilateration", "TrilaterationExpand"),
                     QPS=c(3974.894, 2561.925, 2224.275, 1411.711, 670.163, 25.971, 401.899))
 times <- times[order(times$Algorithm),]
-kable(times, caption="Queries Per Second and Time to Build Indexes for 20-dimension Euclidean")
+# kable(times, caption="Queries Per Second and Time to Build Indexes for 20-dimension Euclidean")
+
+p <- ggplot(data=times, aes(x=Algorithm, y=QPS)) +
+  geom_bar(stat="identity", col='black', fill='blue') +
+  coord_flip()
+p
 ```
 
 ## Glove 25-dimension Angular distance
+
+The GloVe ("Global Vectors for Word Representation") dataset "is an unsupervised learning algorithm for obtaining vector representations for words. Training is performed on aggregated global word-word co-occurrence statistics from a corpus, and the resulting representations showcase interesting linear substructures of the word vector space" according to the authors. [@pennington2014glove]
+
+It is one of the built-in datasets in the ann-benchmark tool.  Under the hood, this isusing a euclidean distance function, once the angular coordinates are transformed, so the relative performance is similar to the euclidean dataset.
+
+Of note, we include only results that were full (not approximate) nearest neighbor solutions.
+
+These results include the addition of the FAISS algorithm, one of the graph index based NN solvers which came out of Facebook Research in recent years.[@FAISS2017]  On these datasets, FAISS is a beast, but unfortunately it is a very highly tuned GPU-based implementation which makes it difficult to adapt to unsupported distance functions, such as the Geodesic we target with Trilateration.  We leave it here for information, but are unable to compare it on our core task.
+
+Note that our performance has suffered again similarly to with the random euclidean dataset.  Trilateration is extremely slow; as is TrilaterationExpand.  TrilaterationExpand2 beats BruteForce and is somewhat shy of the Tree-based algorithms.  But we are not competitive in this space.
+
 ```{html echo=FALSE}
 <!--
 writing output to results/glove-25-angular.png
@@ -110,13 +175,17 @@ writing output to results/glove-25-angular.png
  47:                            FaissIVF(n_list=128, n_probe=200)        1.000       34.741
  48:                              FaissIVF(n_list=64, n_probe=50)        1.000       44.832
  52:                              FaissIVF(n_list=32, n_probe=50)        1.000       35.020
- 54:                                         TrilaterationExpand2        1.000        6.125
  55:                                      BallTree(leaf_size=200)        1.000        8.084
  56:                                                 BruteForce()        1.000        3.765
+ 99:                                                Trilateration        1.000        0.010  # Estimate from 1000 queries
+ 99:                                          TrilaterationExpand        1.000        1.090
+ 54:                                         TrilaterationExpand2        1.000        6.125
  -->
 ```
 
-```{r glove-25-angular, echo=FALSE}
+
+
+```{r glove-25-angular, echo=FALSE, fig.cap="Queries Per Second and Time to Build Indexes for glove-25-angular", fig.width=6, fig.height=3}
 times <- data.frame(Algorithm=c(
 "FaissIVF(n_list=64, n_probe=200)",
 "FaissIVF(n_list=1024, n_probe=200)",
@@ -133,9 +202,16 @@ times <- data.frame(Algorithm=c(
 "FaissIVF(n_list=32, n_probe=50)",
 "TrilaterationExpand2",
 "BallTree(leaf_size=200)",
-"BruteForce()"),
+"BruteForce()",
+"Trilateration",
+"TrilaterationExpand"),
 QPS = c(35.085, 164.781, 35.108, 43.439, 35.081, 44.869,
 83.435, 87.226, 88.562, 35.103, 34.741, 44.832, 35.020,
-6.125, 8.084, 3.765))
-kable(times, caption="Queries Per Second and Time to Build Indexes for glove-25-angular")
+6.125, 8.084, 3.765, 0.010, 1.000))
+# kable(times, caption="Queries Per Second and Time to Build Indexes for glove-25-angular")
+p <- ggplot(data=times, aes(x=Algorithm, y=QPS)) +
+  geom_bar(stat="identity", col='black', fill='blue') +
+  # geom_text(position=position_dodge(width = 0.5)) +
+  coord_flip()
+p
 ```

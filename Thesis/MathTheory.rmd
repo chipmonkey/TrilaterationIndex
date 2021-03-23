@@ -6,7 +6,7 @@ output: pdf_document
 ---
 
 
-## Underlying Mathematical Concepts
+## Underlying Theory Concepts
 
 The benefit of storing geographic points as a set of trilateration distances rather than latitude and longitude boils down to the simplification of comparing distances between points by shortcutting complex distance queries using simple subtractions.  We discuss the math behind the geospatial queries, to exhibit their complexity, and set some theoretical bounds on quick distance calculations using the trilateration index.
 
@@ -40,7 +40,7 @@ kable(times, caption="Timings (seconds) of 5000 Calls to Distance Functions")
 ```
 
 
-## Simple distance functions
+## Simple Multilateration Index Operations
 
 Before jumping into [Network Adequacy] and [Nearest Neighbor] algorithms let's look at the core usage of the trilateration data structure and its use in simple distance functions.
 

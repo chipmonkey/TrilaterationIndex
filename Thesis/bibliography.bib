@@ -168,3 +168,47 @@ title = {A Note on Graph-Based Nearest Neighbor Search}
    volume = {70},
    year = {2014},
 }
+
+@inproceedings{pennington2014glove,
+  author = {Jeffrey Pennington and Richard Socher and Christopher D. Manning},
+  booktitle = {Empirical Methods in Natural Language Processing (EMNLP)},
+  title = {GloVe: Global Vectors for Word Representation},
+  year = {2014},
+  pages = {1532--1543},
+  url = {http://www.aclweb.org/anthology/D14-1162},
+}
+
+@article{FAISS2017,
+  title={Billion-scale similarity search with GPUs},
+  author={Johnson, Jeff and Douze, Matthijs and J{\'e}gou, Herv{\'e}},
+  journal={arXiv preprint arXiv:1702.08734},
+  year={2017}
+}
+
+@generic{Prokhorenkova2019,
+   abstract = {Graph-based approaches are empirically shown to be very successful for approximate nearest neighbor (ANN) search. However, there has been very little research on their theoretical guarantees. In this work, we consider both low-dimensional (d ≪ log n) and high-dimensional (d ≫ log n) regimes and rigorously analyze the performance of graph-based nearest neighbor algorithms when the dataset is uniformly distributed on a d-dimensional sphere. For both regimes, we provide the conditions which guarantee that a graph-based algorithm solves the ANN problem in just one iteration. In the low-dimensional regime, we also show that it is possible to solve the exact nearest neighbor problem. Finally, we discuss how the “small-world” property affects the performance of graph-based approaches.},
+   author = {Liudmila Prokhorenkova},
+   issn = {23318422},
+   journal = {arXiv},
+   title = {Graph-based nearest neighbor search: From practice to theory},
+   year = {2019},
+}
+
+@inproceedings{Dong2011,
+   abstract = {K-Nearest Neighbor Graph (K-NNG) construction is an important operation with many web related applications, including collaborative filtering, similarity search, and many others in data mining and machine learning. Existing methods for K-NNG construction either do not scale, or are specific to certain similarity measures. We present NN-Descent, a simple yet efficient algorithm for approximate K-NNG construction with arbitrary similarity measures. Our method is based on local search, has minimal space overhead and does not rely on any shared global index. Hence, it is especially suitable for large-scale applications where data structures need to be distributed over the network. We have shown with a variety of datasets and similarity measures that the proposed method typically converges to above 90% recall with each point comparing only to several percent of the whole dataset on average. Copyright © 2011 by the Association for Computing Machinery, Inc. (ACM).},
+   author = {Wei Dong and Moses Charikar and Kai Li},
+   doi = {10.1145/1963405.1963487},
+   journal = {Proceedings of the 20th International Conference on World Wide Web, WWW 2011},
+   title = {Efficient K-nearest neighbor graph construction for generic similarity measures},
+   year = {2011},
+}
+
+@inproceedings{Indyk1998,
+   abstract = {The nearest neighbor problem is given with the case of the d-dimensional Euclidean space where X = Rd under some lp norm being investigated. The low-dimensional case is well-solved, however, the issue of dealing with the curse of dimensionality is still a problem. Two algorithmic results for the approximate version that significantly improve the known bounds are presented. The preprocessing cost polynomial in n and d, and a truly sublinear query time and query time polynomial in log n and d, and only a mildly exponential preprocessing cost O(n)×O(1/ε)d are presented. By applying a classical geometric lemma on random projections, the first known algorithm with polynomial preprocessing and query time polynomial in d and log n is obtained.},
+   author = {Piotr Indyk and Rajeev Motwani},
+   doi = {10.4086/toc.2012.v008a014},
+   issn = {07349025},
+   journal = {Conference Proceedings of the Annual ACM Symposium on Theory of Computing},
+   title = {Approximate nearest neighbors: Towards removing the curse of dimensionality},
+   year = {1998},
+}

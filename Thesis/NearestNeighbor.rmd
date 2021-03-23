@@ -8,6 +8,8 @@ Note that it is possible that such a point does not exist if there are multiple 
 
 The k-nearest neighbors ($kNN$) of a given point $q$ as above is the list of $k$ points $R = p_1..p_k \in P$ such that $D(p_k, q)$ is the lowest value of $D(p, q)$ over all $p \in P$ such that $D(p', q)$ for $p' \ne p$ and $p' \not \in R$.  It should be evident that $NN = kNN$ when $k = 1$.
 
+An approximate nearest neighbor ($ANN$) algorithm is one which will provide $k$ points $R' = p_1..p_k \in P$, however it does *_not_* guarantee that there exists no point in $P \not \in R'$ closer than any point in $R'$.  Some formulations require that, if there *_is_* such a point $p'$, that it cannot be more than some $\epsilon$ farther from $q$ than any point $p_i \in R'$.  In general, $ANN$s are used when we can get a 'close enough' solution algorithmically faster than a perfect $kNN$ solution.  For our purposes, we largely ignore $ANN$s except for their historical value, as our construction did not yield algorithms that exhibited this beneficial tradeoff.  See the "TrilatApprox" algorithm section for some more discussion.
+
 ### A History of k-NN Solving Algorithms
 
 #### Brute-Force
@@ -18,7 +20,26 @@ The naive approach to solving k-nn is a brute-force algorithm, iterating over ev
 
 Space paritioning trees use a trie to arrange points from $p$ into groups with a hierarchical search structure, such that, generally, points which are close to one another exist in nearby hierarchies.  The $k-d$ tree was described in 1975.[@Bentley1975]  This partitions a space by dividing the underlying points at the median point along one of the dimensional axes, recursively, resulting in a searchable trie.  An adaptation of this - the Ball-Tree - partitions the space into hyperspheres, rather than along dimensional axes.[@Liu2006]
 
+These are straightforward structures that are easy to describe and implement.  
 
-#### Graph 
+
+#### Locality Sensitive Hashing
+
+LSH stands somewhat alone, as it is not literally space partitioning with strict divisions.  LSH relies on creating a hash function that hashes points into bins with a property that two points with the same hash have a high likelihood of being nearer to each other than points with different hash values.[@Indyk1998]
+
+#### Graph Based Search
+
+More recent algorithms, such as Facebook Research's FAISS, follow a graph based search structure.[@FAISS2017]
+
+A good overview of this approach was available from Liudmila Prokhorenkova: "Recently, graph-based approaches were shown to demonstrate superior performance over other types of algorithms in many large-scale applications of NNS [@Amueller2020]. Most graph-based methods are based on constructing a nearest neighbor graph (or its approximation), where nodes correspond to the elements of D, and each node is connected to its nearest neighbors by directed edges.[@Dong2011] Then, for a given query q, one first takes an element in D (either random or fixed predefined) and makes greedy steps towards q on the graph: at each step, all neighbors of a current node are evaluated, and the one closest to q is chosen."[@Prokhorenkova2019]
+
+The construction costs of these structures can be very high.  A Brute Force construction of a k-Nearest Neighbor Graph $(kNNG)$ has time complexity $O(n^2)$ which is of course completely untenable for large data sets.  Approaches exist to improve upon this, including improvements resulting in approximate results, but this class still tends to trade the highest construction cost for some of the fastest query times in high dimensions.[@Dong2011], [@Prokhorenkova2019]
 
 
+### Comparing Algorithms
+Training Time Complexity
+Memory Space
+Prediction Time Complexity
+Insertion/Move Complexity
+
+## Multilateration 

@@ -6,7 +6,7 @@
 library('maps')
 library("mapproj")
 m = map("state", fill = TRUE, plot = FALSE)
-area.map(m, "Kentucky")
+# area.map(m, "Kentucky")
 
 library("ggplot2")
 usa <- map_data("usa") 
