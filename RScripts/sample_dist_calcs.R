@@ -7,8 +7,10 @@ data <- data[,-1]
 data
 
 refpoints <- read.csv('./data/sample_ref_points.csv')
-refpoints <- refpoints[,-1]
+refpoints <- refpoints[c(3,2,1),-1]
+row.names(refpoints) <- c(1,2,3)
 names(refpoints) <- c('A', 'x', 'y')
+refpoints$A <- c(1,2,3)
 refpoints
 
 querypoint <- data.frame(array(c(50, 65), dim=c(1,2)))
@@ -22,7 +24,7 @@ ggplot() +
   coord_fixed(ratio = 1, xlim=c(0,120), ylim=c(0, 100))
 
 
-ref_lines = data.frame(x=refpoints[3, 'x'], y=refpoints[3,'y'], xend=data[,'x'], yend=data[,'y'])
+ref_lines = data.frame(x=refpoints[1, 'x'], y=refpoints[1,'y'], xend=data[,'x'], yend=data[,'y'])
 ref_lines
 
 ggplot() +
@@ -267,3 +269,4 @@ ggplot() +
 qp4dist <- myDist(c(querypoint$x, querypoint$y), c(data[rownames(data)==4, 'x'], data[rownames(data)==4, 'y']))
 qp1dist <- myDist(c(querypoint$x, querypoint$y), c(data[rownames(data)==1, 'x'], data[rownames(data)==1, 'y']))
 qp1dist
+

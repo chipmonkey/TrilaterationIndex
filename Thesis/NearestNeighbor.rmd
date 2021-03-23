@@ -13,7 +13,7 @@ An approximate nearest neighbor ($ANN$) algorithm is one which will provide $k$ 
 ### A History of k-NN Solving Algorithms
 
 #### Brute-Force
-The naive approach to solving k-nn is a brute-force algorithm, iterating over every point $p in P$ and keeping track of the lowest k distances.
+The naive approach to solving k-nn is a brute-force algorithm, iterating over every point $p in P$ and keeping track of the lowest k distances.  This is trivially a $O(n)$ query time.
 
 
 #### Space Partitioning Trees
@@ -42,4 +42,37 @@ Memory Space
 Prediction Time Complexity
 Insertion/Move Complexity
 
-## Multilateration 
+## Multilateration NN Algorithms
+
+We create a total of four similar algorithms to exploit the Multilateration Index, in particular for geodesic distances (although our implementations are applicable to any distance function):  [Trilateration (TI)], [TrilaterationApprox (TIA)], [TrilaterationExpand (TIE)], and [TrilaterationExpand2 (TIE2)], as follows:
+
+#### Trilateration (TI)
+
+The main trilateration algorithm for exact Nearest-Neighbor solutions takes the Trilateration Index (recall - the distances stored in a sorted array form from all points in $P$ with respect to $d+1$ fixed reference points -- 3 in the case of 2-d Trilateration) and applies the following for a query point $q$:
+
+```
+Calculate qd1..qdn as the distances from point q to the n reference points r1..rn
+Find the index i1 in TI for the nearest point along the d1 distance to q
+Calculate LOW_IDX = i1-(k/2) and HIGH_IDX = i1+(k/2)
+Store all points in TI between TI[LOW_IDX] and TI[HIGH_IDX] in a max-heap by distance (HEAP)
+  Let WORST_DIST bet the maximum distance on HEAP at any time
+Find the index LOW_IDX_POSSIBLE in TI for highest point along d1 where |TI[,d1]-qd1| > WORST_DIST
+Find the index HIGH_IDX_POSSIBLE in TI for the lowest point along d1 where |TI[,d1]-qd1| > WORST_DIST
+While LOW_IDX > LOW_IDX_POSSIBLE or HIGH_IDX < HIGH_IDX_POSSIBLE:
+    Choose the closer of TI[LOW_IDX-1, d1] or TI[HIGH_IDX+1, d1] along d1 (call it p')
+        If ALL of |TI[p', dx]-qx| (for all x 2..n) are < WORST_DIST
+          Calculate D(q, p')
+          If D(q, p') < WORST_DIST:
+              Add p' to the heap
+              recalculate LOW_IDX_POSSIBLE and HIGH_IDX_POSSIBLE
+        depending on the choice, decrement LOW_IDX or increment HIGH_IDX
+Return HEAP
+```
+
+Basically, looking only along one distance dimension (proximity to d1), find the closest k points to q (which is very quick along a sorted array - O(log n) to find the first point and O(1) to add and subtract k/2 to the indices to get the boundary).  Expand the low and high values (selecting the next point as the closest of the 2 along d1) until we have k points such that the farthest (worst) distance to one of those points is closer than the distance along d1 for any other point (which is bounded by LOW_IDX_POSSIBLE and HIGH_IDX_POSSIBLE, since that distance is our sort order).
+
+#### TrilaterationApprox (TIA)
+
+#### TrilaterationExpand (TIE)
+
+#### TrilaterationExpand2 (TIE2)

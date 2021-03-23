@@ -4,6 +4,8 @@ author: "Chip Lynch"
 date: "2/23/2021"
 output: pdf_document
 ---
+
+## ANN Benchmarks
 ## Kentucky 2d Geodesic 150000 points:
 ```{html echo=FALSE}
 <!--
