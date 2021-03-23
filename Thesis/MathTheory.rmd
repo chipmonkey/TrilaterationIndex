@@ -48,6 +48,7 @@ What we mean by 'simple distance functions' is one of the following primitive fu
 
 * $D(p, q)$: returns the distance between points p and q
 * $Within(d, q, P)$:  returns the set of all points in $P$ within distance $d$ of query point $q$
+** $CountWithin(d, q, P)$:  returns the count of the set of points from $Within(d, q, P)$
 * $AnyWithin(d, q, P)$: returns a boolean result - True if $Within(d, q, P)$ is non-empty; False otherwise
 
 ### Distance Function
@@ -63,7 +64,7 @@ data <- read.csv('../data/point_sample_10.csv')
 ref <- read.csv('../data/sample_ref_points.csv')
 ref <- ref[,2:4]
 library(rdist)
-data <- cbind(data, cdist(data, ref))[,2:6]
+data <- cbind(data, cdist(data, ref))[,c(2,3,6,5,4)]
 names(data) <- c('x', 'y', 'd1', 'd2', 'd3')
 data <- data[order(data$d1),]
 kable(data)
@@ -84,7 +85,7 @@ Looking back at our table, let's examine the question "which points are within d
 While performing the walk, we look for $d2$ between $24.08779 \pm 20$ and $d3$ between $82.65970 \pm 20$.  $d2$ rules out points $(7, 4, 6)$ and $d3$ rules out $(1)$, leaving only $(9)$ for consideration. To be completely certain, we can calculate $d = \sqrt{(86.12714 - 85.13531)^2 + (64.090063 - 78.065907)^2} =$ `r sqrt((86.12714 - 85.13531)^2 + (64.090063 - 78.065907)^2)` which is, indeed, within 20.
 
 In pseudocode:
-```
+```{r within_pseudocode, eval=FALSE, attr.source='.numberLines'}
 Within(d, P, TI):
    lowi = lowest i such that TI[i, d1] > P[d1] - d
    highi = highest i such that TI[i, d1] < P[d1] + d
@@ -97,14 +98,18 @@ Within(d, P, TI):
    RETURN RESULTS
 ```
 
-If we were answering the "is there at least one point..." version, it would be easy to shortcut the sequential walk when a match is reached.
+$CountWithin$ is simply the same code but returning the count of $RESULTS$ not the points themselves.
+
+If we were answering the "is there at least one point..." $AnyWithin$ version, it would be easy to shortcut the sequential walk when a match is reached.
+
+
 
 ### Alternate Order Indexes
 
 For an additional possible performance improvement, we can create alternate indexes which store the data in sorted order along $d2$ and $d3$ (or any/all distances for arbitarty dimensions).  We search for the low and high indexes as before, but now we do so along each sorted index (for distances to each reference point).  Once we have the lists of individual candidates from each index, we need to find any point that is common to all candidate lists.  In practice we have not seen this behave as effectively as the single-index function, but this seems to come down to the cost of merging n-lists to find common elements.
 
 In pseudocode:
-```
+```{r withinmulti_pseudocode, eval=FALSE, attr.source='.numberLines'}
 WithinMulti(d, P, TI):
    FOR each ref point rx:
       lowi = lowest i such that TI[i, dx] > P[dx] - d
@@ -120,3 +125,162 @@ WithinMulti(d, P, TI):
           ADD c to RESULTS
     RETURN RESULTS
 ```
+
+
+#### Estimation of Time Complexity of "Within" query
+
+Note that lines 2 and 3 are $O(log_2(n))$ operations, since we can do a binary search on the sorted $TI$ structure to find points closest to a specific value.  The loop in line 4 is a sequential walk along the array; the time complexity being subject to the distance $d$ and the composition of the points $P$.
+
+To estimate time complexity in random or average cases, let's take a closer look at what's happening with some visual elements.  Looking at the "Within Complexity" Figure, we see the following:
+
+* Three reference points $r_1..r_3$ as triangles
+* 10 data points $p_1..p_{10}$ as numbered small circles
+* The query point $q$, a small square
+* A dashed circle with radius $d$.  Note that, in this example, point 2 lies precisely $d$ units from $q$, with $d \approx 22.47$
+* Dashed lines from $r_1$ to each point indicating their distance $p_{d1}$ (and sort order in $TI$) from $r_1$
+* A large ring representing all of the space where a point within $d$ of $q$ must lie, with respect to $r_1$
+
+Comparing this to our sample data, the length of the dashed lines correspond to the sort order in the $TI$ index.  That is, $8, 4, 6, 2, 7, 1, 9, 5, 3, 10$ are increasingly distant from $r_1$.  This is how we quickly prune the list -- points within $d$ distance of $q$ are, by definition, between $q_{d1}-d$ and $q_{d1}+d$ distance from $r_1$ - namely, points $4, 6, 2, 7, 1$.  The rest can be no closer than this.  In this case, all the points in the ring happen to also be within $d$ of $q$, but of course that will not always be the case.
+
+Clearly there are antagonistic datasets that would thwart any benefit.  If the data were arranged in a circle all near distance $d$ from $r_1$, we would have culled no points from this approach.  In that particular case, the alternate $WithinMulti$ construction would be beneficial.
+
+If the points were randomly distributed, however, then the expected culling ratio of the index becomes the area of the ring divided by the area of the total point space.  On an infinite plane, of course, this approaches zero, but in finite spaces, such as this example (and geospatial coordinates), we can calculate the area.  Here, we use a random point estimate method to determine that, for this distance, on the $100x100$ grid, the ring covers about 48.7% of the area.  Given that we had to check five of our ten points, this seems reasonable.
+
+
+```{r within_complexity, echo=FALSE, fig.cap="Within time complexity illustration", fig.height=4, fig.width=4}
+library(ggplot2)
+library(ggforce)
+
+myDist <- function(x, y) {
+  # x and y must be 2D points -- (x,y) tuples i.e.: x <- c(1,2) y <- c(3,4)
+  d <- sqrt((x[[1]]-y[[1]])^2+(x[[2]]-y[[2]])^2)
+  return(d)
+}
+
+
+data <- read.csv('../data/point_sample_10.csv')
+data <- data[,-1]
+
+refpoints <- read.csv('../data/sample_ref_points.csv')
+refpoints <- refpoints[c(3,2,1),-1]
+row.names(refpoints) <- c(1,2,3)
+names(refpoints) <- c('A', 'x', 'y')
+refpoints$A <- c(1,2,3)
+
+querypoint <- data.frame(array(c(50, 65), dim=c(1,2)))
+names(querypoint) <- c('x', 'y')
+
+ref_lines = data.frame(x=refpoints[1, 'x'], y=refpoints[1,'y'], xend=data[,'x'], yend=data[,'y'])
+
+r3dist = apply(ref_lines, 1, function(x) sqrt((x[3]-x[1])^2 + (x[4]-x[2])^2))
+data$r3dist <- r3dist
+data <- data[order(data$r3dist),]
+
+r1dist = apply(data, 1, function(x) sqrt((x[1] - refpoints[1,'x'])^2 + (x[2] - refpoints[1, 'y'])^2))
+data$r1dist <- r1dist
+
+r2dist = apply(data, 1, function(x) sqrt((x[1] - refpoints[2,'x'])^2 + (x[2] - refpoints[2, 'y'])^2))
+data$r2dist <- r2dist
+
+qdists = apply(refpoints, 1, function(x) sqrt((querypoint$x - x[2])^2 + (querypoint$y - x[3])^2))
+qdists <- data.frame(array(qdists, dim=c(1,3)))
+names(qdists) <- c('r1dist', 'r2dist', 'r3dist')
+querypoint <- cbind(querypoint, qdists)
+
+qp2dist <- myDist(c(querypoint$x, querypoint$y), c(data[rownames(data)==2, 'x'], data[rownames(data)==2, 'y']))
+ggplot() +
+  geom_arc_bar(data=refpoints[1,],
+               aes(x0=x,y0=y,
+                   r0=querypoint$r1dist - qp2dist,
+                   r=querypoint$r1dist + qp2dist,
+                   start=-pi/2, end=1.5*pi, fill=TRUE)) +
+  geom_point(data=data[rownames(data) %in% c(1,7,4,6),], mapping=aes(x=x, y=y), color="blue", size=2) +
+  geom_point(data=data[!rownames(data) %in% c(1,7,4,6),], mapping=aes(x=x, y=y), color="black", size=2) +
+  geom_text(data=data, aes(x=x, y=y, label=rownames(data)), nudge_y = -5, color="blue") +
+  geom_point(data=refpoints[0:3,], mapping=aes(x=x, y=y), color="red", shape="triangle", size=3) +
+  geom_text(data=refpoints[0:3,], aes(x=x, y=y, label=A), nudge_y = -5) +
+  geom_point(data=querypoint, mapping=aes(x=x,y=y), color="green4", shape="square", size=3) +
+  geom_point(data=data[rownames(data)==2,], aes(x=x, y=y), color="orange", shape="diamond", size=4) +
+  #  geom_point(data=data[rownames(data) %in% c(4, 7),], aes(x=x, y=y), color="pink", size=4) +
+  geom_circle(aes(x0=x, y0=y, r=qp2dist), data=querypoint, linetype="dashed") +
+  geom_segment(data=ref_lines, mapping=aes(x=x, y=y, xend=xend, yend=yend), linetype="dotted") +
+  coord_fixed(ratio = 1, xlim=c(0,120), ylim=c(-5, 100)) +
+  theme(legend.position = "none")
+```
+
+
+#### Time complexity of WithinMulti
+
+If, rather than cull by one ref point then search the remainder, we cull by all three (the $WithinMulti$ approach), we see something different:
+
+```{r withinmulti_complexity, echo=FALSE, fig.cap="WithinMulti time complexity illustration", fig.height=4, fig.width=4}
+qp6dist <- myDist(c(querypoint$x, querypoint$y), c(data[rownames(data)==6, 'x'], data[rownames(data)==6, 'y']))
+
+ggplot() +
+  geom_arc_bar(data=refpoints[3,],
+               aes(x0=x,y0=y,
+                   r0=querypoint$r3dist - qp6dist,
+                   r=querypoint$r3dist + qp6dist,
+                   start=-pi/2, end=1.5*pi, fill=TRUE)) +
+  geom_arc_bar(data=refpoints[2,],
+               aes(x0=x,y0=y,
+                   r0=querypoint$r2dist - qp6dist,
+                   r=querypoint$r2dist + qp6dist,
+                   start=pi/2, end=-1.5*pi, fill=TRUE, alpha=0.5)) +
+  geom_arc_bar(data=refpoints[1,],
+               aes(x0=x,y0=y,
+                   r0=querypoint$r1dist - qp6dist,
+                   r=querypoint$r1dist + qp6dist,
+                   start=-pi/2, end=1.5*pi, fill=TRUE, alpha=0.5)) +
+  geom_point(data=data[rownames(data) %in% c(1,4),], mapping=aes(x=x, y=y), color="blue", size=2) +
+  geom_point(data=data[!rownames(data) %in% c(1,4),], mapping=aes(x=x, y=y), color="black", size=2) +
+  geom_point(data=refpoints[0:3,], mapping=aes(x=x, y=y), color="red", shape="triangle", size=3) +
+  geom_text(data=refpoints[0:3,], aes(x=x, y=y, label=A), nudge_y = -2) +
+  geom_point(data=querypoint, mapping=aes(x=x,y=y), color="green4", shape="square", size=3) +
+  geom_point(data=data[rownames(data)==6,], aes(x=x, y=y), color="orange", shape="diamond", size=4) +
+  geom_text(data=data, aes(x=x, y=y, label=rownames(data)), nudge_y = -2, color="blue") +
+  #  geom_point(data=data[rownames(data) %in% c(4, 7),], aes(x=x, y=y), color="pink", size=4) +
+  geom_circle(aes(x0=x, y0=y, r=qp6dist), data=querypoint, linetype="dashed") +
+  # geom_segment(data=ref_lines, mapping=aes(x=x, y=y, xend=xend, yend=yend), linetype="dotted") +
+  coord_fixed(ratio = 1, xlim=c(0,120), ylim=c(-5, 100)) +
+  theme(legend.position = "none")
+```
+
+This time we've used a slightly smaller $d$ - the distance from $q$ to $p_6$ or $d \approx 16.127$, for visual appeal.
+
+To perform this efficiently, we would need to store additional sorted lists in memory - namely the points $P$ sorted along distances from $r_2$ and $r_3$ respectively... for example the index with respect to $r_2$ could look like this (x and y need not even be stored again to save more memory, as long as the point index is available):
+
+```{r r2_index, echo=FALSE}
+data <- read.csv('../data/point_sample_10.csv')
+ref <- read.csv('../data/sample_ref_points.csv')
+ref <- ref[,2:4]
+library(rdist)
+data <- cbind(data, cdist(data, ref))[,c(2,3,5)]
+names(data) <- c('x', 'y', 'd2')
+data <- data[order(data$d2),]
+kable(data, caption="Indexed sample data with respect to r2")
+```
+
+
+Here, culling points along the three distances respectively we get:
+
+* $r_1$: $4, 6, 2, 7, 1$
+* $r_2$: $1, 7, 6, 2, 4$
+* $r_3$: $1, 4, 6$
+
+It's clear that $r_3$ is the most restrictive; examining the images, it's easy to see why... points 2 and 7 reside within the rings aroudn $r_1$ and $r_2$, but not that of $r_3$.   The final step, of finding which elements are common to these three lists is, unfortunately, not efficient.  We can start with the smallest list, which is some help, but as these are sorted in different orders, finding the intersection of all of the lists is, algorithimcally, non-trivial.  Given $m$ sets containing $N$ elements total which result in $o$ points in the intersection, modern research indicates space complexity of at least $O(N \log(N))$ and time complexity $O(\sqrt{N*o} + o))$.[@Cohen2010]
+
+Still, the improvement in the initial cull may be worth it.  Recall that, using a single reference point, the time complexity was a result of the area of the ring divided by the area of the space.  In the multi-reference-point version, with $m$ reference points, the result is $m$ times the area of the intersection of the $m$ rings, divided by the area of the space.
+
+In this current example, with $d \approx 16.127$, we can numerically approximate this value:
+
+* total area: $100x100 = 10000$
+* $r_1$ ring area is $\approx 33.1\%$
+* $r_2$ ring area is $\approx 32.7\%$
+* $r_3$ ring area is $\approx 37.9\%$
+* Intersection of all three rings has area $\approx 9.4\%$
+
+Again, these numbers will vary with $d$ more than anything else, but 
+
+
+

@@ -101,10 +101,10 @@ ggplot() +
 qp2dist <- myDist(c(querypoint$x, querypoint$y), c(data[rownames(data)==2, 'x'], data[rownames(data)==2, 'y']))
 library(ggforce)
 ggplot() +
-  geom_arc_bar(data=refpoints[3,],
+  geom_arc_bar(data=refpoints[1,],
                aes(x0=x,y0=y,
-                   r0=querypoint$r3dist - qp2dist,
-                   r=querypoint$r3dist + qp2dist,
+                   r0=querypoint$r1dist - qp2dist,
+                   r=querypoint$r1dist + qp2dist,
                    start=-pi/2, end=1.5*pi, fill=TRUE)) +
   geom_point(data=data[rownames(data) %in% c(1,7,4,6),], mapping=aes(x=x, y=y), color="blue", size=2) +
   geom_point(data=data[!rownames(data) %in% c(1,7,4,6),], mapping=aes(x=x, y=y), color="black", size=2) +

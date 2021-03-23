@@ -50,12 +50,12 @@ We create a total of four similar algorithms to exploit the Multilateration Inde
 
 The main trilateration algorithm for exact Nearest-Neighbor solutions takes the Trilateration Index (recall - the distances stored in a sorted array form from all points in $P$ with respect to $d+1$ fixed reference points -- 3 in the case of 2-d Trilateration) and applies the following for a query point $q$:
 
-```
+```{x trilateration_nn_psudocode, eval=FALSE, attr.source='.numberLines'}
 Calculate qd1..qdn as the distances from point q to the n reference points r1..rn
 Find the index i1 in TI for the nearest point along the d1 distance to q
 Calculate LOW_IDX = i1-(k/2) and HIGH_IDX = i1+(k/2)
 Store all points in TI between TI[LOW_IDX] and TI[HIGH_IDX] in a max-heap by distance (HEAP)
-  Let WORST_DIST bet the maximum distance on HEAP at any time
+    Let WORST_DIST bet the maximum distance on HEAP at any time
 Find the index LOW_IDX_POSSIBLE in TI for highest point along d1 where |TI[,d1]-qd1| > WORST_DIST
 Find the index HIGH_IDX_POSSIBLE in TI for the lowest point along d1 where |TI[,d1]-qd1| > WORST_DIST
 While LOW_IDX > LOW_IDX_POSSIBLE or HIGH_IDX < HIGH_IDX_POSSIBLE:
