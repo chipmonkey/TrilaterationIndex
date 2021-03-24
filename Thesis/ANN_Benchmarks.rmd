@@ -5,10 +5,11 @@ date: "2/23/2021"
 output: pdf_document
 ---
 
-## ANN Benchmarks
-## Kentucky 2d Geodesic 150000 points:
+## Results of Experiment 1 - ANN Benchmarks
+
 ```{html echo=FALSE}
 <!--
+## Kentucky 2d Geodesic 150000 points:
 (venv38) chipmonkey@chipbuntu340 ~/repos/ann-benchmarks (feature/trilateration_index)$ ./run_trilat.sh 
 2021-03-16 18:55:43,367 - annb - INFO - running only ball
 2021-03-16 18:55:43,690 - annb - INFO - Order: [Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 400], query_argument_groups=[], disabled=True), Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 20], query_argument_groups=[], disabled=True), Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 10], query_argument_groups=[], disabled=True), Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 1000], query_argument_groups=[], disabled=True), Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 200], query_argument_groups=[], disabled=True), Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 100], query_argument_groups=[], disabled=True), Definition(algorithm='ball', constructor='BallTree', module='ann_benchmarks.algorithms.balltree', docker_tag='ann-benchmarks-sklearn', arguments=['geodesic', 40], query_argument_groups=[], disabled=True)]

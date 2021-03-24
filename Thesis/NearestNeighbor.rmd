@@ -44,26 +44,30 @@ Insertion/Move Complexity
 
 ## Multilateration NN Algorithms
 
-We create a total of four similar algorithms to exploit the Multilateration Index, in particular for geodesic distances (although our implementations are applicable to any distance function):  [Trilateration (TI)], [TrilaterationApprox (TIA)], [TrilaterationExpand (TIE)], and [TrilaterationExpand2 (TIE2)], as follows:
+We create a total of four similar algorithms to exploit the Multilateration Index, in particular for geodesic distances (although our implementations are applicable to any distance function):  [Trilateration (TRI)], [TrilaterationApprox (TIA)], [TrilaterationExpand (TIE)], and [TrilaterationExpand2 (TIE2)], as follows:
 
-#### Trilateration (TI)
+#### Trilateration (TRI)
 
 The main trilateration algorithm for exact Nearest-Neighbor solutions takes the Trilateration Index (recall - the distances stored in a sorted array form from all points in $P$ with respect to $d+1$ fixed reference points -- 3 in the case of 2-d Trilateration) and applies the following for a query point $q$:
 
-```{x trilateration_nn_psudocode, eval=FALSE, attr.source='.numberLines'}
+```{r trilateration_nn_psudocode, eval=FALSE, attr.source='.numberLines'}
 Calculate qd1..qdn as the distances from point q to the n reference points r1..rn
 Find the index i1 in TI for the nearest point along the d1 distance to q
-Calculate LOW_IDX = i1-(k/2) and HIGH_IDX = i1+(k/2)
-Store all points in TI between TI[LOW_IDX] and TI[HIGH_IDX] in a max-heap by distance (HEAP)
+Create HEAP - a max heap of size k
     Let WORST_DIST bet the maximum distance on HEAP at any time
-Find the index LOW_IDX_POSSIBLE in TI for highest point along d1 where |TI[,d1]-qd1| > WORST_DIST
-Find the index HIGH_IDX_POSSIBLE in TI for the lowest point along d1 where |TI[,d1]-qd1| > WORST_DIST
+Calculate LOW_IDX = i1-(k/2) and HIGH_IDX = i1+(k/2)
+For all points c in TI between TI[LOW_IDX] and TI[HIGH_IDX]:
+    push c onto HEAP
+Find the index LOW_IDX_POSSIBLE in TI as:
+    the highest point along d1 where |TI[,d1]-qd1| > WORST_DIST
+Find the index HIGH_IDX_POSSIBLE in TI as:
+    the lowest point along d1 where |TI[,d1]-qd1| > WORST_DIST
 While LOW_IDX > LOW_IDX_POSSIBLE or HIGH_IDX < HIGH_IDX_POSSIBLE:
-    Choose the closer of TI[LOW_IDX-1, d1] or TI[HIGH_IDX+1, d1] along d1 (call it p')
-        If ALL of |TI[p', dx]-qx| (for all x 2..n) are < WORST_DIST
-          Calculate D(q, p')
-          If D(q, p') < WORST_DIST:
-              Add p' to the heap
+    Choose the closer of TI[LOW_IDX-1, d1] or TI[HIGH_IDX+1, d1] along d1 (call it c)
+        If ALL of |TI[c, dx]-qx| (for all x 2..n) are < WORST_DIST
+          Calculate D(q, c)
+          If D(q, c) < WORST_DIST:
+              Add c to the HEAP
               recalculate LOW_IDX_POSSIBLE and HIGH_IDX_POSSIBLE
         depending on the choice, decrement LOW_IDX or increment HIGH_IDX
 Return HEAP
@@ -73,6 +77,78 @@ Basically, looking only along one distance dimension (proximity to d1), find the
 
 #### TrilaterationApprox (TIA)
 
+In an attempt to gain benefit from the relaxed constraints of an "approximate" $aNN$ approach, we experiment with an algorithm that effectively excludes the distance calculations altogether, from our TRI algorithm altogether.  Recall that, for a given $d_x$ distance to reference point $r_x$, a point $p$ can be _no closer than_ $q_{dx} - p_{dx}$; if we treat the approx_distance $(q, p) = \frac{\sum_{x=1}^{m}{q_{dx} - p_{dx}}}{|d|}$ (the mean of the relative distances from $q$ to all reference points $r_x$), or, more aggressively, the minimum such distance, we can return an approximate result without ever having to call the distance function itself (after the index is created).
+
+We ended up abandoning this approach after only a few tests - there was a significant drop in recall (the mechanism by which ann-benchmarks measures effectiveness of $aNN$ algorithms), with no particular improvement in performance.  This effectively removed $aNN$ from our consideration; our results are primarily focused on exact $NN$ results as a consequence.
+
 #### TrilaterationExpand (TIE)
 
+We theorized that the TRI approach may be slowed down by the overhead of having to iterate one point at a time, and by not utilizing more than one reference point early in the process.  Given the efficiency of the $Within()$ function (see [Time Complexity]), we wondered if we should treat the distance $d$ as the target variable, and use an incremental search to zero in on the proper value to result in $k$ neighbors within $d$.
+
+This turns out to be a silly idea, once we get the results back, but here we are.  The algorithm would look like:
+
+```{r trilateration_tie_psudocode, eval=FALSE, attr.source='.numberLines'}
+set radius = 0.5
+set too_low = 0
+set too_high = maximum possible distance in the space
+set x = CountWithin(radius, q, P)
+while x != k:
+    if x < k:
+        set too_low = radius
+        set radius = (radius + too_high)/2
+    else:
+        set too_high = radius
+        set radius = (radius + too_low)/2
+return Within(radius, q, P)
+```
+
+
 #### TrilaterationExpand2 (TIE2)
+
+Another approach to minimizing the overhead of expanding the range in the TRI algorithm by one at a time is to simply expand by some fixed amount $> 1$.  This actually shows performance gains when the distance functions are inexpensive, although not enough to really be competitive with other $NN$ solutions, but shows no benefit (in fact, it incurs quite the cost) when using our expensive geodesic distance functions.  See our results section for more details.
+
+Fundamentally, the change to the TRI algoritm is that we expand by $k$ (which is a convenient constant), or some larger constant, at a time, rather than $1$ point along $d_1$ in $TI$.  In effect:
+
+```{r trilateration_tie2_psudocode, eval=FALSE, attr.source='.numberLines'}
+Set CHUNK equal to the greater of k or 500
+Calculate qd1..qdn as the distances from point q to the n reference points r1..rn
+Find the index i1 in TI for the nearest point along the d1 distance to q
+Create HEAP - a max heap of size k
+    Let WORST_DIST bet the maximum distance on HEAP at any time
+Calculate LOW_IDX = i1-(k/2) and HIGH_IDX = i1+(k/2)
+For all points c in TI between TI[LOW_IDX] and TI[HIGH_IDX]:
+    push c onto HEAP
+Find the index LOW_IDX_POSSIBLE in TI as:
+    the highest point along d1 where |TI[,d1]-qd1| > WORST_DIST
+Find the index HIGH_IDX_POSSIBLE in TI as:
+    the lowest point along d1 where |TI[,d1]-qd1| > WORST_DIST
+While LOW_IDX > LOW_IDX_POSSIBLE or HIGH_IDX < HIGH_IDX_POSSIBLE:
+    If TI[LOW_IDX-1, d1] is closer than TI[HIGH_IDX+1, d1]:
+        PRIOR_IDX = LOW_IDX
+        LOW_IDX = LOW_IDX - CHUNK
+        Evaluate points between TI[LOW_IDX,] and TI[PRIOR_IDX,]:
+          If ALL of |TI[c, dx]-qx| (for all x 2..n) are < WORST_DIST
+          Calculate D(q, c)
+          If D(q, c) < WORST_DIST:
+              Add c to the HEAP
+    else:
+        PRIOR_IDX = HIGH_IDX
+        HIGH_IDX = HIGH_IDX + CHUNK
+        Evaluate points c between TI[PRIOR_IDX,] and TI[HIGH_IDX,]:
+          If ALL of |TI[c, dx]-qx| (for all x 2..n) are < WORST_DIST
+          Calculate D(q, c)
+          If D(q, c) < WORST_DIST:
+              Add c to the HEAP
+    recalculate LOW_IDX_POSSIBLE and HIGH_IDX_POSSIBLE
+Return HEAP
+```
+
+#### Implementation Notes
+
+There's a lot to digest in these algorithms; many choices were made, and various performance issues were encountered.  Of note, many of the implementation specifics were due to building our algorithms on top of the existing scikit-learn code.[@scikit-learn]  The use of the $HEAP$ structure, mentioned in our code, is immediately attributable to leveraging scikit-learn's source.  Also, being built in Cython, and having been field-tested for about 10 years, it's possible our code could be improved or may have bugs compared to the rest of scikit-learn, but we tried real hard.
+
+As mentioned before, the TIA algorithm failed dominantly because either performance or recall were too slow... recall was a problem when only 1 reference point was used, and performance faltered with multiple reference points due to the high cost of calculating the intersection of candidate point lists from multiple reference points.
+
+The implementation on both "Expanding" algorithms (TIE and TIE2) presented many choices.  Initially we sought to find a reasonable initial guess for the candidate $radius$, however no suitable algorithm presented itslef that was superior to guessing "0.5" as a first guess (curiously true regardless of the coordinate scale).  Similarly, the value of 500 for $CHUNK$ size was found reasonable via trial and error, although heuristics to arrive at the number, rather than hard-coding it, could probably benefit specific cases.
+
+See [Experimental Results] and [Experimentation] for the results and specifics of how we tested these algorithms.

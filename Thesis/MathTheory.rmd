@@ -126,7 +126,7 @@ WithinMulti(d, P, TI):
     RETURN RESULTS
 ```
 
-
+### Time Complexity
 #### Estimation of Time Complexity of "Within" query
 
 Note that lines 2 and 3 are $O(log_2(n))$ operations, since we can do a binary search on the sorted $TI$ structure to find points closest to a specific value.  The loop in line 4 is a sequential walk along the array; the time complexity being subject to the distance $d$ and the composition of the points $P$.
@@ -140,14 +140,7 @@ To estimate time complexity in random or average cases, let's take a closer look
 * Dashed lines from $r_1$ to each point indicating their distance $p_{d1}$ (and sort order in $TI$) from $r_1$
 * A large ring representing all of the space where a point within $d$ of $q$ must lie, with respect to $r_1$
 
-Comparing this to our sample data, the length of the dashed lines correspond to the sort order in the $TI$ index.  That is, $8, 4, 6, 2, 7, 1, 9, 5, 3, 10$ are increasingly distant from $r_1$.  This is how we quickly prune the list -- points within $d$ distance of $q$ are, by definition, between $q_{d1}-d$ and $q_{d1}+d$ distance from $r_1$ - namely, points $4, 6, 2, 7, 1$.  The rest can be no closer than this.  In this case, all the points in the ring happen to also be within $d$ of $q$, but of course that will not always be the case.
-
-Clearly there are antagonistic datasets that would thwart any benefit.  If the data were arranged in a circle all near distance $d$ from $r_1$, we would have culled no points from this approach.  In that particular case, the alternate $WithinMulti$ construction would be beneficial.
-
-If the points were randomly distributed, however, then the expected culling ratio of the index becomes the area of the ring divided by the area of the total point space.  On an infinite plane, of course, this approaches zero, but in finite spaces, such as this example (and geospatial coordinates), we can calculate the area.  Here, we use a random point estimate method to determine that, for this distance, on the $100x100$ grid, the ring covers about 48.7% of the area.  Given that we had to check five of our ten points, this seems reasonable.
-
-
-```{r within_complexity, echo=FALSE, fig.cap="Within time complexity illustration", fig.height=4, fig.width=4}
+```{r within_complexity, echo=FALSE, fig.cap="Within time complexity illustration"}
 library(ggplot2)
 library(ggforce)
 
@@ -209,11 +202,17 @@ ggplot() +
 ```
 
 
+Comparing this to our sample data, the length of the dashed lines correspond to the sort order in the $TI$ index.  That is, $8, 4, 6, 2, 7, 1, 9, 5, 3, 10$ are increasingly distant from $r_1$.  This is how we quickly prune the list -- points within $d$ distance of $q$ are, by definition, between $q_{d1}-d$ and $q_{d1}+d$ distance from $r_1$ - namely, points $4, 6, 2, 7, 1$.  The rest can be no closer than this.  In this case, all the points in the ring happen to also be within $d$ of $q$, but of course that will not always be the case.
+
+Clearly there are antagonistic datasets that would thwart any benefit.  If the data were arranged in a circle all near distance $d$ from $r_1$, we would have culled no points from this approach.  In that particular case, the alternate $WithinMulti$ construction would be beneficial.
+
+If the points were randomly distributed, however, then the expected culling ratio of the index becomes the area of the ring divided by the area of the total point space.  On an infinite plane, of course, this approaches zero, but in finite spaces, such as this example (and geospatial coordinates), we can calculate the area.  Here, we use a random point estimate method to determine that, for this distance, on the $100x100$ grid, the ring covers about 48.7% of the area.  Given that we had to check five of our ten points, this seems reasonable.
+
 #### Time complexity of WithinMulti
 
 If, rather than cull by one ref point then search the remainder, we cull by all three (the $WithinMulti$ approach), we see something different:
 
-```{r withinmulti_complexity, echo=FALSE, fig.cap="WithinMulti time complexity illustration", fig.height=4, fig.width=4}
+```{r withinmulti_complexity, echo=FALSE, fig.cap="WithinMulti time complexity illustration"}
 qp6dist <- myDist(c(querypoint$x, querypoint$y), c(data[rownames(data)==6, 'x'], data[rownames(data)==6, 'y']))
 
 ggplot() +
@@ -246,7 +245,7 @@ ggplot() +
   theme(legend.position = "none")
 ```
 
-This time we've used a slightly smaller $d$ - the distance from $q$ to $p_6$ or $d \approx 16.127$, for visual appeal.
+This time we've used a slightly smaller $d$ - the distance from $q$ to $p_6$ or $d \approx 16.127$, which helps illustrate excluded points $2, 7$.
 
 To perform this efficiently, we would need to store additional sorted lists in memory - namely the points $P$ sorted along distances from $r_2$ and $r_3$ respectively... for example the index with respect to $r_2$ could look like this (x and y need not even be stored again to save more memory, as long as the point index is available):
 
@@ -280,7 +279,4 @@ In this current example, with $d \approx 16.127$, we can numerically approximate
 * $r_3$ ring area is $\approx 37.9\%$
 * Intersection of all three rings has area $\approx 9.4\%$
 
-Again, these numbers will vary with $d$ more than anything else, but 
-
-
-
+Again, these numbers will vary with $d$ more than anything else, but the concept here is that for low $d$, the area of the ring can be significantly less than that of the entire search area, even moreso the intersection of the area of three such rings, benefitting the actual time complexity of the query.

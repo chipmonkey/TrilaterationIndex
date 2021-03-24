@@ -15,12 +15,10 @@ We plan several experiments for Network Adequacy in SQL databases, and Nearest N
 
 1. We adapt the popular Python package scikit-learn to execute our Trilateration Index and perform nearest-neighbor search.
 2. We adapt the ann-benchmarks software, which is designed explicitly for comparing performance of nearest neighbor algorithms[@Amueller2020], to record results.  This includes the addition of a geodesic dataset and distance function (ann-benchmarks only supported jaccard, hamming, euclidean, and angular distance functions) for consistency.
-3. We implement the four algorithms described in [Multilateration NN Algorithms], namely "Trilateration" (TI), "TrilaterationApprox" (TIA), "TrilaterationExpand" (TIE), and "TrilaterationExpand2" (TIE2)
+3. We implement the four algorithms described in [Multilateration NN Algorithms], namely "Trilateration" (TRI), "TrilaterationApprox" (TIA), "TrilaterationExpand" (TIE), and "TrilaterationExpand2" (TIE2)
 4. We execute the ann-benchmarks software against our and other modern $NN$ algorithms, and record the results in [ANN Benchmarks]
 
-
 Note that we use a widely available geodesic distance implementation from Geopy to provide a consistent distance function implementation, thus avoiding any bias in results due to differences between implementations.[@geopy]  Since the geodesic distance function is the result of a convergent series, it is possible to vary the precision of the calculation, trading performance for accuracy.  We use the default settings in the Geopy implementation, again for a consistent comparison across $NN$ techniques.  
-
 
 ### Experiment 2: SQL Nearest Neighbors
 
@@ -29,4 +27,5 @@ Note that we use a widely available geodesic distance implementation from Geopy 
 
 ## Experimental Results
 
-Taa daa
+```{r child = 'ANN_Benchmarks.rmd'}
+```
