@@ -99,6 +99,16 @@
    year = {2013},
 }
 
+@article{Arriaga2019,
+   abstract = {<p><strong>Abstract.</strong> The process of manually georeferencing or aligning historic or illustrated maps with contemporary maps can be a difficult and time consuming task (Fleet et al., 2012). It is generally accepted that the level of understanding necessary to correctly georeference a single image can be rather daunting (Bajcsy and Alumbaugh, 2003). This is especially challenging in an open environment where there is no previous information to help approximating the real coordinates.</p><p>Over the last couple of decades there have been advances in the automatic georeferencing of map images, aerial photographs or raster maps (Chen et al., 2004), (Desai et al., 2005), (Kim et al., 2010), (Cléry et al., 2014). However, there has been little discussion dealing with heterogeneous maps. For instance, some algorithms apply fixed image processing techniques to find features within the map images, and then try to match these patterns of features to a database of geographical information (Chen et al., 2004). The drawback with this approach is that the image processing operations used in a particular style may not work for a map created using a different style. Other techniques only work for a specific kind of map, like street maps (Desai et al., 2005) or aerial photographs (Kim et al., 2010). Furthermore, the artistic vision of the creator or the theme of the map can also result in these features being represented in different ways (Fiori, 2005). For instance, some styles or themes may highlight some roads or completely ignore others. Finally, historic but inaccurate cartography or contemporary illustrated maps can suffer from distortion or unusual perspective (Cajthaml, 2011).</p><p>In this paper, we present a novel algorithm to automatically help start the georeferencing of historic and illustrated maps based on the text found in the map image. To accomplish this, we leverage the power of modern OCR (Optical Character Recognition) and geocoding services on the cloud. The proposed algorithm is able to calculate the area covered by the map, and where north is located in the image, with a precision greater than 80%. This information obtained represents a great help to inexpert users performing the alignment and georeference of maps for the first time. We also propose an optional machine learning module to speed up the process in dynamic environments in which the time required to obtain a result is an important factor. Figure 1 shows some examples of heterogeneous maps processed with the proposed algorithm.</p><p>The proposed algorithm contains five modules as shown in Figure 2. The first module applies an OCR process to extract the text contained within the input image. The results pass through a processing step to filter the text using heuristics to remove incorrect and ambiguous entries. The next module (optional) is a bidirectional LSTM (Long shortterm memory) recurrent neural network (Graves and Schmidhuber, 2005) that takes text and orders it according to likelihood of useful geocoding result return. The third module takes the text (ordered or not) and searches for each line in a geocoding service. The output is a list of locations, each one with its real world latitude and longitude and its coordinates within the image. The fourth module calculates a matrix of distances between locations. Each distance contains the real life geodesic distance (Karney, 2013) in meters, the Euclidean distance between each piece of text in pixels, the calculated meters per pixel (MPP), and the rotation. We define rotation as the difference in angle between real life location and the text in the image. Using the MPP and rotation as dimensions, the module finds clusters of corresponding locations. Lastly, the largest cluster is selected as the best. The fifth and final module uses the best cluster of locations and calculates the georeference information. This output information contains the northeast and southwest corners of the map, a list of mapping points, as well as the angle of north in the image (counter-clockwise, where 0 degrees is pointing up).</p><p>The proposed algorithm has approximately twelve hyper-parameters that can be tuned. We found that one of the most important is the minimum size of the cluster used to calculate the georeference information. In other words, the minimum number of corresponding locations the algorithm needs to converge.</p><p>In Table 1 we show the results of executing the algorithm against a set of 359 illustrated maps obtained from Stroly’s database (Vermeulen et al., 2011). The maps were manually georeferenced, and this information is used as ground truth. The georeference information returned by the algorithm is considered correct when two conditions are met. First, the width of the calculated area is between 50% and 200% of the width of the real area. Second, there is an intersection between both areas. Figure 3 shows the visualization of some results, executing the algorithm against several kinds of maps. The map area delimited in blue is the ground truth, while the one in orange is the one calculated by the presented algorithm. The markers in blue are the locations that are part of the cluster used to calculate the information.</p><p>In conclusion, we offer a novel solution to start and in some cases to complete the georeferencing process for heterogeneous historic and illustrated maps based on the text contained within them. The algorithm does not need vector information or geographical databases, nor image preprocessing. We have proven that even with a small cluster of locations the precision of this method is greater than 80%. The precision increases when the hyper-parameter is set to need larger clusters to converge (98.86% for a minimum of six locations). In future iterations we aim to improve the algorithm to increase the precision for smaller clusters and to improve the recall in general.</p>},
+   author = {Enrique J. Arriaga-Varela and Toru Takahashi},
+   doi = {10.5194/ica-abs-1-15-2019},
+   journal = {Abstracts of the ICA},
+   title = {Automatic Georeferencing of Heterogeneous Historic and Illustrated Maps},
+   volume = {1},
+   year = {2019},
+}
+
 @article{Lambert1942,
     author={Lambert, W. D.},
     title = {The distance between two widely separated points on the surface of the earth},
@@ -132,6 +142,17 @@ year = {2020},
 month = {12},
 pages = {},
 title = {A Note on Graph-Based Nearest Neighbor Search}
+}
+
+@article{Tainiter1963,
+   author = {M. Tainiter},
+   doi = {10.1145/321172.321178},
+   issn = {1557735X},
+   issue = {3},
+   journal = {Journal of the ACM (JACM)},
+   title = {Addressing for Random-Access Storage with Multiple Bucket Capacities},
+   volume = {10},
+   year = {1963},
 }
 
 @article{Bentley1975,
@@ -241,4 +262,140 @@ title = {A Note on Graph-Based Nearest Neighbor Search}
  volume={12},
  pages={2825--2830},
  year={2011}
+}
+
+@article{Zhou2009,
+   abstract = {Object localization based on radio frequency identification (RFID) technology has promising potentials. By combining localization with its identification capability, existing applications can be enhanced and new applications can be developed for this technology. This paper starts with an overview introducing the available technologies for localization with a focus on radio frequency based technologies. The existing and potential applications of RFID localization in various industries are then summarized. Moreover, RFID localization algorithms are reviewed, which can be categorized into multilateration, Bayesian inference, nearest-neighbor, proximity, and kernel-based learning methods. Also, we present a localization case study using passive RFID technology, and it shows that objects can be successfully localized using either multilateration or Bayesian inference methods. The survey also discusses the challenges and future research on RFID localization. © 2008 Springer Science+Business Media, LLC.},
+   author = {Junyi Zhou and Jing Shi},
+   doi = {10.1007/s10845-008-0158-5},
+   issn = {09565515},
+   issue = {6},
+   journal = {Journal of Intelligent Manufacturing},
+   title = {RFID localization algorithms and applications-A review},
+   volume = {20},
+   year = {2009},
+}
+
+@inproceedings{Zhang2017,
+   abstract = {Localization has always been a topic of concern in transportation and construction management. Radio frequency identification (RFID) has promising potentials due to their practically unlimited identification capacity, lower power and light weight. The objective of this research is to develop localization algorithms using RFID technology and analyse which is possible algorithm indoor environment. To achieve this goal, this study derives multilateration and nearest-neighbour algorithms for localization. Different parameter including distance and RSSI between the antenna and the target tag is then calculated based on Received Signal Strength Indication and Phase Angle. To make the localization more accurate, this survey also analyse the localization results by using normal tags and Wireless Identification and Sensing Platform (WISP).},
+   author = {Yipeng Zhang and Fan Zhang and Yang Wang and Yulin Ma and Honghai Li},
+   doi = {10.1109/ICSCSE.2017.64},
+   journal = {Proceedings - 2nd International Conference on Smart City and Systems Engineering, ICSCSE 2017},
+   title = {Localization of Nearest-Neighbour and Multilateration Analyse Based on RFID},
+   year = {2017},
+}
+
+
+@inproceedings{Tillquist2016,
+author = {Tillquist, Richard C. and Lladser, Manuel E.},
+title = {Metric-Space Positioning Systems (MPS) for Machine Learning},
+year = {2016},
+isbn = {9781450342254},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi-org.echo.louisville.edu/10.1145/2975167.2985641},
+doi = {10.1145/2975167.2985641},
+abstract = {Many machine learning techniques such as k-nearest neighbors (KNNs) and support vector machines (SVMs) require examples to be mapped to numerical feature vectors. Principal coordinate analysis (PCoA) accomplishes this by mapping a set of n examples to n points in Rn-1. However, learning from these high-dimensional vectors may require an astronomically large number of examples. Here we present an intuitive, novel method for uniquely representing sequences of symbolic features with the fewest dimensions via "multi-lateration" (i.e. the selection of a minimal feature set that uniquely distinguishes all examples under a reference metric). We show that the problem of determining a minimal multilateration set is NP-complete in general, and present a randomized algorithm for finding close to optimal subsets. As proof of concept, we apply multilateration to learn 12-mers centered at intron-exon boundaries using human annotated examples. We compare results using features derived in several different ways and an array of machine learning techniques, some of which can handle symbolic features directly and some of which cannot. Our experiments indicate that multilateration improves performance of non-symbolic classification techniques without significantly altering performance using other techniques.},
+booktitle = {Proceedings of the 7th ACM International Conference on Bioinformatics, Computational Biology, and Health Informatics},
+pages = {479},
+numpages = {1},
+keywords = {Dimension Reduction, NP-Complete, Multilateration, Sequence Features},
+location = {Seattle, WA, USA},
+series = {BCB '16}
+}
+
+@article{Strohmeier2018,
+   abstract = {In this paper, we argue that current state-of-the-art methods of aircraft localization such as multilateration are insufficient, in particular for modern crowdsourced air traffic networks with random, unplanned deployment geometry. We propose an alternative, a grid-based localization approach using the k-nearest neighbor (k -NN) algorithm, to deal with the identified shortcomings. Our proposal does not require any changes to the existing air traffic protocols and transmitters, and is easily implemented using only low-cost, commercial-off-the-shelf hardware. Using an algebraic multilateration algorithm for comparison, we evaluate our approach using real-world flight data collected with our collaborative sensor network OpenSky. We quantify its effectiveness in terms of aircraft location accuracy, surveillance coverage, and the verification of false position data. Our results show that the grid-based k-NN approach can increase the effective air traffic surveillance coverage compared to multilateration by a factor of up to 2.5. As it does not suffer from dilution of precision to the same extent, it is more robust in noisy environments and performs better in pre-existing, unplanned receiver deployments. We further find that the mean aircraft location accuracy can be increased by up to 41% in comparison with multilateration while also being able to pinpoint the origin of potential spoofing attacks conducted from the ground.},
+   author = {Martin Strohmeier and Ivan Martinovic and Vincent Lenders},
+   doi = {10.1109/TAES.2018.2797760},
+   issn = {00189251},
+   issue = {3},
+   journal = {IEEE Transactions on Aerospace and Electronic Systems},
+   keywords = {Air traffic control (ATC),crowdsourced networks,k-nearest neighbors (k-NN),wireless localization},
+   month = {6},
+   pages = {1519-1529},
+   publisher = {Institute of Electrical and Electronics Engineers Inc.},
+   title = {A k-NN-Based Localization Approach for Crowdsourced Air Traffic Communication Networks},
+   volume = {54},
+   year = {2018},
+}
+
+
+@article{LINARES20201,
+title = {Effects of number of digits in large-scale multilateration},
+journal = {Precision Engineering},
+volume = {64},
+pages = {1-6},
+year = {2020},
+issn = {0141-6359},
+doi = {https://doi.org/10.1016/j.precisioneng.2020.03.009},
+url = {https://www.sciencedirect.com/science/article/pii/S0141635919308591},
+author = {Jean Marc Linares and Santiago Arroyave-Tobon and José Pires and Jean Michel Sprauel},
+keywords = {Multilateration, Tracking interferometer, Uncertainty, Floating-point, Numerical stability},
+abstract = {Since many years ago, multilateration has been used in precision engineering notably in machine tool and coordinate measuring machine calibration. This technique needs, first, the use of laser trackers or tracking interferometers, and second, the use of nonlinear optimization algorithms to determine point coordinates. Research works have shown the influence of the experimental configuration on measure precision in multilateration. However, the impact of floating-point precision in computations on large-scale multilateration precision has not been addressed. In this work, the effects of numerical errors (rounding and cancellation effects) due to floating-point precision (number of digits) were studied. In order to evaluate these effects in large-scale multilateration, a multilateration measurement system was simulated. This protocol is illustrated with a case study where large distances (≤20 m) between pairs of target points were simulated. The results show that the use of multi-precision libraries is recommended to control the propagation of uncertainties during the multilateration computation.}
+}
+
+
+@inproceedings{Singh2015,
+   abstract = {Recent developments in micro electro mechanical systems (MEMS) technology and wireless communication have propelled the growing applications of wireless sensor networks (WSNs). Wireless sensor network is comprised of large number of small and cheap devices known as sensors. One of the important functions of sensor network is collection and forwarding of data. In most of the applications, it is of much interest to find out the location of the data. This type of information can be obtained by use of localization techniques. So node localization is very crucial to find out the position of node with the help of localization algorithms. Hence, node localization becomes one of the fundamental challenges in WSNs. We make the rigorous reviews on different schemes of localization in sensor networks. On the basis of range measurements, the localization schemes can be broadly classified in two categories such as: range based and range free schemes. The cost and hardware limitation on sensing node preclude the use of range based localization schemes. In most of the sensor network application coarse accuracy is sufficient so range free localization schemes are considered as a substitute to range based schemes. In this paper, the detailed study has been carried out to understand and select the best range free localization algorithm for WSNs. At the end some issues are discussed for future research in the area of localization techniques for WSNs.},
+   author = {Santar Pal Singh and S. C. Sharma},
+   doi = {10.1016/j.procs.2015.07.357},
+   issn = {18770509},
+   journal = {Procedia Computer Science},
+   keywords = {accuracy,localization algorithms,range,range free localization,wireless sensor networks},
+   month = {1},
+   pages = {7-16},
+   publisher = {Elsevier},
+   title = {Range Free Localization Techniques in Wireless Sensor Networks: A Review},
+   volume = {57},
+   year = {2015},
+}
+
+@article{Kazel1972,
+   abstract = {An airborne radar concept is described which would achieve high-resolution mapping of terrain, even with wide-beam antennas, by utilizing a narrow pulse-width. Successive high-resolution range rings, superimposed in a suitable storage medium, cause the terrain image to build up as the aircraft flies by.},
+   author = {Sidney Kazel},
+   doi = {10.1109/PROC.1972.8886},
+   issn = {00189219},
+   issue = {10},
+   journal = {Proceedings of the IEEE},
+   title = {MULTILATERATION RADAR.},
+   volume = {60},
+   year = {1972},
+}
+
+@article{Wasserstein1989,
+   author = {Ronald L. Wasserstein and Malvin H. Kalos and Paula A. Whitlock},
+   doi = {10.2307/1268841},
+   issn = {00401706},
+   issue = {2},
+   journal = {Technometrics},
+   title = {Monte Carlo Methods, Volume 1: Basics},
+   volume = {31},
+   year = {1989},
+}
+
+
+@article{Lee1975,
+   abstract = {This paper describes a novel procedure for determing the accuracy of hyperbolic multilateration systems. Basically, the procedure links the conventional accuracy measures (e.g., GDOP) to the moments and products of inertia of a mass configuration that is easily derived from the system geometry. Thus, the problem of determining accuracy measures is reduced to that of calculating simple moments and products of inertia. The insight provided by the procedure makes it possible to derive a variety of useful approximations for GDOP and other accuracy measures. Copyright © 1975 by The Institute of Electrical and Electronics Engineers, Inc.},
+   author = {Harry B. Lee},
+   doi = {10.1109/TAES.1975.308023},
+   issn = {00189251},
+   issue = {1},
+   journal = {IEEE Transactions on Aerospace and Electronic Systems},
+   title = {A Novel Procedure for Assessing the Accuracy of Hyperbolic Multilateration Systems},
+   volume = {AES-11},
+   year = {1975},
+}
+
+
+@article{Abel1991,
+   abstract = {The existence and uniqueness of positions computed from Global Positioning System (GPS) pseudorange (PR) measurements is studied. Contrary to several recent claims [2, 3], in the case of n = 4 satellites a fix may not exist, and, if a fix exists, it is not guaranteed to be unique. In the case of n -5 satellites a unique fix is assured, except in certain degenerate cases such as coplanar satellites. Finally, an alternate formulation of the direct n = 4 PR to three-space position solutions [2, 3] is presented, and simple tests for existence and uniqueness are derived. © 1991 IEEE},
+   author = {Jonathan S. Abel and James W. Chaffee},
+   doi = {10.1109/7.104271},
+   issn = {00189251},
+   issue = {6},
+   journal = {IEEE Transactions on Aerospace and Electronic Systems},
+   title = {Existence And Uniqueness Of Gps Solutions},
+   volume = {27},
+   year = {1991},
 }

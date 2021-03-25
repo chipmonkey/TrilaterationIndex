@@ -61,16 +61,16 @@ ggplot() +
 
 
 test <- data.frame(x = runif(10000, min=0, max=100), y=runif(1000, min=0, max=100))
-ggplot() +
-  geom_arc_bar(data=refpoints[1,],
-               aes(x0=x,y0=y,
-                   r0=querypoint$r1dist - qp2dist,
-                   r=querypoint$r1dist + qp2dist,
-                   start=-pi/2, end=1.5*pi, fill=TRUE)) +
-  geom_point(data=test, mapping=aes(x=x, y=y), color="black", size=1) +
-  geom_point(data=refpoints[1,], mapping=aes(x=x, y=y), color="red", shape="triangle", size=3) +
-  coord_fixed(ratio = 1, xlim=c(0,120), ylim=c(-5, 100)) +
-  theme(legend.position = "none")
+# ggplot() +
+#   geom_arc_bar(data=refpoints[1,],
+#                aes(x0=x,y0=y,
+#                    r0=querypoint$r1dist - qp2dist,
+#                    r=querypoint$r1dist + qp2dist,
+#                    start=-pi/2, end=1.5*pi, fill=TRUE)) +
+#   geom_point(data=test, mapping=aes(x=x, y=y), color="black", size=1) +
+#   geom_point(data=refpoints[1,], mapping=aes(x=x, y=y), color="red", shape="triangle", size=3) +
+#   coord_fixed(ratio = 1, xlim=c(0,120), ylim=c(-5, 100)) +
+#   theme(legend.position = "none")
 
 tdists <- apply(test, 1, function(x) sqrt((refpoints[1,'x'] - x[1])^2 + (refpoints[1, 'y'] - x[2])^2))
 lowbound = qdists$r1dist - qp2dist
@@ -82,21 +82,22 @@ tout <- test[which(tdists < lowbound | tdists > highbound),]
 ratio = nrow(tin) / nrow(test)
 ratio
 
-ggplot() +
-  geom_arc_bar(data=refpoints[1,],
-               aes(x0=x,y0=y,
-                   r0=querypoint$r1dist - qp2dist,
-                   r=querypoint$r1dist + qp2dist,
-                   start=-pi/2, end=1.5*pi, fill=TRUE)) +
-  geom_point(data=tin, mapping=aes(x=x, y=y), color="green", size=1) +
-  geom_point(data=tout, mapping=aes(x=x, y=y), color="black", size=1) +
-  geom_point(data=refpoints[1,], mapping=aes(x=x, y=y), color="red", shape="triangle", size=3) +
-  coord_fixed(ratio = 1, xlim=c(0,120), ylim=c(-5, 100)) +
-  theme(legend.position = "none")
+# ggplot() +
+#   geom_arc_bar(data=refpoints[1,],
+#                aes(x0=x,y0=y,
+#                    r0=querypoint$r1dist - qp2dist,
+#                    r=querypoint$r1dist + qp2dist,
+#                    start=-pi/2, end=1.5*pi, fill=TRUE)) +
+#   geom_point(data=tin, mapping=aes(x=x, y=y), color="green", size=1) +
+#   geom_point(data=tout, mapping=aes(x=x, y=y), color="black", size=1) +
+#   geom_point(data=refpoints[1,], mapping=aes(x=x, y=y), color="red", shape="triangle", size=3) +
+#   coord_fixed(ratio = 1, xlim=c(0,120), ylim=c(-5, 100)) +
+#   theme(legend.position = "none")
 
 
 #  Plots with qp6dist and multiple r:
 
+qp6dist <- myDist(c(querypoint$x, querypoint$y), c(data[rownames(data)==6, 'x'], data[rownames(data)==6, 'y']))
 
 t1d <- apply(test, 1, function(x) sqrt((refpoints[1,'x'] - x[1])^2 + (refpoints[1, 'y'] - x[2])^2))
 t2d <- apply(test, 1, function(x) sqrt((refpoints[2,'x'] - x[1])^2 + (refpoints[2, 'y'] - x[2])^2))
@@ -132,8 +133,6 @@ ggplot() +
                    r0=querypoint$r1dist - qp6dist,
                    r=querypoint$r1dist + qp6dist,
                    start=-pi/2, end=1.5*pi, fill=TRUE, alpha=0.5)) +
-  # geom_point(data=tin, mapping=aes(x=x, y=y), color="green", size=1) +
-  # geom_point(data=tout, mapping=aes(x=x, y=y), color="black", size=1) +
   geom_point(data=refpoints[1:3,], mapping=aes(x=x, y=y), color="red", shape="triangle", size=3) +
   geom_circle(aes(x0=x, y0=y, r=qp6dist), data=querypoint, linetype="dashed") +
   geom_point(data=querypoint, mapping=aes(x=x,y=y), color="green4", shape="square", size=3) +

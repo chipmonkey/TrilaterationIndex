@@ -140,7 +140,7 @@ To estimate time complexity in random or average cases, let's take a closer look
 * Dashed lines from $r_1$ to each point indicating their distance $p_{d1}$ (and sort order in $TI$) from $r_1$
 * A large ring representing all of the space where a point within $d$ of $q$ must lie, with respect to $r_1$
 
-```{r within_complexity, echo=FALSE, fig.cap="Within time complexity illustration"}
+```{r within_complexity, echo=FALSE, fig.cap="Within time complexity illustration", fig.height=4, fig.width=4}
 library(ggplot2)
 library(ggforce)
 
@@ -206,13 +206,13 @@ Comparing this to our sample data, the length of the dashed lines correspond to 
 
 Clearly there are antagonistic datasets that would thwart any benefit.  If the data were arranged in a circle all near distance $d$ from $r_1$, we would have culled no points from this approach.  In that particular case, the alternate $WithinMulti$ construction would be beneficial.
 
-If the points were randomly distributed, however, then the expected culling ratio of the index becomes the area of the ring divided by the area of the total point space.  On an infinite plane, of course, this approaches zero, but in finite spaces, such as this example (and geospatial coordinates), we can calculate the area.  Here, we use a random point estimate method to determine that, for this distance, on the $100x100$ grid, the ring covers about 48.7% of the area.  Given that we had to check five of our ten points, this seems reasonable.
+If the points were randomly distributed, however, then the expected culling ratio of the index becomes the area of the ring divided by the area of the total point space.  On an infinite plane, of course, this approaches zero, but in finite spaces, such as this example (and geospatial coordinates), we can calculate the area.  Here, we use a common Monte Carlo method to estimate that, for this distance, on the $100x100$ grid, the ring covers about 48.7% of the area.[@Wasserstein1989]  Given that we had to check five of our ten points, this seems reasonable.
 
 #### Time complexity of WithinMulti
 
 If, rather than cull by one ref point then search the remainder, we cull by all three (the $WithinMulti$ approach), we see something different:
 
-```{r withinmulti_complexity, echo=FALSE, fig.cap="WithinMulti time complexity illustration"}
+```{r withinmulti_complexity, echo=FALSE, fig.cap="WithinMulti time complexity illustration", fig.height=4, fig.width=4}
 qp6dist <- myDist(c(querypoint$x, querypoint$y), c(data[rownames(data)==6, 'x'], data[rownames(data)==6, 'y']))
 
 ggplot() +
@@ -278,5 +278,83 @@ In this current example, with $d \approx 16.127$, we can numerically approximate
 * $r_2$ ring area is $\approx 32.7\%$
 * $r_3$ ring area is $\approx 37.9\%$
 * Intersection of all three rings has area $\approx 9.4\%$
+
+The Monte Carlo simulation of this is illustrated in Figure: "Monte Carlo Estimating Ring Overlap Area".
+
+```{r space_estimation, echo=FALSE, fig.cap="Monte Carlo Estimating Ring Overlap Area", fig.height=4, fig.width=4}
+
+library(ggplot2)
+library(ggforce)
+
+myDist <- function(x, y) {
+  # x and y must be 2D points -- (x,y) tuples i.e.: x <- c(1,2) y <- c(3,4)
+  d <- sqrt((x[[1]]-y[[1]])^2+(x[[2]]-y[[2]])^2)
+  return(d)
+}
+
+
+data <- read.csv('../data/point_sample_10.csv')
+data <- data[,-1]
+
+refpoints <- read.csv('../data/sample_ref_points.csv')
+refpoints <- refpoints[c(3,2,1),-1]
+row.names(refpoints) <- c(1,2,3)
+names(refpoints) <- c('A', 'x', 'y')
+refpoints$A <- c(1,2,3)
+
+querypoint <- data.frame(array(c(50, 65), dim=c(1,2)))
+names(querypoint) <- c('x', 'y')
+
+qdists = apply(refpoints, 1, function(x) sqrt((querypoint$x - x[2])^2 + (querypoint$y - x[3])^2))
+qdists <- data.frame(array(qdists, dim=c(1,3)))
+names(qdists) <- c('r1dist', 'r2dist', 'r3dist')
+querypoint <- cbind(querypoint, qdists)
+
+test <- data.frame(x = runif(5000, min=0, max=100), y=runif(1000, min=0, max=100))
+
+
+qp6dist <- myDist(c(querypoint$x, querypoint$y), c(data[rownames(data)==6, 'x'], data[rownames(data)==6, 'y']))
+
+t1d <- apply(test, 1, function(x) sqrt((refpoints[1,'x'] - x[1])^2 + (refpoints[1, 'y'] - x[2])^2))
+t2d <- apply(test, 1, function(x) sqrt((refpoints[2,'x'] - x[1])^2 + (refpoints[2, 'y'] - x[2])^2))
+t3d <- apply(test, 1, function(x) sqrt((refpoints[3,'x'] - x[1])^2 + (refpoints[3, 'y'] - x[2])^2))
+
+low1 = qdists$r1dist - qp6dist
+high1 = qdists$r1dist + qp6dist
+low2 = qdists$r2dist - qp6dist
+high2 = qdists$r2dist + qp6dist
+low3 = qdists$r3dist - qp6dist
+high3 = qdists$r3dist + qp6dist
+
+r1in <- test[which(t1d >= low1 & t1d <= high1),]
+r2in <- test[which(t2d >= low2 & t2d <= high2),]
+r3in <- test[which(t3d >= low3 & t3d <= high3),]
+tin <- test[which(t1d >= low1 & t1d <= high1 & t2d >= low2 & t2d <= high2 & t3d >= low3 & t3d <= high3),]
+tout <- test[which(t1d < low1 | t1d > high1 | t2d < low2 | t2d > high2 | t3d < low3 | t3d > high3),]
+
+ggplot() +
+  geom_point(data=tout, mapping=aes(x=x, y=y), color="black", size=1) +
+  geom_arc_bar(data=refpoints[3,],
+               aes(x0=x,y0=y,
+                   r0=querypoint$r3dist - qp6dist,
+                   r=querypoint$r3dist + qp6dist,
+                   start=-pi/2, end=1.5*pi, fill=TRUE, alpha=0.5)) +
+  geom_arc_bar(data=refpoints[2,],
+               aes(x0=x,y0=y,
+                   r0=querypoint$r2dist - qp6dist,
+                   r=querypoint$r2dist + qp6dist,
+                   start=pi/2, end=-1.5*pi, fill=TRUE, alpha=0.5)) +
+  geom_arc_bar(data=refpoints[1,],
+               aes(x0=x,y0=y,
+                   r0=querypoint$r1dist - qp6dist,
+                   r=querypoint$r1dist + qp6dist,
+                   start=-pi/2, end=1.5*pi, fill=TRUE, alpha=0.5)) +
+  geom_point(data=refpoints[1:3,], mapping=aes(x=x, y=y), color="red", shape="triangle", size=3) +
+  geom_circle(aes(x0=x, y0=y, r=qp6dist), data=querypoint, linetype="dashed") +
+  geom_point(data=querypoint, mapping=aes(x=x,y=y), color="green4", shape="square", size=3) +
+  geom_point(data=tin, mapping=aes(x=x, y=y), color="green", size=1) +
+  coord_fixed(ratio = 1, xlim=c(0,120), ylim=c(-5, 100)) +
+  theme(legend.position = "none")
+```
 
 Again, these numbers will vary with $d$ more than anything else, but the concept here is that for low $d$, the area of the ring can be significantly less than that of the entire search area, even moreso the intersection of the area of three such rings, benefitting the actual time complexity of the query.

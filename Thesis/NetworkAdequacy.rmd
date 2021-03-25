@@ -21,8 +21,6 @@ The nearest-neighbor problem was called the "Post-Office Problem" in early incar
 
 and so forth.
 
-It is worth noting that the phrase "Network Adequacy" appears in studies of electric grids bearing a meaning that is NOT related to these distance algorithms.  [@Mahdavi2011; @Ahmadi2019]  Satellite "coverage" appears similar at first, and in some cases (like GPS or Satellite Internet) asks a similar question, but often the term "coverage" has a temporal component - for example with satellite imaging - where a satellite must pass over every point it wants to cover _at some point in time_.  We do not explore this treatment for those problems with temporal components, although with some works the ideas may be extended there.
-
 
 ### Formalization of Network Adequacy
 
@@ -36,16 +34,8 @@ We can generalize this slightly more by describing a network as 'adequate with t
 
 In this case, if $T == 1$ we have the original case.  If $T == 0$ we have a trivial case where the network is always adequate (even if $Q$ and/or $P$ are empty, which is generally disallowed).
 
-### Existing solutions
+Generally, using $NN$ techniques, the brute-force is iterative: for each point $q$, find the nearest point $p$ and if $D(p, q) < d$ count it as conforming, otherwise count it as non-conforming. We then calculate the ratio of $r = \frac{conforming} {|Q|}$ to determing whether $r >= T$ or not.
 
-We can find no literature where this topic is solved in a particular algorighmic way.  There are numerous discussions in health care about satisfying network adequacy, but more as policy or health care topics than as computational approaches. [@Wishner2017],[@Mahdavi2011]
+If we set $m = |Q|$ and $n = |P|$, and if we use a Nearest-Neighbor algorithm with $O(n\ log\ n)$ then the time complexity for Network Adequacy becomes $O(m*n\ log\ n)$.
 
-In general, it appears that most practical solutions are done in SQL databases which are commonly the source of member and provider data for health care datasets.  Still, there is little published here; this information is anecdotal based on the author's personal direct knowledge and informal research.
-
-Satellite and cellular network discussions of this problem appear to be proprietary, but again anecdotally, appear to simply apply common Nearest-Neighbor
-
-Where we can find references to actual applications, the implemented solutions tend to be iterative, exhaustive implementations of existing Nearest-Neighbor algorithms.  That is, for each point $q$, find the nearest point $p$ and if $D(p, q) < d$ count it as conforming, otherwise count it as non-conforming. We then calculate the ratio of $r = \frac{conforming} {|Q|}$ to determing whether $r >= T$ or not.
-
-If we set $m = |Q|$ and $n = |P|$, and if we use a Nearest-Neighbor algorithm with $O(n\ log\ n)$ then the time complexity for Network Adequacy becomes $O(mn\ log\ n)$.
-
-In the worst-case, we cannot improve on this mathematically, but we can introduce what we believe are novel algorithms, based on the Trilateration Index, which execute efficiently compared to this iterative approach, by deeply reducing the search space and number of times the distance functions must be called in typical real-world cases.  Also, trivially, it is unnecessary to find the nearest point $p$, merely prove that at least one such point exists (or none exists) for a given $q$.
+In the worst-case, we cannot improve on this, however we can introduce what we believe are novel algorithms, based on the Trilateration Index, which execute efficiently compared to this iterative approach, by deeply reducing the search space and number of times the distance functions must be called in typical real-world cases.  Also, trivially, it is unnecessary to find the nearest point $p$, merely prove that at least one such point exists (or none exists) for a given $q$.

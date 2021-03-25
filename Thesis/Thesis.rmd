@@ -13,6 +13,7 @@ bibliography: bibliography.bib
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.pos = 'H')
 ```
 
 ```{r child = 'Abstract.rmd'}
@@ -20,22 +21,32 @@ knitr::opts_chunk$set(echo = TRUE)
 
 \newpage
 
+```{r child = 'ReviewOfLiterature.rmd'}
+```
+
+\newpage
+
 ```{r child = 'TableOfContents.rmd'}
 ```
+
+\newpage
 
 ```{r child = 'MathTheory.rmd'}
 ```
 
+\newpage
+
 ```{r child = 'Experiment.rmd'}
 ```
+
+\newpage
 
 ```{r child = 'NetworkAdequacy.rmd'}
 ```
 
-```{r child = 'NearestNeighbor.rmd'}
-```
+\newpage
 
-```{r child = 'ReviewOfLiterature.rmd'}
+```{r child = 'NearestNeighbor.rmd'}
 ```
 
 
