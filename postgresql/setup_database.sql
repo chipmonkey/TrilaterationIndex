@@ -60,6 +60,12 @@ create index sample_cat_ref_dists_ref3 on sample_cat_ref_dists (RefDist3);
 create index sample_cat_ref_dists_ref4 on sample_cat_ref_dists (RefDist4);
 
 
+create view category_counts as (
+   select category, count(1) as category_count
+   from sample_cat_ref_dists
+   group by category
+);
+
 -- Test query just to make sure some things work:
 -- via: https://postgis.net/workshops/postgis-intro/knn.html
 EXPLAIN (ANALYZE ON, BUFFERS ON)
@@ -179,5 +185,16 @@ $$ LANGUAGE plpgsql;
 select funcs.run_timings();
 select funcs.run_sq_timings();
 
+create view v_results as (
+   select qt.*, ccl.category_count as leftcount, ccr.category_count as rightcount
+   from query_timings qt
+   join category_counts ccl on
+      qt.leftcat = ccl.category
+   join category_counts ccr on
+      qt.rightcat = ccr.category
+);
+
 copy query_timings to '/output/query_timings.csv' DELIMITER ',' CSV HEADER;
-COPY (SELECT * FROM v_category_counts) to '/output/category_counts.csv' DELIMITER ',' CSV HEADER;
+COPY (SELECT * FROM category_counts) to '/output/category_counts.csv' DELIMITER ',' CSV HEADER;
+
+

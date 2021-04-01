@@ -1,0 +1,635 @@
+leftcat,rightcat,timing_ms,id,notes,row_stamp,leftcount,rightcount
+9,10,3.598,1,Initial Tests,2021-01-29 00:48:49.367536,10000,100
+9,10,3.523,2,Initial Tests,2021-01-29 00:50:35.192974,10000,100
+9,10,3.536,3,Initial Tests,2021-01-29 00:56:50.890179,10000,100
+9,10,3.531,4,Initial Tests,2021-01-29 00:59:13.115881,10000,100
+9,10,3.599,5,Initial Tests,2021-01-29 01:00:43.415827,10000,100
+9,10,3.525,6,Initial Tests,2021-01-29 01:01:55.935466,10000,100
+9,10,3.590,7,Initial Tests,2021-01-29 01:03:12.093422,10000,100
+9,10,3.556,8,Initial Tests,2021-01-29 01:03:45.1061,10000,100
+9,10,3.856,9,Initial Tests,2021-01-29 01:07:35.37741,10000,100
+10,10,0.328,10,run_timings,2021-01-29 01:07:40.643635,100,100
+10,11,0.604,11,run_timings,2021-01-29 01:07:40.643635,100,900
+10,12,0.980,12,run_timings,2021-01-29 01:07:40.643635,100,2000
+10,13,2.076,13,run_timings,2021-01-29 01:07:40.643635,100,5000
+11,10,0.605,14,run_timings,2021-01-29 01:07:40.643635,900,100
+11,11,3.277,15,run_timings,2021-01-29 01:07:40.643635,900,900
+11,12,7.091,16,run_timings,2021-01-29 01:07:40.643635,900,2000
+11,13,17.786,17,run_timings,2021-01-29 01:07:40.643635,900,5000
+12,10,0.980,18,run_timings,2021-01-29 01:07:40.643635,2000,100
+12,11,7.068,19,run_timings,2021-01-29 01:07:40.643635,2000,900
+12,12,15.908,20,run_timings,2021-01-29 01:07:40.643635,2000,2000
+12,13,41.993,21,run_timings,2021-01-29 01:07:40.643635,2000,5000
+13,10,2.096,22,run_timings,2021-01-29 01:07:40.643635,5000,100
+13,11,17.884,23,run_timings,2021-01-29 01:07:40.643635,5000,900
+13,12,40.627,24,run_timings,2021-01-29 01:07:40.643635,5000,2000
+13,13,104.511,25,run_timings,2021-01-29 01:07:40.643635,5000,5000
+9,10,3.978,26,Initial Tests,2021-01-29 01:23:06.748818,10000,100
+10,10,0.307,27,min_stdist_timings,2021-01-29 01:23:12.195731,100,100
+10,11,0.597,28,min_stdist_timings,2021-01-29 01:23:12.195731,100,900
+10,12,0.963,29,min_stdist_timings,2021-01-29 01:23:12.195731,100,2000
+10,13,2.048,30,min_stdist_timings,2021-01-29 01:23:12.195731,100,5000
+11,10,0.592,31,min_stdist_timings,2021-01-29 01:23:12.195731,900,100
+11,11,3.279,32,min_stdist_timings,2021-01-29 01:23:12.195731,900,900
+11,12,7.043,33,min_stdist_timings,2021-01-29 01:23:12.195731,900,2000
+11,13,17.877,34,min_stdist_timings,2021-01-29 01:23:12.195731,900,5000
+12,10,0.992,35,min_stdist_timings,2021-01-29 01:23:12.195731,2000,100
+12,11,7.090,36,min_stdist_timings,2021-01-29 01:23:12.195731,2000,900
+12,12,15.857,37,min_stdist_timings,2021-01-29 01:23:12.195731,2000,2000
+12,13,41.832,38,min_stdist_timings,2021-01-29 01:23:12.195731,2000,5000
+13,10,2.088,39,min_stdist_timings,2021-01-29 01:23:12.195731,5000,100
+13,11,17.847,40,min_stdist_timings,2021-01-29 01:23:12.195731,5000,900
+13,12,40.425,41,min_stdist_timings,2021-01-29 01:23:12.195731,5000,2000
+13,13,104.588,42,min_stdist_timings,2021-01-29 01:23:12.195731,5000,5000
+10,10,0.051,43,approx_trilat_timings,2021-01-29 01:32:10.491626,100,100
+10,11,0.127,44,approx_trilat_timings,2021-01-29 01:32:10.491626,100,900
+10,12,0.239,45,approx_trilat_timings,2021-01-29 01:32:10.491626,100,2000
+10,13,0.534,46,approx_trilat_timings,2021-01-29 01:32:10.491626,100,5000
+11,10,0.129,47,approx_trilat_timings,2021-01-29 01:32:10.491626,900,100
+11,11,0.803,48,approx_trilat_timings,2021-01-29 01:32:10.491626,900,900
+11,12,1.400,49,approx_trilat_timings,2021-01-29 01:32:10.491626,900,2000
+11,13,3.197,50,approx_trilat_timings,2021-01-29 01:32:10.491626,900,5000
+12,10,0.230,51,approx_trilat_timings,2021-01-29 01:32:10.491626,2000,100
+12,11,1.258,52,approx_trilat_timings,2021-01-29 01:32:10.491626,2000,900
+12,12,2.717,53,approx_trilat_timings,2021-01-29 01:32:10.491626,2000,2000
+12,13,7.299,54,approx_trilat_timings,2021-01-29 01:32:10.491626,2000,5000
+13,10,0.522,55,approx_trilat_timings,2021-01-29 01:32:10.491626,5000,100
+13,11,3.082,56,approx_trilat_timings,2021-01-29 01:32:10.491626,5000,900
+13,12,6.770,57,approx_trilat_timings,2021-01-29 01:32:10.491626,5000,2000
+13,13,11.186,58,approx_trilat_timings,2021-01-29 01:32:10.491626,5000,5000
+9,10,3.561,59,Initial Tests,2021-01-29 02:07:13.685688,10000,100
+10,10,0.262,60,min_stdist_timings,2021-01-29 02:07:18.528195,100,100
+10,11,0.517,61,min_stdist_timings,2021-01-29 02:07:18.528195,100,900
+10,12,0.870,62,min_stdist_timings,2021-01-29 02:07:18.528195,100,2000
+10,13,1.850,63,min_stdist_timings,2021-01-29 02:07:18.528195,100,5000
+11,10,0.516,64,min_stdist_timings,2021-01-29 02:07:18.528195,900,100
+11,11,2.906,65,min_stdist_timings,2021-01-29 02:07:18.528195,900,900
+11,12,6.348,66,min_stdist_timings,2021-01-29 02:07:18.528195,900,2000
+11,13,16.030,67,min_stdist_timings,2021-01-29 02:07:18.528195,900,5000
+12,10,0.867,68,min_stdist_timings,2021-01-29 02:07:18.528195,2000,100
+12,11,6.336,69,min_stdist_timings,2021-01-29 02:07:18.528195,2000,900
+12,12,14.182,70,min_stdist_timings,2021-01-29 02:07:18.528195,2000,2000
+12,13,37.427,71,min_stdist_timings,2021-01-29 02:07:18.528195,2000,5000
+13,10,1.848,72,min_stdist_timings,2021-01-29 02:07:18.528195,5000,100
+13,11,16.080,73,min_stdist_timings,2021-01-29 02:07:18.528195,5000,900
+13,12,36.361,74,min_stdist_timings,2021-01-29 02:07:18.528195,5000,2000
+13,13,93.878,75,min_stdist_timings,2021-01-29 02:07:18.528195,5000,5000
+10,10,0.063,76,approx_trilat_timings,2021-01-29 02:11:14.87262,100,100
+10,11,0.117,77,approx_trilat_timings,2021-01-29 02:11:14.87262,100,900
+10,12,0.219,78,approx_trilat_timings,2021-01-29 02:11:14.87262,100,2000
+10,13,0.498,79,approx_trilat_timings,2021-01-29 02:11:14.87262,100,5000
+11,10,0.116,80,approx_trilat_timings,2021-01-29 02:11:14.87262,900,100
+11,11,0.761,81,approx_trilat_timings,2021-01-29 02:11:14.87262,900,900
+11,12,1.688,82,approx_trilat_timings,2021-01-29 02:11:14.87262,900,2000
+11,13,2.947,83,approx_trilat_timings,2021-01-29 02:11:14.87262,900,5000
+12,10,0.218,84,approx_trilat_timings,2021-01-29 02:11:14.87262,2000,100
+12,11,1.655,85,approx_trilat_timings,2021-01-29 02:11:14.87262,2000,900
+12,12,2.591,86,approx_trilat_timings,2021-01-29 02:11:14.87262,2000,2000
+12,13,6.632,87,approx_trilat_timings,2021-01-29 02:11:14.87262,2000,5000
+13,10,0.491,88,approx_trilat_timings,2021-01-29 02:11:14.87262,5000,100
+13,11,2.885,89,approx_trilat_timings,2021-01-29 02:11:14.87262,5000,900
+13,12,6.302,90,approx_trilat_timings,2021-01-29 02:11:14.87262,5000,2000
+13,13,10.472,91,approx_trilat_timings,2021-01-29 02:11:14.87262,5000,5000
+9,10,3.546,92,Initial Tests,2021-01-29 02:40:35.065457,10000,100
+10,10,0.263,93,min_stdist_timings,2021-01-29 02:40:39.831908,100,100
+10,11,0.516,94,min_stdist_timings,2021-01-29 02:40:39.831908,100,900
+10,12,0.867,95,min_stdist_timings,2021-01-29 02:40:39.831908,100,2000
+10,13,1.852,96,min_stdist_timings,2021-01-29 02:40:39.831908,100,5000
+11,10,0.517,97,min_stdist_timings,2021-01-29 02:40:39.831908,900,100
+11,11,2.901,98,min_stdist_timings,2021-01-29 02:40:39.831908,900,900
+11,12,6.354,99,min_stdist_timings,2021-01-29 02:40:39.831908,900,2000
+11,13,16.042,100,min_stdist_timings,2021-01-29 02:40:39.831908,900,5000
+12,10,0.864,101,min_stdist_timings,2021-01-29 02:40:39.831908,2000,100
+12,11,6.344,102,min_stdist_timings,2021-01-29 02:40:39.831908,2000,900
+12,12,14.215,103,min_stdist_timings,2021-01-29 02:40:39.831908,2000,2000
+12,13,37.513,104,min_stdist_timings,2021-01-29 02:40:39.831908,2000,5000
+13,10,1.847,105,min_stdist_timings,2021-01-29 02:40:39.831908,5000,100
+13,11,16.033,106,min_stdist_timings,2021-01-29 02:40:39.831908,5000,900
+13,12,36.581,107,min_stdist_timings,2021-01-29 02:40:39.831908,5000,2000
+13,13,93.316,108,min_stdist_timings,2021-01-29 02:40:39.831908,5000,5000
+10,10,0.045,109,approx_trilat_timings,2021-01-29 02:44:35.862914,100,100
+10,11,0.117,110,approx_trilat_timings,2021-01-29 02:44:35.862914,100,900
+10,12,0.218,111,approx_trilat_timings,2021-01-29 02:44:35.862914,100,2000
+10,13,0.497,112,approx_trilat_timings,2021-01-29 02:44:35.862914,100,5000
+11,10,0.116,113,approx_trilat_timings,2021-01-29 02:44:35.862914,900,100
+11,11,0.763,114,approx_trilat_timings,2021-01-29 02:44:35.862914,900,900
+11,12,1.682,115,approx_trilat_timings,2021-01-29 02:44:35.862914,900,2000
+11,13,2.967,116,approx_trilat_timings,2021-01-29 02:44:35.862914,900,5000
+12,10,0.214,117,approx_trilat_timings,2021-01-29 02:44:35.862914,2000,100
+12,11,1.657,118,approx_trilat_timings,2021-01-29 02:44:35.862914,2000,900
+12,12,2.616,119,approx_trilat_timings,2021-01-29 02:44:35.862914,2000,2000
+12,13,6.560,120,approx_trilat_timings,2021-01-29 02:44:35.862914,2000,5000
+13,10,0.486,121,approx_trilat_timings,2021-01-29 02:44:35.862914,5000,100
+13,11,2.902,122,approx_trilat_timings,2021-01-29 02:44:35.862914,5000,900
+13,12,6.296,123,approx_trilat_timings,2021-01-29 02:44:35.862914,5000,2000
+13,13,10.535,124,approx_trilat_timings,2021-01-29 02:44:35.862914,5000,5000
+9,10,4.383,125,Initial Tests,2021-01-30 20:04:19.54423,10000,100
+10,10,0.337,126,min_stdist_timings,2021-01-30 20:04:25.371344,100,100
+10,11,0.621,127,min_stdist_timings,2021-01-30 20:04:25.371344,100,900
+10,12,1.025,128,min_stdist_timings,2021-01-30 20:04:25.371344,100,2000
+10,13,2.223,129,min_stdist_timings,2021-01-30 20:04:25.371344,100,5000
+11,10,0.626,130,min_stdist_timings,2021-01-30 20:04:25.371344,900,100
+11,11,3.746,131,min_stdist_timings,2021-01-30 20:04:25.371344,900,900
+11,12,7.352,132,min_stdist_timings,2021-01-30 20:04:25.371344,900,2000
+11,13,16.974,133,min_stdist_timings,2021-01-30 20:04:25.371344,900,5000
+12,10,0.897,134,min_stdist_timings,2021-01-30 20:04:25.371344,2000,100
+12,11,6.573,135,min_stdist_timings,2021-01-30 20:04:25.371344,2000,900
+12,12,14.709,136,min_stdist_timings,2021-01-30 20:04:25.371344,2000,2000
+12,13,38.827,137,min_stdist_timings,2021-01-30 20:04:25.371344,2000,5000
+13,10,1.959,138,min_stdist_timings,2021-01-30 20:04:25.371344,5000,100
+13,11,16.635,139,min_stdist_timings,2021-01-30 20:04:25.371344,5000,900
+13,12,37.674,140,min_stdist_timings,2021-01-30 20:04:25.371344,5000,2000
+13,13,98.079,141,min_stdist_timings,2021-01-30 20:04:25.371344,5000,5000
+10,10,0.048,142,approx_trilat_timings,2021-01-30 20:08:33.631752,100,100
+10,11,0.125,143,approx_trilat_timings,2021-01-30 20:08:33.631752,100,900
+10,12,0.231,144,approx_trilat_timings,2021-01-30 20:08:33.631752,100,2000
+10,13,0.531,145,approx_trilat_timings,2021-01-30 20:08:33.631752,100,5000
+11,10,0.119,146,approx_trilat_timings,2021-01-30 20:08:33.631752,900,100
+11,11,0.785,147,approx_trilat_timings,2021-01-30 20:08:33.631752,900,900
+11,12,1.735,148,approx_trilat_timings,2021-01-30 20:08:33.631752,900,2000
+11,13,3.101,149,approx_trilat_timings,2021-01-30 20:08:33.631752,900,5000
+12,10,0.225,150,approx_trilat_timings,2021-01-30 20:08:33.631752,2000,100
+12,11,1.698,151,approx_trilat_timings,2021-01-30 20:08:33.631752,2000,900
+12,12,2.645,152,approx_trilat_timings,2021-01-30 20:08:33.631752,2000,2000
+12,13,6.830,153,approx_trilat_timings,2021-01-30 20:08:33.631752,2000,5000
+13,10,0.518,154,approx_trilat_timings,2021-01-30 20:08:33.631752,5000,100
+13,11,2.952,155,approx_trilat_timings,2021-01-30 20:08:33.631752,5000,900
+13,12,6.407,156,approx_trilat_timings,2021-01-30 20:08:33.631752,5000,2000
+13,13,10.543,157,approx_trilat_timings,2021-01-30 20:08:33.631752,5000,5000
+10,10,0.179,158,Quick test - dist: 10,2021-03-26 01:43:18.168845,100,100
+10,10,1.480,159,Quick test - dist: 10,2021-03-26 01:43:18.168845,100,100
+10,11,0.178,160,Quick test - dist: 10,2021-03-26 01:43:18.168845,100,900
+10,11,1.475,161,Quick test - dist: 10,2021-03-26 01:43:18.168845,100,900
+11,10,0.179,162,Quick test - dist: 10,2021-03-26 01:43:18.168845,900,100
+11,10,1.471,163,Quick test - dist: 10,2021-03-26 01:43:18.168845,900,100
+11,11,0.182,164,Quick test - dist: 10,2021-03-26 01:43:18.168845,900,900
+11,11,1.443,165,Quick test - dist: 10,2021-03-26 01:43:18.168845,900,900
+10,13,10.848,494,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,100,5000
+10,13,10.199,495,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,100,5000
+11,10,0.178,496,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,900,100
+11,10,0.208,497,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,900,100
+11,10,0.057,498,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,900,100
+11,11,0.297,499,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,900,900
+11,11,0.196,500,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,900,900
+11,11,0.065,501,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,900,900
+11,12,2.226,502,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,900,2000
+11,12,1.898,503,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,900,2000
+11,12,3.247,504,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,900,2000
+11,13,5.487,505,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,900,5000
+11,13,4.600,506,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,900,5000
+11,13,8.409,507,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,900,5000
+12,10,0.176,508,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,2000,100
+12,10,0.188,509,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,2000,100
+12,10,0.054,510,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,2000,100
+12,11,0.943,511,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,2000,900
+12,11,0.657,512,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,2000,900
+12,11,0.928,513,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,2000,900
+12,12,0.891,514,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,2000,2000
+12,12,0.378,515,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,2000,2000
+12,12,0.421,516,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,2000,2000
+12,13,4.973,517,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,2000,5000
+12,13,3.029,518,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,2000,5000
+12,13,5.272,519,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,2000,5000
+13,10,0.189,520,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,5000,100
+13,10,0.205,521,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,5000,100
+13,10,0.086,522,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,5000,100
+13,11,1.235,523,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,5000,900
+13,11,0.668,524,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,5000,900
+13,11,0.974,525,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,5000,900
+13,12,2.612,526,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,5000,2000
+13,12,1.345,527,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,5000,2000
+13,12,2.399,528,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,5000,2000
+13,13,3.623,529,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,5000,5000
+13,13,1.534,530,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,5000,5000
+13,13,2.736,531,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,5000,5000
+10,10,0.152,532,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,100
+10,10,0.181,533,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,100
+10,10,0.037,534,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,100
+10,11,1.758,535,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,900
+10,11,1.798,536,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,900
+10,11,2.854,537,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,900
+10,12,4.099,538,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,2000
+10,12,4.161,539,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,2000
+10,12,7.162,540,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,2000
+10,13,10.696,541,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,5000
+10,13,10.802,542,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,5000
+10,13,19.128,543,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,5000
+10,14,19.369,544,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,10000
+10,14,20.311,545,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,10000
+10,14,33.726,546,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,10000
+10,15,63.546,547,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,32000
+10,15,63.796,548,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,32000
+10,15,112.776,549,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,100,32000
+11,10,0.184,550,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,100
+11,10,0.206,551,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,100
+11,10,0.089,552,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,100
+11,11,0.296,553,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,900
+11,11,0.196,554,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,900
+11,11,0.063,555,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,900
+11,12,2.240,556,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,2000
+11,12,1.825,557,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,2000
+11,12,3.087,558,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,2000
+11,13,5.514,559,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,5000
+11,13,4.391,560,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,5000
+11,13,7.876,561,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,5000
+11,14,9.812,562,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,10000
+11,14,7.802,563,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,10000
+11,14,13.830,564,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,10000
+11,15,32.522,565,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,32000
+11,15,26.362,566,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,32000
+11,15,47.250,567,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,900,32000
+12,10,0.176,568,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,100
+12,10,0.188,569,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,100
+12,10,0.054,570,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,100
+12,11,0.946,571,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,900
+12,11,0.647,572,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,900
+12,11,0.893,573,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,900
+12,12,0.893,574,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,2000
+12,12,0.379,575,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,2000
+12,12,0.421,576,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,2000
+12,13,4.965,577,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,5000
+12,13,3.056,578,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,5000
+12,13,5.241,579,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,5000
+12,14,9.339,580,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,10000
+12,14,5.675,581,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,10000
+12,14,9.937,582,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,10000
+12,15,29.019,583,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,32000
+12,15,17.363,584,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,32000
+12,15,30.986,585,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,2000,32000
+13,10,0.189,586,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,100
+13,10,0.206,587,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,100
+13,10,0.086,588,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,100
+13,11,1.226,589,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,900
+13,11,0.689,590,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,900
+13,11,1.006,591,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,900
+13,12,2.598,592,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,2000
+13,12,1.347,593,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,2000
+13,12,2.241,594,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,2000
+13,13,3.640,595,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,5000
+13,13,1.563,596,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,5000
+13,13,2.729,597,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,5000
+13,14,11.344,598,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,10000
+13,14,5.605,599,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,10000
+13,14,10.260,600,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,10000
+13,15,35.885,601,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,32000
+13,15,17.357,602,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,32000
+13,15,32.266,603,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,5000,32000
+14,10,0.240,604,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,100
+14,10,0.248,605,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,100
+14,10,0.170,606,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,100
+14,11,1.735,607,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,900
+14,11,1.007,608,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,900
+14,11,1.664,609,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,900
+14,12,3.858,610,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,2000
+14,12,1.994,611,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,2000
+14,12,3.562,612,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,2000
+14,13,8.924,613,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,5000
+14,13,4.633,614,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,5000
+14,13,8.757,615,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,5000
+14,14,12.579,616,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,10000
+14,14,7.159,617,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,10000
+14,14,13.895,618,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,10000
+14,15,55.297,619,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,32000
+14,15,28.598,620,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,32000
+14,15,55.532,621,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,10000,32000
+15,10,0.330,622,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,100
+15,10,0.333,623,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,100
+15,10,0.338,624,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,100
+15,11,3.377,625,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,900
+15,11,1.704,626,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,900
+15,11,3.075,627,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,900
+15,12,7.002,628,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,2000
+15,12,3.552,629,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,2000
+15,12,6.732,630,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,2000
+15,13,16.940,631,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,5000
+15,13,8.505,632,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,5000
+15,13,16.579,633,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,5000
+15,14,33.649,634,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,10000
+15,14,16.928,635,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,10000
+15,14,35.053,636,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,10000
+15,15,81.632,637,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,32000
+15,15,49.926,638,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,32000
+15,15,99.029,639,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:44:33.886931,32000,32000
+10,10,0.172,736,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,100,100
+10,10,0.181,737,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,100,100
+10,11,0.430,738,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,100,900
+10,11,0.461,739,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,100,900
+10,12,0.720,740,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,100,2000
+10,12,0.758,741,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,100,2000
+10,13,1.432,742,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,100,5000
+10,13,1.451,743,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,100,5000
+10,14,2.859,744,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,100,10000
+10,14,2.899,745,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,100,10000
+10,15,8.298,746,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,100,32000
+10,15,8.290,747,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,100,32000
+11,10,0.146,748,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,900,100
+11,10,0.182,749,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,900,100
+11,11,0.185,750,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,900,900
+11,11,0.210,751,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,900,900
+11,12,0.577,752,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,900,2000
+11,12,0.537,753,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,900,2000
+11,13,1.242,754,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,900,5000
+11,13,1.087,755,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,900,5000
+11,14,2.356,756,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,900,10000
+11,14,2.011,757,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,900,10000
+11,15,6.714,758,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,900,32000
+11,15,5.589,759,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,900,32000
+12,10,0.153,760,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,2000,100
+12,10,0.191,761,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,2000,100
+12,11,0.431,762,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,2000,900
+12,11,0.414,763,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,2000,900
+12,12,0.401,764,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,2000,2000
+12,12,0.361,765,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,2000,2000
+12,13,1.456,766,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,2000,5000
+12,13,1.264,767,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,2000,5000
+12,14,2.794,768,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,2000,10000
+12,14,2.283,769,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,2000,10000
+12,15,7.901,770,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,2000,32000
+10,10,0.180,640,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,100,100
+10,10,0.169,641,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,100,100
+10,11,12.680,642,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,100,900
+10,11,12.162,643,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,100,900
+10,12,28.771,644,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,100,2000
+10,12,31.677,645,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,100,2000
+10,13,80.916,646,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,100,5000
+10,13,78.029,647,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,100,5000
+11,10,1.880,648,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,900,100
+11,10,1.573,649,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,900,100
+11,11,1.410,650,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,900,900
+11,11,0.295,651,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,900,900
+11,12,33.710,652,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,900,2000
+11,12,29.622,653,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,900,2000
+11,13,84.836,654,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,900,5000
+11,13,73.866,655,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,900,5000
+12,10,1.952,656,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,2000,100
+12,10,1.475,657,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,2000,100
+12,11,16.939,658,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,2000,900
+12,11,12.190,659,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,2000,900
+12,12,6.150,660,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,2000,2000
+12,12,0.667,661,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,2000,2000
+12,13,93.286,662,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,2000,5000
+12,13,70.632,663,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,2000,5000
+13,10,2.554,664,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,5000,100
+13,10,1.392,665,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,5000,100
+13,11,22.427,666,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,5000,900
+13,11,11.022,667,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,5000,900
+13,12,49.972,668,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,5000,2000
+13,12,23.794,669,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,5000,2000
+13,13,36.365,670,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,5000,5000
+13,13,3.243,671,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 20:46:01.94764,5000,5000
+10,10,0.167,672,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,100,100
+10,10,0.182,673,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,100,100
+10,11,7.847,674,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,100,900
+10,11,8.651,675,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,100,900
+10,12,17.556,676,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,100,2000
+10,12,17.814,677,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,100,2000
+10,13,46.254,678,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,100,5000
+10,13,48.386,679,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,100,5000
+11,10,0.645,680,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,900,100
+11,10,0.590,681,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,900,100
+11,11,0.759,682,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,900,900
+11,11,0.216,683,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,900,900
+11,12,10.608,684,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,900,2000
+11,12,8.234,685,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,900,2000
+11,13,25.006,686,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,900,5000
+11,13,19.944,687,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,900,5000
+12,10,0.618,688,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,2000,100
+12,10,0.505,689,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,2000,100
+12,11,5.052,690,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,2000,900
+12,11,3.455,691,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,2000,900
+12,12,2.672,692,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,2000,2000
+12,12,0.473,693,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,2000,2000
+12,13,26.199,694,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,2000,5000
+12,13,16.711,695,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,2000,5000
+13,10,0.750,696,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,5000,100
+13,10,0.437,697,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,5000,100
+13,11,5.382,698,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,5000,900
+13,11,2.364,699,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,5000,900
+13,12,12.345,700,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,5000,2000
+13,12,5.405,701,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,5000,2000
+13,13,12.183,702,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,5000,5000
+13,13,1.878,703,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:12:50.688992,5000,5000
+10,10,0.149,704,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,100,100
+10,10,0.181,705,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,100,100
+10,11,0.425,706,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,100,900
+10,11,0.460,707,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,100,900
+10,12,0.719,708,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,100,2000
+10,12,0.755,709,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,100,2000
+10,13,1.427,710,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,100,5000
+10,13,1.464,711,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,100,5000
+11,10,0.148,712,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,900,100
+11,10,0.186,713,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,900,100
+11,11,0.187,714,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,900,900
+11,11,0.199,715,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,900,900
+11,12,0.590,716,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,900,2000
+11,12,0.555,717,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,900,2000
+11,13,1.264,718,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,900,5000
+11,13,1.110,719,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,900,5000
+12,10,0.156,720,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,2000,100
+12,10,0.194,721,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,2000,100
+12,11,0.438,722,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,2000,900
+12,11,0.401,723,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,2000,900
+12,12,0.410,724,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,2000,2000
+12,12,0.369,725,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,2000,2000
+12,13,1.462,726,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,2000,5000
+12,13,1.173,727,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,2000,5000
+13,10,0.173,728,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,5000,100
+13,10,0.210,729,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,5000,100
+13,11,0.622,730,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,5000,900
+13,11,0.515,731,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,5000,900
+13,12,1.092,732,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,5000,2000
+13,12,0.853,733,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,5000,2000
+13,13,1.817,734,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,5000,5000
+13,13,1.465,735,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:18:28.769525,5000,5000
+12,15,6.595,771,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,2000,32000
+13,10,0.169,772,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,5000,100
+13,10,0.208,773,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,5000,100
+13,11,0.619,774,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,5000,900
+13,11,0.549,775,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,5000,900
+13,12,1.091,776,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,5000,2000
+13,12,0.940,777,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,5000,2000
+13,13,1.797,778,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,5000,5000
+13,13,1.605,779,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,5000,5000
+13,14,4.571,780,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,5000,10000
+13,14,3.723,781,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,5000,10000
+13,15,13.327,782,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,5000,32000
+13,15,11.029,783,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,5000,32000
+14,10,0.213,784,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,10000,100
+14,10,0.262,785,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,10000,100
+14,11,0.920,786,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,10000,900
+14,11,0.893,787,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,10000,900
+14,12,1.846,788,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,10000,2000
+14,12,1.600,789,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,10000,2000
+14,13,4.244,790,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,10000,5000
+14,13,3.655,791,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,10000,5000
+14,14,7.511,792,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,10000,10000
+14,14,6.915,793,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,10000,10000
+14,15,25.640,794,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,10000,32000
+14,15,22.564,795,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,10000,32000
+15,10,0.289,796,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,32000,100
+15,10,0.334,797,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,32000,100
+15,11,1.784,798,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,32000,900
+15,11,1.548,799,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,32000,900
+15,12,3.413,800,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,32000,2000
+15,12,3.179,801,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,32000,2000
+15,13,8.406,802,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,32000,5000
+15,13,7.767,803,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,32000,5000
+15,14,17.884,804,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,32000,10000
+15,14,15.390,805,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,32000,10000
+15,15,51.551,806,CatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,32000,32000
+10,10,0.145,484,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,100,100
+10,10,0.178,485,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,100,100
+10,10,0.036,486,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,100,100
+10,11,1.642,487,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,100,900
+10,11,1.771,488,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,100,900
+10,11,1.598,489,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,100,900
+10,12,3.832,490,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,100,2000
+10,12,4.107,491,CatTrilatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,100,2000
+10,12,3.849,492,CatTrilatApproxAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,100,2000
+10,13,10.143,493,CatAdequacy: Adequacy Timings:  - dist: 10,2021-03-26 06:31:29.164057,100,5000
+15,15,48.315,807,CatTrilatAdequacy: Adequacy Timings:  - dist: 100,2021-03-26 21:20:42.644522,32000,32000
+10,10,0.161,808,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,100,100
+10,10,0.183,809,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,100,100
+10,11,7.860,810,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,100,900
+10,11,7.991,811,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,100,900
+10,12,16.695,812,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,100,2000
+10,12,16.929,813,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,100,2000
+10,13,40.895,814,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,100,5000
+10,13,41.356,815,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,100,5000
+10,14,82.400,816,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,100,10000
+10,14,83.801,817,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,100,10000
+10,15,262.690,818,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,100,32000
+10,15,269.705,819,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,100,32000
+11,10,0.647,820,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,900,100
+11,10,0.590,821,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,900,100
+11,11,0.759,822,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,900,900
+11,11,0.217,823,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,900,900
+11,12,10.036,824,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,900,2000
+11,12,8.238,825,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,900,2000
+11,13,24.473,826,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,900,5000
+11,13,19.729,827,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,900,5000
+11,14,48.054,828,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,900,10000
+11,14,38.972,829,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,900,10000
+11,15,160.837,830,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,900,32000
+11,15,124.115,831,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,900,32000
+12,10,0.604,832,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,2000,100
+12,10,0.481,833,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,2000,100
+12,11,4.846,834,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,2000,900
+12,11,3.242,835,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,2000,900
+12,12,2.656,836,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,2000,2000
+12,12,0.453,837,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,2000,2000
+12,13,25.779,838,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,2000,5000
+12,13,16.710,839,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,2000,5000
+12,14,49.889,840,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,2000,10000
+12,14,32.183,841,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,2000,10000
+12,15,159.230,842,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,2000,32000
+12,15,103.406,843,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,2000,32000
+13,10,0.743,844,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,5000,100
+13,10,0.434,845,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,5000,100
+13,11,5.389,846,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,5000,900
+13,11,2.385,847,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,5000,900
+13,12,12.310,848,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,5000,2000
+13,12,5.667,849,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,5000,2000
+13,13,12.190,850,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,5000,5000
+13,13,1.935,851,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,5000,5000
+13,14,57.910,852,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,5000,10000
+13,14,24.540,853,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,5000,10000
+13,15,183.894,854,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,5000,32000
+13,15,78.064,855,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,5000,32000
+14,10,0.814,856,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,10000,100
+14,10,0.362,857,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,10000,100
+14,11,6.936,858,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,10000,900
+14,11,2.234,859,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,10000,900
+14,12,15.600,860,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,10000,2000
+14,12,4.857,861,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,10000,2000
+14,13,38.035,862,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,10000,5000
+14,13,11.615,863,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,10000,5000
+14,14,40.946,864,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,10000,10000
+14,14,8.228,865,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,10000,10000
+14,15,236.941,866,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,10000,32000
+14,15,71.514,867,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,10000,32000
+15,10,1.350,868,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,32000,100
+15,10,0.417,869,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,32000,100
+15,11,11.693,870,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,32000,900
+15,11,2.414,871,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,32000,900
+15,12,26.561,872,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,32000,2000
+15,12,5.188,873,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,32000,2000
+15,13,65.989,874,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,32000,5000
+15,13,12.975,875,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,32000,5000
+15,14,126.094,876,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,32000,10000
+15,14,25.090,877,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,32000,10000
+15,15,263.182,878,CatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,32000,32000
+15,15,56.794,879,CatTrilatAdequacy: Adequacy Timings:  - dist: 1,2021-03-26 21:33:03.772183,32000,32000
+10,10,0.166,880,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,100,100
+10,10,0.184,881,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,100,100
+10,11,11.698,882,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,100,900
+10,11,12.369,883,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,100,900
+10,12,25.840,884,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,100,2000
+10,12,27.680,885,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,100,2000
+10,13,64.528,886,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,100,5000
+10,13,67.815,887,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,100,5000
+10,14,131.135,888,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,100,10000
+10,14,145.738,889,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,100,10000
+10,15,459.312,890,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,100,32000
+10,15,433.208,891,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,100,32000
+11,10,1.500,892,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,900,100
+11,10,1.369,893,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,900,100
+11,11,1.214,894,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,900,900
+11,11,0.241,895,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,900,900
+11,12,28.819,896,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,900,2000
+11,12,27.706,897,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,900,2000
+11,13,76.276,898,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,900,5000
+11,13,71.444,899,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,900,5000
+11,14,150.136,900,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,900,10000
+11,14,143.439,901,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,900,10000
+11,15,472.810,902,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,900,32000
+11,15,476.229,903,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,900,32000
+12,10,1.684,904,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,2000,100
+12,10,1.370,905,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,2000,100
+12,11,14.368,906,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,2000,900
+12,11,11.348,907,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,2000,900
+12,12,5.386,908,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,2000,2000
+12,12,0.558,909,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,2000,2000
+12,13,78.677,910,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,2000,5000
+12,13,61.447,911,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,2000,5000
+12,14,156.333,912,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,2000,10000
+12,14,114.855,913,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,2000,10000
+12,15,513.321,914,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,2000,32000
+12,15,360.329,915,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,2000,32000
+13,10,2.057,916,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,5000,100
+13,10,1.117,917,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,5000,100
+13,11,18.418,918,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,5000,900
+13,11,9.257,919,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,5000,900
+13,12,40.437,920,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,5000,2000
+13,12,19.863,921,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,5000,2000
+13,13,31.153,922,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,5000,5000
+13,13,2.721,923,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,5000,5000
+13,14,197.283,924,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,5000,10000
+13,14,94.631,925,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,5000,10000
+13,15,642.035,926,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,5000,32000
+13,15,303.170,927,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,5000,32000
+14,10,2.766,928,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,10000,100
+14,10,0.997,929,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,10000,100
+14,11,24.238,930,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,10000,900
+14,11,7.740,931,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,10000,900
+14,12,54.160,932,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,10000,2000
+14,12,16.911,933,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,10000,2000
+14,13,132.855,934,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,10000,5000
+14,13,41.440,935,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,10000,5000
+14,14,113.181,936,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,10000,10000
+14,14,11.368,937,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,10000,10000
+14,15,852.057,938,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,10000,32000
+14,15,263.899,939,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,10000,32000
+15,10,5.184,940,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,32000,100
+15,10,0.839,941,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,32000,100
+15,11,47.665,942,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,32000,900
+15,11,6.458,943,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,32000,900
+15,12,101.616,944,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,32000,2000
+15,12,13.937,945,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,32000,2000
+15,13,255.188,946,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,32000,5000
+15,13,34.237,947,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,32000,5000
+15,14,535.278,948,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,32000,10000
+15,14,76.143,949,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,32000,10000
+15,15,965.460,950,CatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,32000,32000
+15,15,91.256,951,CatTrilatAdequacy: Adequacy Timings:  - dist: 0.1,2021-03-26 22:50:55.662218,32000,32000
+(633 rows)
