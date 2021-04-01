@@ -7,19 +7,34 @@ output: pdf_document
 
 # Review of Current Literature
 
-In general, we split our current literature review into sevveral major sections:  1. Geospatial computational considerations, 2. Multilateration and 3. Nearest Neighbor Algorithms, plus a final minor section for ancillary references outside those two areas:
+We divide our current literature review into sevveral major sections:
 
-## Geospatial References
+1. Geospatial computational considerations
+2. Multilateration
+3. Nearest Neighbor Algorithms
+4. Ancillary references outside those two areas:
+
+## Geospatial Computations
+
+The key to our problem is accurate distance calculation on the Earth.  In particular, we explore the topic of the computational complexity of a single call to the distance function for geospatial distances.
+
+In general, the difficulty of determining distances on the earth goes back to the origins of sailing and before, with modern geography tracing its origins to Eratosthenes, whose claim is to be the first to calculate the circumference of the earth arund 200BC, and who himself was building on the ideas of a spherical earth from Pythagoras and others around 500BC.  [@Kaplan2018]
 
 ### Haversine
+The Haversine is the measurement of distances along a sphere; particularly great-circle (minimum) distances on a spherical earth's surface.  Tables of the Haversine were published around 1800AD, although the term was not coined until aroudn 1835 by James Inman.[@VanBrummelen2012]
 
+Given the radius of a spherical representation of the earth as $r = 6356.752 km$ and the coordinates of two points (latitude, longitude) given by $(\phi_1, \lambda_1)$ and $(\phi_2, \lambda_2)$, the distance $d$ between those points along the surface of the earth is [@gade2010]:
+
+$$d = 2r\sin^{-1}(\sqrt{\sin^2(\frac{\phi_2-\phi_1}{2}) +\cos(\phi_1)\cos(\phi_2)\sin^2(\frac{\lambda_2-\lambda_1}{2})})$$
+
+Obviously this is somewhat computationally complex, comprising five trigonometric functions, two subtractions and a square root.  While it is a closed form solution, it causes an error over long distances of up to 0.3%, which can mean distances are off by up to 3 meters over distances of 1000 kilometers.  From the equator to the north pole, which on a sphere is defined as precisely 10,000 km, the actual distance is off by over 2 km, which is a sizeable error for even the most robust applications.
 
 ### Vincenty's Formula
-Vincenty's Formula is a common non-spherical numeric solution to Earth-shaped ellipsoidal distance calculations however it "fails to converge for nearly antipodal points".[@Karney2013]  
+The shortcomings of the spherical calculation was thoroughly discussed by Walter Lambert in 1942.[@Lambert1942]  However it wasn't until 1975 that an iterative computational approach came about to give more accurate distance measurements with a model of the earth more consistent with reality.  By considering the earth as an ellipsoid, rather than a sphere, the distance calculations are more complex, but far more precise.  Vincenty was able to create an iterative approach accurate down to the millimeter level on an ideal elliptical earth; far more accurate than the Haversine calculations[@Vincenty1975].  This algorithm, however, was a series which failed to converge for points at near opposite sides of the earth.[@Karney2013]
+
 
 ### Karney's Formula
-Improvements of the Vincenty algorithms to fix the convergence issues, were provided by Karney in 2013. [@Karney2013].  This is currently the state-of-the art implementation of precise geospatial distances.  
-Implementations of this approach have already been implemented in Python (in the Geopy library), which we use in our Python implementations.[@geopy]
+Karney was able to improve upon this in 2013 to fix these antipodal non-convergences, and the resulting formulae are now widely available in geospatial software libraries where precision is required (commonly referred to as "Geodesic" distances. [@Karney2013]  This is currently the state-of-the art implementation of precise geospatial distances.  Implementations of this approach have already been implemented in Python (in the Geopy library), which we use in our Python implementations.[@geopy]
 
 
 ## Multilateration
@@ -48,18 +63,55 @@ The k-nearest neighbors ($kNN$) of a given point $q$ as above is the list of $k$
 
 An approximate nearest neighbor ($ANN$) algorithm is one which will provide $k$ points $R' = p_1..p_k \in P$, however it does *_not_* guarantee that there exists no point in $P \not \in R'$ closer than any point in $R'$.  Some formulations require that, if there *_is_* such a point $p'$, that it cannot be more than some $\epsilon$ farther from $q$ than any point $p_i \in R'$.  In general, $ANN$s are used when we can get a 'close enough' solution algorithmically faster than a perfect $kNN$ solution.  For our purposes, we largely ignore $ANN$s except for their historical value, as our construction did not yield algorithms that exhibited this beneficial tradeoff.  See the "TrilatApprox" algorithm section for some more discussion.
 
+For clarity in this paper we use the common notation $|P|$ and $|Q|$ to refer to the number of points in $P$ and $Q$ respectively.
+
+### Comparing Algorithms
+
+Solutions for NN queries can be compared across a variety of metrics which, when possible, we explore for each algorithm:
+
+1. Training Time Complexity - the $O()$ required to pre-process the points $p$ if any
+2. Memory Space - the memory requirements (typically in terms of $|P|$) of the structures resulting from pre-processing
+3. Prediction Time Complexity - the $O()$ required to find the $kNN \in P$ for a single point $q$
+4. Insertion/Move Complexity - the $O()$ complexity required to add or move (or remove) a point $p \in P$
+
+In some cases these are directly calculable theoretically, however many algorithms suffer from theoretical worst-case situations that are not realistic.  Synthetic benchmarks such as "ANN-Benchmark" (which we use to report our experimental results) exist for this reason.[@Amueller2020]
+
+In general we want some standard bounds on these values.  Our list here is compatible with [@Chen2018], which sets the following bounds:
+
+> ideally we would like nearest neighbor data structures with the following properties:
+1. Fast [Prediction Time Complexity]. The cost of finding k nearest neighbors (for constant k) should be sublinear in n, i.e., o(n); the smaller the better.
+2. Low storage overhead [Memory Space]. The storage required for the data structure should be subquadratic in n, i.e., $o(n^2); the smaller the better.
+3. Low pre-processing [Training Time Complexity]. The cost of pre-processing data to build the data structure should not require computing all pairwise distances and should thus be o(n^2); the smaller the better.
+4. Incremental insertions [Insert Complexity] It should be possible to add data incrementally to the data structure with insertion running time o(n).
+5. Generic distances and spaces. The data structure should be able to handle all forms of distances ρ and all forms of spaces X.
+6. Incremental deletions [Move Complexity] The data structure should allow removal of data points from it with deletion running time o(n).
+
+We don't address point 5 from [@Chen2018]; we compare Euclidean, Angular, and Geodesic distances with the ANN-Benchmark software; other distance functions should be generally compatible with all approaches here, but we do not attempt to address all possible distances.
+
 ### A History of k-NN Solving Algorithms
 
 #### Brute-Force
-The naive approach to solving k-nn is a brute-force algorithm, iterating over every point $p in P$ and keeping track of the lowest k distances.  This is trivially a $O(n)$ query time.
+The naive approach to solving k-nn is a brute-force algorithm, iterating over every point $p in P$ and keeping track of the lowest k distances.  This is trivial to examine:
+
+1. Training Time Complexity: Zero; i.e. $O(1)$  No pre-processing is performed.
+2. Memory Space: $|P|$, which is simply the cost of storing the list of points $p \in P$
+3. Prediction Time Complexity: $O(n)$ - each query must process every point; this is not a worst case, but the every-time case for brute force
+4. Insertion/Move Complexity: $O(1)$ - a list element can be added to the end of an array, or a location can be updated in place.  There is no complexity to changing a point.
 
 
 #### Space Partitioning Trees
 
 Space paritioning trees use a trie to arrange points from $p$ into groups with a hierarchical search structure, such that, generally, points which are close to one another exist in nearby hierarchies.  The $k-d$ tree was described in 1975.[@Bentley1975]  This partitions a space by dividing the underlying points at the median point along one of the dimensional axes, recursively, resulting in a searchable trie.  An adaptation of this - the Ball-Tree - partitions the space into hyperspheres, rather than along dimensional axes.[@Liu2006]
 
-These are straightforward structures that are easy to describe and implement.  
+These are straightforward structures that are easy to describe and implement.
 
+Per [@Chen2018], k-d trees have:
+
+1. Training Time Complexity: $O(|P|*log(|P|))$ (To calculate a binary search tree [BST] along $d$ dimensions)
+2. Memory Space: $O(|P|)$  - the BST is space efficient; every point needs to be stored only once
+3. Prediction Time Complexity: $O(d*2^{O(d)}+log(|P|))$ to query the binary search tree
+
+For our point 4 (Insertion/Move Complexity), k-d and ball-trees generally provide no approach which preserves the integrity of the first three complexity measurements.  While a $O(log(n))$ insertion is possible (inserting in a BST is not atomically difficult, per se), and while a single insert may not really erode the utility of the tree, if new data is repeatedly added which does not match the distribution of the original space partitioning, the tree will become imbalanced and the logarithmic effect previously guaranteed by the original space division which preserves a balanced tree, will fade, leaving the eventual time complexity back to $O(|P|)$, which is typically $>> d$, and therefore worse.
 
 #### Locality Sensitive Hashing
 

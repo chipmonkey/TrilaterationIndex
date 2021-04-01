@@ -9,7 +9,7 @@ output: html_document
 
 ## Experimental Setup
 
-We plan several experiments for Network Adequacy in SQL databases, and Nearest Neighbor applications using Python.
+We plan experiments for Network Adequacy in SQL databases, and Nearest Neighbor applications using Python.
 
 ### Experiment 1: Python Nearest Neighbors with ANN
 
@@ -20,9 +20,9 @@ We plan several experiments for Network Adequacy in SQL databases, and Nearest N
 
 Note that we use a widely available geodesic distance implementation from Geopy to provide a consistent distance function implementation, thus avoiding any bias in results due to differences between implementations.[@geopy]  Since the geodesic distance function is the result of a convergent series, it is possible to vary the precision of the calculation, trading performance for accuracy.  We use the default settings in the Geopy implementation, again for a consistent comparison across $NN$ techniques.  
 
-### Experiment 2: SQL Nearest Neighbors
+### Experiment 2: SQL Network Adequacy
 
-### Experiment 3: SQL Network Adequacy
+
 
 
 ## Experimental Results

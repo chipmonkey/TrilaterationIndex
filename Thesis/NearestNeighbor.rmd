@@ -1,12 +1,17 @@
-### Comparing Algorithms
-Training Time Complexity
-Memory Space
-Prediction Time Complexity
-Insertion/Move Complexity
-
 ## Multilateration NN Algorithms
 
-We create a total of four similar algorithms to exploit the Multilateration Index, in particular for geodesic distances (although our implementations are applicable to any distance function):  [Trilateration (TRI)], [TrilaterationApprox (TIA)], [TrilaterationExpand (TIE)], and [TrilaterationExpand2 (TIE2)], as follows:
+We create a total of four similar algorithms to exploit the Multilateration Index, in particular for geodesic distances (although our implementations are applicable to any distance function):  [Trilateration (TRI)], [TrilaterationApprox (TIA)], [TrilaterationExpand (TIE)], and [TrilaterationExpand2 (TIE2)].
+
+### Comparing Algorithms
+
+Recall from our Review of Literature, we are comparing $NN$ algorithms by four areas Training Time Complexity, Memory Space, Prediction Time Complexity, Insertion/Move Complexity.
+
+For each of these Trilateration algorithms, complexity is:
+
+1. Training Time Complexity is $O(|P|)$ - each point $p \in P$ is compared to the $d+1$ reference points ($d + 1 = 3$ for Trilateration).
+2. Memory Space is $|P|*(d+1)$ since each structure requires the storage of a $d*p$ array of $d+1$ distances for each point $p \in P$
+3. Prediction Time Complexity is, as with other $kNN$ algorithms, bounded by worst-case of $O(n)$.  The algorithms may differ in their average case performance.
+4. Insertion Complexity is $O(|P|)$ - being the cost if inserting or updating an element in the sorted array of distances for each $p \in P$.
 
 #### Trilateration (TRI)
 

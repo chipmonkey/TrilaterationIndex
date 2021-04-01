@@ -6,28 +6,14 @@ output: pdf_document
 ---
 
 
-## Underlying Theory Concepts
+## Underlying Theory Concepts and Problem Statement
 
 The benefit of storing geographic points as a set of trilateration distances rather than latitude and longitude boils down to the simplification of comparing distances between points by shortcutting complex distance queries using simple subtractions.  We discuss the math behind the geospatial queries, to exhibit their complexity, and set some theoretical bounds on quick distance calculations using the trilateration index.
 
 
-### High Cost of Geospatial Calculations
+### Problem: High Cost of Geospatial Calculations
 
-Calculating the distance between two points around the globe with precision is required for Satellite Communications and Geospatial Positioning Systems (GPS), as well as for ground based surveying and generally all applications requiring precise (sub-meter) measurements accounting for the curvature of the earth.[@ASPRS2015]
-
-#### Haversine
-One of the simplest distance calculations between two points on the earth's surface -- namely the Haversine Formula [@gade2010], which dates to the early 1800s-- works by assuming the earth is a sphere.  The calculation for the distance between two points on the earth, using this formula goes as:
-
-Given the radius of a spherical representation of the earth as $r = 6356.752 km$ and the coordinates of two points (latitude, longitude) given by $(\phi_1, \lambda_1)$ and $(\phi_2, \lambda_2)$, the distance $d$ between those points along the surface of the earth is:
-
-$$d = 2r\sin^{-1}(\sqrt{\sin^2(\frac{\phi_2-\phi_1}{2}) +\cos(\phi_1)\cos(\phi_2)\sin^2(\frac{\lambda_2-\lambda_1}{2})})$$
-
-Obviously this is somewhat computationally complex, comprising five trigonometric functions, two subtractions and a square root.  While it is a closed form solution, it causes an error over long distances of up to 0.3%, which can mean distances are off by up to 3 meters over distances of 1000 kilometers.  From the equator to the north pole, which on a sphere is defined as precisely 10,000 km, the actual distance is off by over 2 km, which is a sizeable error for even the most robust applications.
-
-
-#### Vincenty and Karney's Improvements (Geodesics)
-
-The shortcomings of the spherical calculation was thoroughly discussed by Walter Lambert in 1942.[@Lambert1942]  However it wasn't until 1975 that an iterative computational approach came about to give more accurate distance measurements with a model of the earth more consistent with reality.  By considering the earth as an ellipsoid, rather than a sphere, the distance calculations are more complex, but far more precise.  Vincenty was able to create an iterative approach accurate down to the millimeter level on an ideal elliptical earth; far more accurate than the Haversine calculations[@Vincenty1975].  This algorithm, however, was a series which failed to converge for points at near opposite sides of the earth.  Karney was able to improve upon this in 2013 to fix these antipodal non-convergences, and the resulting formulae are now widely available in geospatial software libraries where precision is required (commonly referred to as "Geodesic" distances. [@Karney2013]
+Calculating the distance between two points around the globe with precision is required for Satellite Communications and Geospatial Positioning Systems (GPS), as well as for ground based surveying and generally all applications requiring precise (sub-meter) measurements accounting for the curvature of the earth.[@ASPRS2015]  Recall from our research that modern methods of calculating accurate distances on a properly modeled (elliptical) earth requires calculating a converging series with an iterative algorithm.  This is significantly more computationally expensive than closed form mathematical distance functions like the Haversine spherical distance or more common Euclidean distances.
 
 To get an idea of the relative complexity, we ran some basic timings using widely available python libraries that perform both calculations.  The Haversine is about 22 times faster than Karney's iterative approach.  For comparison, we include Euclidean functions, which are of course computationally simple, although their usefulness on curved surfaces are minimal:
 
