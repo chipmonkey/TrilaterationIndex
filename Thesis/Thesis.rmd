@@ -31,11 +31,6 @@ knitr::opts_chunk$set(fig.pos = 'H')
 
 \newpage
 
-```{r child = 'ReviewOfLiterature.rmd'}
-```
-
-\newpage
-
 ```{r child = 'Experiment.rmd'}
 ```
 

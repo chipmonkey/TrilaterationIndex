@@ -61,7 +61,7 @@ Note that it is possible that such a point does not exist if there are multiple 
 
 The k-nearest neighbors ($kNN$) of a given point $q$ as above is the list of $k$ points $R = p_1..p_k \in P$ such that $D(p_k, q)$ is the lowest value of $D(p, q)$ over all $p \in P$ such that $D(p', q)$ for $p' \ne p$ and $p' \not \in R$.  It should be evident that $NN = kNN$ when $k = 1$.
 
-An approximate nearest neighbor ($ANN$) algorithm is one which will provide $k$ points $R' = p_1..p_k \in P$, however it does *_not_* guarantee that there exists no point in $P \not \in R'$ closer than any point in $R'$.  Some formulations require that, if there *_is_* such a point $p'$, that it cannot be more than some $\epsilon$ farther from $q$ than any point $p_i \in R'$.  In general, $ANN$s are used when we can get a 'close enough' solution algorithmically faster than a perfect $kNN$ solution.  For our purposes, we largely ignore $ANN$s except for their historical value, as our construction did not yield algorithms that exhibited this beneficial tradeoff.  See the "TrilatApprox" algorithm section for some more discussion.
+An approximate nearest neighbor ($ANN$) algorithm is one which will provide $k$ points $R' = p_1..p_k \in P$, however it does *_not_* guarantee that there exists no point in $P \not \in R'$ closer than any point in $R'$.  A $c-ANN$ formulation, for example, requires that, if there *_is_* such a point $p'$, that it cannot be more than some $\epsilon < c$ farther from $q$ than any point $p_i \in R'$; that is, a solution must guarantee that $d(p, q) < c*d(p', q)$   In general, $ANN$s are used when we can get a 'close enough' solution algorithmically faster than a perfect $kNN$ solution.  For our purposes, we largely ignore $ANN$s except for their historical value, as our construction did not yield algorithms that exhibited this beneficial tradeoff.  See the "TrilatApprox" algorithm section for some more discussion.
 
 For clarity in this paper we use the common notation $|P|$ and $|Q|$ to refer to the number of points in $P$ and $Q$ respectively.
 
@@ -79,14 +79,17 @@ In some cases these are directly calculable theoretically, however many algorith
 In general we want some standard bounds on these values.  Our list here is compatible with [@Chen2018], which sets the following bounds:
 
 > ideally we would like nearest neighbor data structures with the following properties:
-1. Fast [Prediction Time Complexity]. The cost of finding k nearest neighbors (for constant k) should be sublinear in n, i.e., o(n); the smaller the better.
-2. Low storage overhead [Memory Space]. The storage required for the data structure should be subquadratic in n, i.e., $o(n^2); the smaller the better.
-3. Low pre-processing [Training Time Complexity]. The cost of pre-processing data to build the data structure should not require computing all pairwise distances and should thus be o(n^2); the smaller the better.
-4. Incremental insertions [Insert Complexity] It should be possible to add data incrementally to the data structure with insertion running time o(n).
-5. Generic distances and spaces. The data structure should be able to handle all forms of distances ρ and all forms of spaces X.
-6. Incremental deletions [Move Complexity] The data structure should allow removal of data points from it with deletion running time o(n).
+
+> 1. Fast [Prediction Time Complexity]. The cost of finding k nearest neighbors (for constant k) should be sublinear in n, i.e., o(n); the smaller the better.
+> 2. Low storage overhead [Memory Space]. The storage required for the data structure should be subquadratic in n, i.e., $o(n^2); the smaller the better.
+> 3. Low pre-processing [Training Time Complexity]. The cost of pre-processing data to build the data structure should not require computing all pairwise distances and should thus be o(n^2); the smaller the better.
+> 4. Incremental insertions [Insert Complexity] It should be possible to add data incrementally to the data structure with insertion running time o(n).
+> 5. Generic distances and spaces. The data structure should be able to handle all forms of distances $\rho$ and all forms of spaces X.
+> 6. Incremental deletions [Move Complexity] The data structure should allow removal of data points from it with deletion running time o(n).
 
 We don't address point 5 from [@Chen2018]; we compare Euclidean, Angular, and Geodesic distances with the ANN-Benchmark software; other distance functions should be generally compatible with all approaches here, but we do not attempt to address all possible distances.
+
+Also, while worst-case computational analysis of $NN$ algorithms is necessarily pessimistic, theoretical differences for average performance are impacted by the relationship between the dimension $d$ and the sample size $n$... three situations are identifiable, when a point set is: "dense with $d << log(n)$; sparse with $d >> log(n)$; moderate with $d = \Theta(log(n))$".[@Prokhorenkova2019]
 
 ### A History of k-NN Solving Algorithms
 
@@ -105,25 +108,50 @@ Space paritioning trees use a trie to arrange points from $p$ into groups with a
 
 These are straightforward structures that are easy to describe and implement.
 
-Per [@Chen2018], k-d trees have:
+Per [@Chen2018] space partitioning trees, such as k-d and ball trees have:
 
 1. Training Time Complexity: $O(|P|*log(|P|))$ (To calculate a binary search tree [BST] along $d$ dimensions)
 2. Memory Space: $O(|P|)$  - the BST is space efficient; every point needs to be stored only once
-3. Prediction Time Complexity: $O(d*2^{O(d)}+log(|P|))$ to query the binary search tree
+3. Prediction Time Complexity: $O(d*2^{O(d)}+log(|P|))$ to query the binary search tree; with low $d$ ($d << log(|P|)$), this is efficient, but since the $d$ appears in the exponent, large numbers of dimensions cause significant problems here.
 
-For our point 4 (Insertion/Move Complexity), k-d and ball-trees generally provide no approach which preserves the integrity of the first three complexity measurements.  While a $O(log(n))$ insertion is possible (inserting in a BST is not atomically difficult, per se), and while a single insert may not really erode the utility of the tree, if new data is repeatedly added which does not match the distribution of the original space partitioning, the tree will become imbalanced and the logarithmic effect previously guaranteed by the original space division which preserves a balanced tree, will fade, leaving the eventual time complexity back to $O(|P|)$, which is typically $>> d$, and therefore worse.
+For point 4 (Insertion/Move Complexity), k-d and ball-trees generally provide no approach which preserves the integrity of the first three complexity measurements.  While a $O(log(n))$ insertion is possible (inserting in a BST is not atomically difficult, per se), and while a single insert may not really erode the utility of the tree, if new data is repeatedly added which does not match the distribution of the original space partitioning, the tree will become imbalanced and the logarithmic effect previously guaranteed by the original space division which preserves a balanced tree, will fade, leaving the eventual time complexity back to $O(|P|)$, which is typically $>> d$, and therefore worse.[@Chen2018]
 
 #### Locality Sensitive Hashing
 
-LSH stands somewhat alone, as it is not literally space partitioning with strict divisions.  LSH relies on creating a hash function that hashes points into bins with a property that two points with the same hash have a high likelihood of being nearer to each other than points with different hash values.[@Indyk1998]
+Locality (sometimes "Locally") Sensitive Hashing (LSH) relies on creating a hash function that hashes points into bins with a property that two points with the same hash have a high likelihood of being nearer to each other than points with different hash values.[@Indyk1998]  Formally:
+
+For a given threshold $\epsilon > 0$, and a hash function $H(p) => S$ maps to a space $S$ for all $p \in P$
+* if $d(p, q) < \epsilon$ then $H(p) = H{q}$ with probability at least $\lambda_1$
+* if $d(p, q) > \epsilon$ then $H(p) \neq H(q)$ with probability at MOST $\lambda_2$
+
+And a value $k$ which is the approximate number of points $p \in P$ which hash to a given value.  [@PJA2010] think of this value as the fraction $sel = k/|P|$: "the selectivity sel is the fraction of the data collection that is returned in the short-list, on average, by the algorithm".[@PJA2010]
+
+LSH as a concept lends itself to no specific complexity analyis, since it is dependent on the particular hash functions chosen. LSH can leverage $L$ multiple hashes, and the selection of the number and type of hashing algorithm is itself the basis of research and variety.[@PJA2010],[@Chen2018]
+
+1. Training Time Complexity: if the hash function(s) take time $O(t)$, the LSH prep takes $O(|P|*L*O(t))$ - the cost of executing the functions to hash into $L$ buckets against all points $p \in P$
+2. Memory Space: a single hash function typically requires $O(|P|)$ space or for $L$ hashes memory space: $O(L*|P|)$.
+3. Prediction Time Complexity: This feature is the most highly dependent on the selection of hash function, and the width of the hash buckets ($k$).  The worst case is $O(|P|)$, however for large enough sets given $\lambda_2$, the average case can be estimated as: $O(L*O(t) + L*|P|*d*{\lambda_2^k})$ - [@Prokhorenkova2019] simplifies this to $O(d*|P|^\phi)$ for $c-ANN$ algorithms where $\phi \approx \frac{1}{c}$
+4. Insertion/Move Complexity: $O(L*O(t))$ - the cost of executing the $L$ hash functions on the new point's data
 
 #### Graph Based Search
 
 More recent algorithms, such as Facebook Research's FAISS, follow a graph based search structure.[@FAISS2017]
 
-A good overview of this approach was available from Liudmila Prokhorenkova: "Recently, graph-based approaches were shown to demonstrate superior performance over other types of algorithms in many large-scale applications of NNS [@Amueller2020]. Most graph-based methods are based on constructing a nearest neighbor graph (or its approximation), where nodes correspond to the elements of D, and each node is connected to its nearest neighbors by directed edges.[@Dong2011] Then, for a given query q, one first takes an element in D (either random or fixed predefined) and makes greedy steps towards q on the graph: at each step, all neighbors of a current node are evaluated, and the one closest to q is chosen."[@Prokhorenkova2019]
+A good overview of this approach was available from Liudmila Prokhorenkova: "Recently, graph-based approaches were shown to demonstrate superior performance over other types of algorithms in many large-scale applications of NNS [@Amueller2020]. Most graph-based methods are based on constructing a $k$-nearest neighbor graph (or its approximation), where nodes correspond to the elements of D, and each node is connected to its nearest neighbors by directed edges.[@Dong2011] Then, for a given query q, one first takes an element in D (either random or fixed predefined) and makes greedy steps towards q on the graph: at each step, all neighbors of a current node are evaluated, and the one closest to q is chosen."[@Prokhorenkova2019]
 
 The construction costs of these structures can be very high.  A Brute Force construction of a k-Nearest Neighbor Graph $(kNNG)$ has time complexity $O(n^2)$ which is of course completely untenable for large data sets.  Approaches exist to improve upon this, including improvements resulting in approximate results, but this class still tends to trade the highest construction cost for some of the fastest query times in high dimensions.[@Dong2011], [@Prokhorenkova2019]
+
+One interesting point about FAISS is that it is designed to be highly parallelized, and particularly focused on optimizations available to GPUs.[@FAISS2017]  This may be a disadvantage for comparisons with the ANN Benchmark suite that we use, which forces single-threaded operation, in order to test the algorithm rather than the hardware.[@Amueller2020]
+
+As these are relatively new, and as implementations focus on real-world performance, rather than theoretical, "Graph-based approaches are empirically shown to be very successful for the nearest neighbor search (NNS). However, there has been very little re-search on their theoretical guarantees."[@Prokhorenkova2019]
+
+As with LSH, Graph search methods differ in their specific choices; typically the mechanism for generating the search graph.  In general, these graphs are called "Monotonic Search Networks" (MSNETs)...  [@Fu2018] compares "Monotonic Relative Neighborhood Graphs" (MRNGs) and "Navigating Spreading-out Graphs" (NSGs).
+
+1. Training Time Complexity: [@Fu2018] reports $O(n^2\log(n)+n^2*c)$ for an "MRNG" where $c$ is the average out-degree of [the graph]".  For NSGs, this can be reduced to $O(kn\frac{1+d}{d}log(n^\frac{1}{d})+n^{1.16})$ and  $O(kn\frac{1+d}{d}\log(n^\frac{1}{d})+n*\log(n))$ for FAISS.  Note that these are all by far the largest preparation complexities of all our reviewed algorithms.
+2. Memory Space: Efficient graph storage requires storing $k$ edges for each of $n$ points for a base space complexity of $O(kn)$
+3. Prediction Time Complexity: [@Fu2018] reports theoretical results for $NSG$s as $O(cn^{\frac{1+\epsilon}{d}}\log{n^\frac{1}{d}})$, which, for large $d$ approaches $O(\log n)$, which matches their experimental results.
+4. Insertion/Move Complexity: This doesn't seem closely studied, but in principle inserting a new row costs the time to re-evaluate the $kNN$ graph for that point, and update any points for which the $kNN$ graph would change with its addition.  We expect this should roughly be between $O(k\log{n})$ and $O(k^2 \log{n})$
+
 
 
 ## Network Adequacy
