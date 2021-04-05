@@ -1,6 +1,6 @@
 ## Network Adequacy
 
-The trilateration index was originally designed to improve efficiency of the "network adequacy" problem for health care.  Network adequacy is a common legal requirement for medicare or insurance companies with constraints such as:
+The trilateration index was originally designed to improve efficiency of the "network adequacy" (NA) problem for health care.  Network adequacy is a common legal requirement for medicare or insurance companies with constraints such as:
 
 * 90% of members must live within 50 miles of a covered emergency room
 * 80% of female members over the age of 13 must live within 25 miles of a covered OB/GYN
@@ -27,12 +27,25 @@ and so forth.
 We formalize the concept of "Network Adequacy" mathematically:
 
 #### Network Adequacy Definition
-Given a non-empty set of points $P$ and a non-empty set of query points $Q$ in a metric space $M$ (where $P \cap Q$ comprises the 'network'), the network is 'adequate' for a distance $d$ and a distance function $D(a, b)$ describing the distance between points $a$ and $b$ for $a \in M$ and $b \in M$ if for every point $q$ (where $q \in Q$) $\exists$ at least one point $p$ ($p \in P$) $\ni D(p, q) <= d$.  Otherwise the network is 'inadequate'.
 
-#### Network Adequacy Threshold Definition
-We can generalize this slightly more by describing a network as 'adequate with threshold $T$' by introducing a percent $T$ ($0<=T<=1$) such that the same network is adequate if for at least $T*|Q|$ (or $T$ percent of points in $Q$) there exists at least one point $p$ $\ni D(p, q) <= d$.
+Given a non-empty set of points $P$ and a non-empty set of query points $Q$ in a metric space $M$ (where $P \cap Q$ comprises the 'network'), the network is 'completely adequate' for a distance $d$ and a distance function $D(a, b)$ describing the distance between points $a$ and $b$ for $a \in M$ and $b \in M$ if for every point $q$ (where $q \in Q$) $\exists$ at least one point $p$ ($p \in P$) $\ni D(p, q) <= d$.  Otherwise the network is 'inadequate'.
+
+We call a single point $q$ 'adequate' itself, if it satisfies the same condition -- i.e. $\exists$ at least one point $p$ ($p \in P$) $D(p, q) <= d$.
+
+
+#### Network Adequacy Percent
+
+If, within $P$, we consider the largest subset $P' \in P$ where $P'$ is 'completely adequate',  then $P$ has a "Network Adequacy Percent (NAP)" of $|P'|/|P|$.  Note that $P'$ can be defined (identically) as the union of all 'adequate' points $p \in P$.
+
+#### Network Adequacy Threshold
+We can generalize this slightly more by describing a network as 'adequate with threshold $T$' by introducing a percent $T$ ($0<=T<=1$) such that the same network is adequate if at least $T*|Q|$ (or $T$ percent of points in $Q$) are individually 'adequate'.
+
+Another way of saying this is that the netwrk is 'adequate with threshold $T$' if the Network Adequacy Percent ${NAP} > T$.
 
 In this case, if $T == 1$ we have the original case.  If $T == 0$ we have a trivial case where the network is always adequate (even if $Q$ and/or $P$ are empty, which is generally disallowed).
+
+
+#### Solving NA Using NN Algorithms
 
 Generally, using $NN$ techniques, the brute-force is iterative: for each point $q$, find the nearest point $p$ and if $D(p, q) < d$ count it as conforming, otherwise count it as non-conforming. We then calculate the ratio of $r = \frac{conforming} {|Q|}$ to determing whether $r >= T$ or not.
 

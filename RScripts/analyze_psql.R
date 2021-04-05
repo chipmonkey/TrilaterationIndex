@@ -1,9 +1,9 @@
-library('RPostgreSQL')
-
-drv <- dbDriver("PostgreSQL")
-con <- dbConnect(drv, dbname = "trilateration", host = "localhost", port = 5433)
-?dbDriver
-?`dbDriver-methods`
+# library('RPostgreSQL')
+# 
+# drv <- dbDriver("PostgreSQL")
+# con <- dbConnect(drv, dbname = "trilateration", host = "localhost", port = 5433)
+# ?dbDriver
+# ?`dbDriver-methods`
 
 qt <- read.csv('./data/query_timings.csv')
 head(qt)

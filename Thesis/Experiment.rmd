@@ -14,7 +14,7 @@ We plan experiments for Network Adequacy in SQL databases, and Nearest Neighbor 
 ### Experiment 1: Python Nearest Neighbors with ANN
 
 1. We adapt the popular Python package scikit-learn to execute our Trilateration Index and perform nearest-neighbor search.
-2. We adapt the ann-benchmarks software, which is designed explicitly for comparing performance of nearest neighbor algorithms[@Amueller2020], to record results.  This includes the addition of a geodesic dataset and distance function (ann-benchmarks only supported jaccard, hamming, euclidean, and angular distance functions) for consistency.
+2. We adapt the ann-benchmarks software, which is designed explicitly for comparing performance of nearest neighbor algorithms[@Amueller2020], to record results.  This includes the addition of a geodesic dataset and distance function (ann-benchmarks only supported jaccard, hamming, euclidean, and angular distance functions) for consistency (see [Geodesic query points] for details).
 3. We implement the four algorithms described in [Multilateration NN Algorithms], namely "Trilateration" (TRI), "TrilaterationApprox" (TIA), "TrilaterationExpand" (TIE), and "TrilaterationExpand2" (TIE2)
 4. We execute the ann-benchmarks software against our and other modern $NN$ algorithms, and record the results in [ANN Benchmarks]
 
@@ -22,10 +22,20 @@ Note that we use a widely available geodesic distance implementation from Geopy 
 
 ### Experiment 2: SQL Network Adequacy
 
+For Network Adequacy, no standard benchmark exists (such as ann-benchmarks for Nearest Neighbor), so our experimental setup requires a bit more setup.  We use the following steps:
+
+1. We take the same 150,000 point geospatial data set used in the $NN$ experiment (see [Geodesic query points] for details) and assign the points randomly to 15 categories.
+2. We implement our two Network Algorithms (NAIVE-NA and TRILAT-NA) described in [Multilateration NA Algorithms] in the SQL database.
+3. We 
 
 
 
 ## Experimental Results
 
+### Nearest Neighbor Results
 ```{r child = 'ANN_Benchmarks.rmd'}
 ```
+
+
+### Network Adequacy Results
+```{r child = 'SQL_Results.rmd'}

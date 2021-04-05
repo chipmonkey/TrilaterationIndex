@@ -1,7 +1,0 @@
-# The Trilateration Geospatial Index
-
-## Trilateration Index – General Definition 
-
-Given an n-dimensional metric space $(M, d)$ (the universe of points $M$ in the space and a distance function $d$ which respects the triangle inequality), a typical point $X$ in the coordinate system will be described by coordinates ${x_1, x_2, …, x_n}$, which, typically, represents the decomposition of a vector $V$ from an "origin" point $O: {0, 0, … ,0}$ to $X$ into orthogonal vectors ${0,x1}, {0,x2}, …, {0,xn}$ along each of the n dimensional axes of the space.
-
-The Trilateration of such a point requires $n+1$ fixed points $F_p$ ($p$ from $1$ to $n+1$), no three of which occupy the same $(n-1)$-dimensional hyperplane.  The Trilateration Coordinate for the point $X$ is then: ${t_1, t_2, …, t_{n+1}}$ where $t_i$ is the distance (according to $d$) from $X$ to $F_i$ (in units applicable to the system). 

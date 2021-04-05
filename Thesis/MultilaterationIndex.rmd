@@ -1,0 +1,232 @@
+# Introducing the Multilateration Index
+
+## Multilateration Index – General Definition 
+
+Given an n-dimensional metric space $(M, d)$ comprising universe of points $M$ in the space and a distance function $d(x, y)$ which respects the triangle inequality, a typical point $X$ in the coordinate system will be described by coordinates ${x_1, x_2, …, x_n}$, which, typically, represents the decomposition of a vector $V$ from an "origin" point $O: {0, 0, … ,0}$ to $X$ into orthogonal vectors $\{x1,0,..,0\}, \{0,x2,0,..,0\}, …, \{0,0,..,0,xn\}$ along each of the n dimensional axes of the space.
+
+The Multilateration of points in the space requires $n+1$ fixed reference points $F_p$ ($p$ from $1$ to $n+1$), which contains no subset of any length $m$ which all lie on the same $m-2$ hyperplane.  (i.e. in a 3d coordinate system, with four reference points, the four points cannot lie on the same plane, no three points can lie on the same line, and, trivially, no two points can be the same).  The Multilateration Coordinate $X'$ for the point $X$ is then: $X'=\{t_1, t_2, …, t_{n+1}\}$ where $t_i$ is the distance $d(X, F_i)$ (in units applicable to the system).
+
+A "Multilateration Index" is a data structure which, for a given set of points $p \in M$ stores the Multilateration Coordinates.  Depending on implementation and use, these can be stored in a single structure sorted by one of $t_i$, or in multiple structures sorted individually by each $t_i$, or some other variant.  See [Multilateration NN Algorithms] and [Multilateration NA Algorithms] for our specific implementations.
+
+## 2-D Bounded Example 
+
+Consider a 2-dimensional grid – a flattened map, a video game map, or any mathematical $x-y$ coordinate grid with boundaries.  WOLOG in this example consider the two-dimensional Euclidean space $M=\mathbb{R^2}$ and bounded by $x,y\ \epsilon\  \{0..100\}$.  Also, let us use the standard Euclidean distance function for $d$.  This is, trivially, a valid metric space.
+
+Since the space has dimension $n=2$, we need $3$ fixed points $F_p$.  While the Geospatial example on Earth has a specific prescription for the fixed points, an arbitrary space does not.  We therefore prescribe the following construction for bounded spaces: 
+
+Construct a circle (hypersphere for other dimensions) with the largest area inscribable in the space.  In this example, that will be the circle centered at $(50,50)$ with radius $r=50$. 
+
+Select the point at which the circle touches the boundary at the first dimension (for spaces with uneven boundary ratios, select the point at which the circle touches the earliest boundary $x_i$).  Such a point is guaranteed to exist since the circle is largest (if it does not, then the circle can be expanded since there is space between every point on the circle and an axis, and it is not a largest possible circle).
+
+From this point, create a regular $n+1$-gon (triangle here) which touches the circle at $n+1$ points.  These are the points we will use as $F_p$.  They are, by construction, not all co-linear (or in general do not all exist on the same $n$-dimensional hyperplane) satisfying our requirement [proof]. 
+
+The point $y=0$, $x=50$ is the first point of the equilateral triangle.  The slope of the triangle's line is $tan(\frac{pi}{3})$, so setting the equation of the circle: 
+
+$(x-50)^2+(y-50)^2=50^2$ equal to the lines: $y=tan(\frac{\pi}{3})(x-50)$ gives $x=25(2+\sqrt{3})$ on the right  and $y=tan(\frac{-\pi}{3})(x-50)$ gives $x=-25(\sqrt{3}-2)$ on the left, and of course the original $(0,50)$ point.  Applying $x$ to our earlier equations for $y$ we get a final set of three points: 
+
+$$F_1 = (x=50,y=0)$$
+
+$$F_2 = (x=25(2+\sqrt{3}), y=tan(\frac{\pi}{3})((25(2+\sqrt{3}))-50)$$
+
+$$F_3 = (x=-25(\sqrt{3}-2), y=tan(\frac{-\pi}{3})((-25(\sqrt{3}-2))-50) $$
+
+```{r trianglePlot, fig.align="center", echo=FALSE}
+library(plotrix)
+
+plot(x=NULL, y=NULL, xlim=c(0,100), ylim=c(0,100), asp = 1,
+     xlab='X', ylab='Y',
+     main = "Example calculation of reference points in 2d area")
+draw.circle(x = 50, y = 50, radius = 50)
+abline(h=0)
+abline(h=100)
+abline(v=0)
+abline(v=100)
+
+# Draw point
+draw.circle(x = 50, y = 0, radius = 1, lwd = 1, col="red")
+
+# Triangle points:
+myTri <- data.frame(id=1, x=50, y=0)
+myTri <- rbind(myTri, c(2, 25*(2+sqrt(3)), tan(pi/3)*((25*(2+sqrt(3)))-50)))
+myTri <- rbind(myTri, c(3, -25*(sqrt(3)-2), tan(-pi/3)*((-25*(sqrt(3)-2))-50)))
+polygon(myTri[,2], myTri[,3], border="blue")
+
+# abline(a=tan(pi/3)*(-50), tan(pi/3))
+
+
+# Draw point
+draw.circle(x = 50, y = 0, radius = 1, lwd = 1, col="red")
+draw.circle(x = 25*(2+sqrt(3)), y = tan(pi/3)*((25*(2+sqrt(3)))-50), radius = 1, lwd = 1, col="red")
+draw.circle(x = -25*(sqrt(3)-2), y = tan(-pi/3)*((-25*(sqrt(3)-2))-50), radius = 1, lwd = 1, col="red")
+```
+
+Remember, any three non-colinear points will do, but this construction spaces them fairly evenly throughout the space, which may be beneficial later* [Add section (reference) with discussions of precision and examples where reference points are very near one another]. 
+
+The trilateration of any given point X in the space, now, is given by: 
+
+$$T(X) = {d(F_1, X), d(F_2, X), d(F_3,X)} $$
+
+That is, the set of (three) distances $d$ from $X$ to $F_1$, $F_2$, and $F_3$ respectively. 
+
+#### 10 Random Points
+
+As a quick example of the trilateration calculations, we use a basic collection of 10 data points:
+
+```{r rand10points, echo=FALSE}
+  library(knitr)
+  myDist <- function(x, y) {
+    # x and y must be 2D points -- (x,y) tuples i.e.: x <- c(1,2) y <- c(3,4)
+    d <- sqrt((x[[1]]-y[[1]])^2+(x[[2]]-y[[2]])^2)
+    return(d)
+  }
+
+  # Function to generate lots of random points
+  makepoints <- function(n, min, max) {
+    set.seed(1729)
+    myPoints <- data.frame(x = runif(n = n, min = min, max = max),
+                           y = runif(n = n, min = min, max = max))
+    return(myPoints)
+  }
+
+  # 10 Random Points (seed ensures reproducibility):
+  myPoints <- makepoints(10, 0, 100)
+  kable(myPoints, caption = "10 Random Points")
+```
+
+
+The trilateration of those points, that is, the three points $d_1, d_2, d_3 = {d(F_1, X), d(F_2, X), d(F_3,X)}$ are (next to the respective $x_n$):
+
+```{r distanceexample, echo=FALSE}
+  myTrilat <- data.frame(d1=NULL, d2=NULL, d3=NULL)
+  for(i in 1:nrow(myPoints)) {
+    myTrilat[i, 'd1'] <- myDist(c(myPoints[i,'x'], myPoints[i, 'y']), c(myTri[1,'x'], myTri[1,'y']))
+    myTrilat[i, 'd2'] <- myDist(c(myPoints[i,'x'], myPoints[i, 'y']), c(myTri[2,'x'], myTri[2,'y']))
+    myTrilat[i, 'd3'] <- myDist(c(myPoints[i,'x'], myPoints[i, 'y']), c(myTri[3,'x'], myTri[3,'y']))
+  }
+
+  myTrilateration <- cbind(myPoints, myTrilat)
+  rm(myTrilat)  #twas temporary
+  kable(myTrilateration, caption="Multilateration Index of 10 Random Points WRT Fixed points F")
+```
+
+Note that we do not need to continue to store the original latitude and longitude.  We can convert the three $d_n$ distances back to Latitude and Longitude within some $\epsilon$ based on the available precision.  Geospatial coordinates in Latitude and Longitude with six digits of precision are accurate to within $<1\ meter$, and 8 digits is accuract to within $<1\ centimeter$, although this varies based on the latitude and longitude itself; latitudes closer to the equator are less accurate than those at the poles.  The distance values $d_x$ are more predictable, since they measure distances directly.  While the units in this sample are arbitrary, $F(x)$ in a real geospatial example could be in kilometers, so three decimal digits would precisely relate to $1\ meter$, and so on.  This is one reason that we will later examine using the trilateration values as an outright replacement for Longitude and Latitide, and this feature is important when considering storage requirements for this data in large real-world database applications.
+
+For now, continuing with the example, those $10$ points are shown here in blue with the three reference points $F_1, F_2, F_3$ in red:
+
+```{r plot10Points, fig.align="center", echo=FALSE}
+
+  plot(x=NULL, y=NULL, xlim=c(0,100), ylim=c(0,100), asp = 1,
+       xlab='X', ylab='Y', main = "Sample Reference and Data Points")
+  points(myTrilateration, col="blue", pch=16, asp=1)
+  text(myTrilateration, pos = 1)
+  
+  draw.circle(x = myTri[1,'x'], y = myTri[1,'y'], radius = 1, lwd = 1, col="red")
+  draw.circle(x = myTri[2,'x'], y = myTri[2,'y'], radius = 1, lwd = 1, col="red")
+  draw.circle(x = myTri[3,'x'], y = myTri[3,'y'], radius = 1, lwd = 1, col="red")
+  text(myTri[1, 'x'], myTri[1, 'y'], labels = 'F1', pos=2)
+  text(myTri[2, 'x'], myTri[2, 'y'], labels = 'F2', pos=1)
+  text(myTri[3, 'x'], myTri[3, 'y'], labels = 'F3', pos=2)
+```
+
+To help understand the above values, the following chart shows the distances for points $x_2$ and $x_10$ above.  Specifically, the distances $d_1$ from point $F_1$ are shown as arcs in red, the distances $d_2$ from point $F_2$ in blue, and $d_3$ from point $F_3$ in green.  
+
+```{r distanceExamples, fig.align="center", echo=FALSE}
+# Arcs around two points:
+  
+  plot(x=NULL, y=NULL, xlim=c(0,100), ylim=c(0,100), asp = 1,
+       xlab='X', ylab='Y', main = "Distance Arcs to Two Sample Points")
+  points(myTrilateration[c(2,10),'x'], myTrilateration[c(2,10),'y'], col="blue", pch=16, asp=1)
+  text(myTrilateration[2,'x'], myTrilateration[2,'y'], labels = 'x2', pos=4)
+  text(myTrilateration[10,'x'], myTrilateration[10,'y'], labels = 'x10', pos=2)
+  
+  draw.circle(x = myTri[1,'x'], y = myTri[1,'y'], radius = 1, lwd = 1, col="red")
+  draw.circle(x = myTri[2,'x'], y = myTri[2,'y'], radius = 1, lwd = 1, col="red")
+  draw.circle(x = myTri[3,'x'], y = myTri[3,'y'], radius = 1, lwd = 1, col="red")
+  text(myTri[1, 'x'], myTri[1, 'y'], labels = 'F1', pos=2)
+  text(myTri[2, 'x'], myTri[2, 'y'], labels = 'F2', pos=1)
+  text(myTri[3, 'x'], myTri[3, 'y'], labels = 'F3', pos=2)
+  
+  
+  draw.circle(x=myTri[1,'x'], y=myTri[1,'y'], radius=myTrilateration[2,'d1'], border="red")
+  draw.circle(x=myTri[1,'x'], y=myTri[1,'y'], radius=myTrilateration[10,'d1'], border = "red")
+
+  draw.circle(x=myTri[2,'x'], y=myTri[2,'y'], radius=myTrilateration[2,'d2'], border="blue")
+  draw.circle(x=myTri[2,'x'], y=myTri[2,'y'], radius=myTrilateration[10,'d2'], border="blue")
+
+  draw.circle(x=myTri[3,'x'], y=myTri[3,'y'], radius=myTrilateration[2,'d3'], border="darkgreen")
+  draw.circle(x=myTri[3,'x'], y=myTri[3,'y'], radius=myTrilateration[10,'d3'], border="darkgreen")
+```
+
+
+#### Use of trilateration as an index for nearest-neighbor
+
+One of our expected benefits of this approach is an improvement in algorithms like nearest-neighbor search.
+
+
+### Geospatial Example 
+
+Applying this to real sample points; let the following be the initial reference points on the globe: 
+
+Point 1: $90.000000, 0.000000$ (The geographic north pole) 
+
+Point 2: $38.260000, -85.760000$ (Louisville, KY on the Ohio River) 
+
+Point 3: $-19.22000, 159.93000$ (Sandy Island, New Caledonia)
+
+Optional Point 4: $-9.42000, 46.33000$ (Aldabra)
+
+Optional Point 5: $-48.87000, -123.39000$ (Point Nemo)
+
+Note that the reference points are defined precisely, as exact latitude and longitude to stated decimals (all remaining decimal points are 0).  This is to avoid confusion, and why the derivation of the points is immaterial (Point Nemo, for example is actually at a nearby location requiring more than two digits of precision).
+
+Only three points are required for trilateration (literally; thus the "tri" prefix of the term), but we include 5 points to explore the pros and cons of n-fold geodistance indexing for higher values of n.
+
+ 
+
+## Theoretical Discussion 
+
+### Theoretical benefits: 
+
+**Precision**: Queries are not constrained by precision choices dictated by the index, as can be the case in Grid Indexes and similar R-tree indexes.  R-tree indexes improve upon naïve Grid Indexes in this area, by allowing the data to dictate the size of individual grid elements, and even Grid Indexes are normally tunable to specific data requirements.  Still, this involves analysis of the data ahead of time for optimal sizing, and causes resistance to changes in the data.
+
+**Distributed Computing**: Trilateration distances can be used as hash values, compatible with distributed computing (I.e. MongoDB shards or Teradata AMP Hashes). 
+
+**Geohashing**: Trilateration distances can be used as the basis for Geohashes, which improve somewhat on Latitude/Longitude geohashes in that distances between similar geohashes are more consistent in their proximity. 
+
+**Bounding Bands**: The intersection of Bounding Bands create effective metaphors to bounding boxes, without having to artificially nest or constrain them, nor build them in advance. 
+
+**Readily Indexed (B-Tree compatible)**: Trilateration distances can be stored in traditional B-Tree indexes, rather than R-tree indexes, which can improve the sorting, merging, updating, and other functions performed on the data. 
+
+**Fault Tolerant**: This coordinate system is somewhat self-checking, in that many sets of coordinates that are individually within the correct bounds, cannot be real, and can therefore be identified as data quality issues.  For example, a point cannot be 5 kilometers from the north pole (fixed point F1) and 5 kilometers from Louisville, KY (fixed point F2) at the same time.  A point stored with those distances could be easily identified as invalid. 
+
+Theoretical shortcomings: 
+
+**Index Build Cost**: Up front calculation of each trilateration is expensive, when translating from standard coordinates. Each point requires three (at least) distance calculations from fixed points and the sorting of the resulting three lists of distances.  This results in `O(n*logn)` just to set up the index.
+
+*This could be mitigated by upgrading sensor devices and pushing the calculations back to the data acquisition step, in much the way that Latitude and Longitude are now trivial to calculate in practice by use of GPS devices.  Also, we briefly discuss how GPS direct measurements (prior to converstion to Lat/Long) may be useful in constructing trilateration values. 
+
+**Storage**: The storing of three distances (32- or 64- bits per distance) is potentially a sizeable percent increase in storage requirement from storing only Latitude/Longitude and some R-Tree or similar index structure. 
+
+*Note that if the distances are stored instead of the Lat/Long, rather than in addition to them, storage need not increase. 
+
+**Projection-Bound**: The up-front distance calculations means that transforming from one spatial reference system (I.e. map projection – geodetic – get references to be specific) to another requires costly recalculations bearing no benefit from the calculation.  For example a distance on a spherical projection of the earth between a given lat/long combination will be different than the distance calculated on the earth according to the standard WGS84 calculations). 
+
+*This said, we expect in most real-world situations, cross-geodetic comparisons are rare. 
+
+**Difficult Bounding Band Intersection**: Bounding Bands intersect in odd shapes, which, particularly on ellipsoids, but even on 2D grids, are difficult to describe mathematically.  Bounding boxes on the other hand, while they distort on ellipsoids, are still easily understandable as rectangles. 
+
+ 
+
+ 
+
+Figure 1 - An example problem with radio towers R1, R2, and R3, and various receivers.  Dashed lines represent the bounding bands with +/- a small distance from a given receiver (center black circle) 
+
+ 
+
+ 
+
+Figure 2 - A close look at the intersection of three bounding bands limiting an index search around a point with a search radius giving the circle in A.  Note that the area B is an intersection of two of the three bands.  Area C is the intersection of all three. 
+
+ 
+
+ 

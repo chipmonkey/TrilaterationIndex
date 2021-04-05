@@ -75,7 +75,7 @@ ggplot() +
   geom_polygon(data=ky_counties, aes(x=long, y=lat, group=group), fill = NA, color = "white")
 ```
 
-As hoped, our Trilateration algorithm really shines when applying the complex but accurate geodesic distance function.  The Trilateration algorithm is over 30 times faster than the next best candidate (the Ball Tree algorithm with leaf_size=10).  The Brute Force algorithm is unbearably slow here, which is expected since it should be calling the expensive distance function more than any other algorithm in the usual case.
+As hoped, our Trilateration algorithm really shines when applying the complex but accurate geodesic distance function.  The Trilateration algorithm is over 30 times faster than the next best candidate (the Ball Tree algorithm with leaf_size=10).  The Brute Force algorithm is unbearably slow here, which is expected since it should be calling the expensive distance function $n^2$ or $150,000^2=22,500,000,000$ (22.5 billion) times... more than any other algorithm by far.  Recall that our test of 5000 calls to a single geodetic function took $\approx1.2$ seconds, so we'd expect 22.5 billion to take 5.4 million seconds, or about 62 days on similar hardware.  The other algorithms ran to completion.
 
 ```{html echo=FALSE}
 <!--
@@ -84,12 +84,13 @@ As hoped, our Trilateration algorithm really shines when applying the complex bu
   1:        BallTree(leaf_size=100)        1.000        0.683      207.249
   2:       BallTree(leaf_size=1000)        1.000        0.182      153.778
   3:           TrilaterationExpand2        1.000        1.335       59.262
-  4:                   BruteForce()        1.000        0.050        0.001
+  4:                   BruteForce()        1.000*       0.050*       0.001*
   5:           KDTree(leaf_size=10)        1.000        0.099        0.125
   6:          KDTree(leaf_size=100)        1.000        0.096        0.106
   7:         KDTree(leaf_size=1000)        1.000        0.089        0.085
   8:                  Trilateration        1.000       73.119       58.857
   9:                   TrilatExpand        1.000        0.364       58.737
+* BruteForce algorithm did not run to completion due to exceeding time limits
 -->
 ```
 
@@ -104,7 +105,7 @@ times <- times[order(times$Algorithm),]
 # kable(times[,1:3], caption="Queries Per Second and Time to Build Indexes for Geodesic (Q=150,000)")
 
 p <- ggplot(data=times, aes(x=Algorithm, y=QPS)) +
-  geom_bar(stat="identity", col='black', fill='blue') +
+  geom_bar(stat="identity", col='black', fill='grey') +
   coord_flip()
 p
 ```
@@ -145,7 +146,7 @@ times <- times[order(times$Algorithm),]
 # kable(times, caption="Queries Per Second and Time to Build Indexes for 20-dimension Euclidean")
 
 p <- ggplot(data=times, aes(x=Algorithm, y=QPS)) +
-  geom_bar(stat="identity", col='black', fill='blue') +
+  geom_bar(stat="identity", col='black', fill='grey') +
   coord_flip()
 p
 ```
@@ -213,7 +214,7 @@ QPS = c(35.085, 164.781, 35.108, 43.439, 35.081, 44.869,
 6.125, 8.084, 3.765, 0.010, 1.000))
 # kable(times, caption="Queries Per Second and Time to Build Indexes for glove-25-angular")
 p <- ggplot(data=times, aes(x=Algorithm, y=QPS)) +
-  geom_bar(stat="identity", col='black', fill='blue') +
+  geom_bar(stat="identity", col='black', fill='grey') +
   # geom_text(position=position_dodge(width = 0.5)) +
   coord_flip()
 p
