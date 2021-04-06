@@ -158,11 +158,6 @@ To help understand the above values, the following chart shows the distances for
 ```
 
 
-#### Use of trilateration as an index for nearest-neighbor
-
-One of our expected benefits of this approach is an improvement in algorithms like nearest-neighbor search.
-
-
 ### Geospatial Example 
 
 Applying this to real sample points; let the following be the initial reference points on the globe: 
@@ -181,7 +176,6 @@ Note that the reference points are defined precisely, as exact latitude and long
 
 Only three points are required for trilateration (literally; thus the "tri" prefix of the term), but we include 5 points to explore the pros and cons of n-fold geodistance indexing for higher values of n.
 
- 
 
 ## Theoretical Discussion 
 
@@ -215,18 +209,6 @@ Theoretical shortcomings:
 
 **Difficult Bounding Band Intersection**: Bounding Bands intersect in odd shapes, which, particularly on ellipsoids, but even on 2D grids, are difficult to describe mathematically.  Bounding boxes on the other hand, while they distort on ellipsoids, are still easily understandable as rectangles. 
 
- 
 
- 
-
-Figure 1 - An example problem with radio towers R1, R2, and R3, and various receivers.  Dashed lines represent the bounding bands with +/- a small distance from a given receiver (center black circle) 
-
- 
-
- 
-
-Figure 2 - A close look at the intersection of three bounding bands limiting an index search around a point with a search radius giving the circle in A.  Note that the area B is an intersection of two of the three bands.  Area C is the intersection of all three. 
-
- 
 
  

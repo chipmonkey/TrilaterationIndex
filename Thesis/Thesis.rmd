@@ -6,6 +6,7 @@ output:
   pdf_document:
     toc: true
     number_sections: true
+    extra_dependencies: ["float"]
   html_document: default
 institute: University of Louisville
 bibliography: bibliography.bib
@@ -13,7 +14,8 @@ bibliography: bibliography.bib
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(fig.pos = 'H')
+# knitr::opts_chunk$set(fig.pos = 'H')
+# knitr::opts_chunk$set(fig.pos = "!H", out.extra = "")
 ```
 
 ```{r child = 'Abstract.rmd'}
@@ -27,6 +29,11 @@ knitr::opts_chunk$set(fig.pos = 'H')
 \newpage
 
 ```{r child = 'MultilaterationIndex.rmd'}
+```
+
+\newpage
+
+```{r child = 'MathTheory.rmd'}
 ```
 
 \newpage

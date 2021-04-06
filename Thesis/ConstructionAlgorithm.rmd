@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 ## 2-D Bounded Example 
 
 Consider a 2-dimensional grid – a flattened map, a video game map, or any mathematical $x-y$ coordinate grid with boundaries.  WOLOG in this example consider the two-dimensional Euclidean space $M=\mathbb{R^2}$ and bounded by $x,y\ \epsilon\  \{0..100\}$.  Also, let us use the standard Euclidean distance function for $d$.  This is, trivially, a valid metric space.

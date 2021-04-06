@@ -7,15 +7,11 @@ output:
   html_document: default
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ## SQL Network Adequacy Results
 
 We conducted our experiment as described, resulting in 36 combinations of point ($P$) and query ($Q$) sets from the same 150,000 point sample we've used for $NN$ experiments.  The datasets are categorized and range from 100 to 32,000 points, as shown here:
 
-```{r category_counts, echo=FALSE}
+```{r category_counts_sql, echo=FALSE}
 library(knitr)
 library(data.table)
 
@@ -60,7 +56,22 @@ ggplot(data=data, aes(x=dist, y=timing_s, fill=algorithm)) +
 ```
 
 
-Given the importance of the sizes of the $P$ and $Q$ datasets, it's quite informative to compare the algorithms with respect to those sizes.
+Given the importance of the sizes of the $P$ and $Q$ datasets, it's quite informative to compare the algorithms with respect to those sizes.  Also very important is the value of $d$.  It's worth noting that the actual NAP for $d$ varies in this dataset; using $|P|=32000$ and $|Q|=10000$ we find:
+
+```{r d_NAP_chart, echo=FALSE}
+library(data.table)
+library(knitr)
+dnap <- data.table(d=c(0.1,1,10,100),
+                   NAP=c(0.42, 0.88, 0.98, 1.00))
+kable(dnap, caption="d vs. ~NAP")
+```
+
+Of course this varies with the size of the dataset, but the rough bounds are important.  The data set comprises points in Kentucky which is roughly 400 miles east-west and 200 miles north-south.  When $d$ is 100 miles, even with 100 points (our smallest sample), 100% coverage is all but guaranteed.  At 10 miles, we see some holes in coverage, but not many -- thus the 98.4% value.  When we get down to the one mile and one tenth of a mile ranges, coverages drop precipitously.  Even with our largest two categories, NAP is only 88% at 1 mile and 42% at 0.1 miles.  If we had been using real world data, imagine that we ask the question "what percent of people live within 1 mile of a pharmacy" to get an idea what these numbers could mean (if this were not synthetic data).
+
+
+### Result Charts
+In any case, comparing performance those are our parameters... the size of $Q$, size of $P$, and the distance $d$.  We chart the results here, for both the NAIVE-NA and TRILAT-NA queries:
+
 
 ```{r QP_size_comparison_d01, echo=FALSE, message=FALSE, fig.cap="SQL Timings By Category (s) - d=0.1 - lower is better", fig.width=10, fig.height=5}
 library(ggplot2)
@@ -392,3 +403,129 @@ mydist = 100
   grid.arrange(p1, p2, nrow=1, ncol=2)
 
 ```
+
+***
+
+### Interpretation
+
+We find these charts quite interesting.  What is happening?  we make several distinct observations:
+
+
+#### Processing time is directly realted to |Q|
+As the size of the query data set ($Q$) increases along the y-axis, it's clear that the computation time increases at roughly the same rate.  The top row is roughly 3x the row below it (the ratio of 32,000:10,000)... the next row is roughly half (10,000:5000), and so on.  This makes sense; if we consider the query a for loop over $Q$, which is how we implement it in another language, the cost should go up proportionately, and it clearly does.
+
+#### The diagonal is strangely fast.
+
+This we originally thought of as a flaw in our experimental design, but now that we analyze it it's quite interesting and we chose not to change it.  The situation along the diagonal is that we're using the same category for $P$ and $Q$; this means that the datasets are identical, and that there is a 100% chance, always, of finding a point $p$ within $d$ of $q \forall q \in Q$ namely the point itself - since it is in the dataset and we made no effort to restrict this.  There may or may not be a second point within distance, but recall that our definition only requires one (since we did not extend to $k-NA$).  But why is this so fast?  Given the guaranteed success of finding at least one qualifying point in every dataset, we surmise that the performance improvement is a statistical result of almost never having to iterate over the entire set $P$.  The average time to find a point if one is guaranteed to exist, should be roughly half the time (over repeated iterations) of searching the whole set.  The entire query time is then some statistical fraction of a prior expectation of the likelihood of finding a match.
+
+Given our chart of $d$ vs. $NAP$ earlier, it makes sense that the diagonal's relative value is higher when $d$ is low.  That is, when $d=100$ every point is adequate, even without itself as a guaranteed qualifying point, so there is no real performance gain -- we never have to search every $p$ for a match.  When $d=0.1$, on the other hand, we have to search the entire data set, in vain, over 50% of the time (per our chart), wasting an entire scan of $P$.  Along the diagonal this never happens, and the time results mirror this fact.
+
+#### The impact of varying distance d
+
+Our best results are on low $d$ with high $|Q|$ and high $|P|$.  The NAIVE-NA query took nearly 15 minutes on our hardware to execute a 32,000x32,000 point search for network adequacy for $d=0.1$.  A little over 4 minutes for $d=1$, and just over and under a minute for $d=10$ and $d=100$ respectively.  A similar pattern exists for the $TRILAT-NA$ algorithm.
+
+The reason for this seems straightforward... the smaller the distance $d$, the less likely it is that any given point $p$ is within $d$ of a query point $q$.  Thus, in a large sample $P$ we expect to have to search more points, and spend more time, as $d$ decreases.  This is a simple theory consistent with the result.
+
+#### Complex relationship with |P| for NAIVE-NA
+
+A more complicated relationship exists as we walk the charts from left to right.  Examine the chart where $d=1$ for a moment.  On every but the bottom line (where zeroes probably hide this as a rounding problem), on the NAIVE-NA chart, the query time is HIGHER for $|P|=100$ than it is for $|P| \in (900, 2000, 5000, 10000)$, however it picks UP again when $|P|=32000$.
+
+Why?  We've run these tests repeatedly, in random order, back to back, to rule out hot/cold cache issues or other startup problems.
+
+Let's look at the actual NAP values for that row:
+
+```{r d_1_NAP_chart, echo=FALSE}
+library(data.table)
+library(knitr)
+dnap <- data.table(P=c(100, 900, 2000, 5000, 10000, 32000),
+                   NAP=c(36.27, 70.81, 76.37, 83.66, 100.00, 93.50))
+kable(dnap, caption="P vs. ~NAP for d=0.1, Q=10000")
+```
+
+With only 100 candidate points, only 36% of $Q$ is within 0.1 miles of a point in $P$.  The other 64% must iterate all $|P|*|Q|$ comparisons (in the NAIVE-NA implementation), resulting in $0.64*10000*100=640,000$ comparisons plus a portion of the other 36% which is at most $0.36*10000*100=360,000$.  Applying the same math for $|P|=900$, at 70.8% (29.2 inadequate) we get $0.292*10000*900=2,628,000$.  So.  We see no direct theoretical observation that would make this make sense.
+
+Sooo... we have to look at the SQL query plan:
+
+```{SQL explain_d_p900}
+ Aggregate  (cost=37295851666.13..37295851666.14 rows=1 width=16)
+      (actual time=86693.568..86693.570 rows=1 loops=1)
+   ->  Nested Loop Left Join  (cost=0.00..37295851616.50 rows=9925 width=8)
+          (actual time=152.251..86690.574 rows=10000 loops=1)
+         ->  Seq Scan on sample_cat_ref_dists m
+              (cost=0.00..4018.00 rows=9925 width=60)
+              (actual time=151.943..166.146 rows=10000 loops=1)
+               Filter: (category = 14)
+               Rows Removed by Filter: 140000
+         ->  Limit  (cost=0.00..3757768.00 rows=1 width=4)
+                    (actual time=8.651..8.651 rows=0 loops=10000)
+               ->  Seq Scan on sample_cat_ref_dists p
+                    (cost=0.00..3757768.00 rows=1 width=4)
+                    (actual time=8.649..8.649 rows=0 loops=10000)
+                     Filter: category=10 ...
+                     Rows Removed by Filter: 95609
+ Planning Time: 0.464 ms
+ JIT:
+   Functions: 11
+   Options: Inlining true, Optimization true, Expressions true, Deforming true
+   Timing: Generation 4.194 ms
+   Inlining 9.301 ms
+   Optimization 86.339 ms
+   Emission 55.402 ms
+   Total 155.236 ms
+ Execution Time: 86697.917 ms
+(15 rows)
+
+Time: 86699.517 ms (01:26.700)
+```
+
+
+```{SQL explain_d_p100}
+Aggregate  (cost=3107991549.46..3107991549.47 rows=1 width=16)
+           (actual time=43705.837..43705.839 rows=1 loops=1)
+   ->  Nested Loop Left Join  (cost=0.00..3107991499.83 rows=9925 width=8)
+          (actual time=158.346..43702.035 rows=10000 loops=1)
+         ->  Seq Scan on sample_cat_ref_dists m
+              (cost=0.00..4018.00 rows=9925 width=60)
+              (actual time=158.024..172.995 rows=10000 loops=1)
+               Filter: (category = 14)
+               Rows Removed by Filter: 140000
+         ->  Limit  (cost=0.00..313147.33 rows=1 width=4)
+                    (actual time=4.351..4.351 rows=1 loops=10000)
+               ->  Seq Scan on sample_cat_ref_dists p
+                   (cost=0.00..3757768.00 rows=12 width=4)
+                   (actual time=4.349..4.349 rows=1 loops=10000)
+                     Filter: category=11 ...
+                     Rows Removed by Filter: 43992
+ Planning Time: 0.189 ms
+ JIT:
+   Functions: 11
+   Options: Inlining true, Optimization true, Expressions true, Deforming true
+   Timing: Generation 1.702 ms
+   Inlining 9.062 ms
+   Optimization 91.460 ms
+   Emission 56.565 ms
+   Total 158.790 ms
+ Execution Time: 43707.634 ms
+(15 rows)
+
+Time: 43708.659 ms (00:43.709)
+```
+
+There are two key differences here - the inner (second) "Rows Removed by Filter" which, for $|P|=100$ is $95609$ and for $|P|=900$ is $43992$.  The other, related, difference being the actual time in the loops - $86693.568$ for the outer and $8.649$ for the inner when $|P|=100$ and $43705.837$ outer, $4.349$ inner for $|P|=900$.  This indicates that our analysis was flawed; the SQL optimizer swapped what we presumed were the inner and outer loops, and given the percents, the inner loop is more expensive when $|P|=100$ (by about double).
+
+
+#### Complex relationship with |P| for TRILAT-NA
+
+The pattern is similar, but not identical, in the right half of the graphs - those using our new TRILAT-NA algorithm.
+
+If we examine the top rows for $d=0.1$ and $d=1$, where runtime is longest, the NAIVE-NA algorithm as we described may slightly increase performance for low $|P|$, but quickly sees a runtime increase as $|P|$ increases.  The TRILAT-NA algorithm, however, while it isn't monotonic for $|P| \in (100, 900)$, it actually _decreases_ as $|P|$ increases from then on (with the exception of items on the diagonal, which are special as we discussed before).
+
+This is easier to explain... the addition of the filters using the $refdist_i$ distances causes a much quicker elimination of points outside of the $d$ radius from each $q$.  More points in $P$ makes the efficiency of these culls more pronounced.  That is, if we look at the "Rows Removed by Filter" as we did in the explain before, and remember the figure [Monte Carlo Estimating Ring Overlap Area], we see that those three additional refdist filters will exclude a high percent of candidate records quickly.  The _remaining_ points, subject to the expensive st_distance calculation, have a high percent chance of being within $d$ of $q$.
+
+The higher the number of points in $P$, the more points culled as a result of the refdist filters that no longer have to have st_distance called, compared to the NAIVE-NA query, resulting in the performance gains we see.
+
+#### NA Performance Conclusions
+
+The TRILAT-NA algoritm was as fast or faster in almost every test we ran; the only major outlier was when $d=0.1$ and $|P|=100$, in two cases ($|Q|=2000$ and $|Q|=10000$), TRILAT-NA was slower by 2 and 14 seconds (about 7% and 10%) respectively.  When $d=1$, $|P|=100$ again, and $|Q|=900$, $|Q|=5000$, or $|Q|=10000$, TRILAT-NA was slower by 1 second or less in each case.  Given that our resolution is 1-second, these are statistically minor.  Even for the larger discrepancies, it seems that the TRILAT-NA algoritm is only slower for very small values of $|P|$, which is where optimization is least needed in the first place.  When the workload takes the longest, the TRILAT-NA algoritm performs significantly faster than the naive algorithm.
+
+

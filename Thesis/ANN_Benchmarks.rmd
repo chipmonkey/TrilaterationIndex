@@ -94,7 +94,7 @@ As hoped, our Trilateration algorithm really shines when applying the complex bu
 -->
 ```
 
-```{r ann_geodesic_25, echo=FALSE, fig.cap="Queries Per Second for Geodesic (Q=150,000)", fig.width=6, fig.height=3}
+```{r ann_geodesic_25, echo=FALSE, fig.cap="Queries Per Second for Geodesic (Q=150,000; higher is better)", fig.width=6, fig.height=3}
 library(knitr)
 times <- data.frame(Algorithm=c("BallTree(leaf_size=10)", "BallTree(leaf_size=100)", "BallTree(leaf_size=1000)",
                             "TrilaterationExpand2", "BruteForce", "KDTree(leaf_size=10)", "KDTree(leaf_size=100)",

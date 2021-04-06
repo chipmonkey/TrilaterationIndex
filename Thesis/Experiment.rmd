@@ -2,7 +2,9 @@
 title: "Experiment"
 author: "Chip Lynch"
 date: "3/13/2021"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 # Experimentation
@@ -24,10 +26,21 @@ Note that we use a widely available geodesic distance implementation from Geopy 
 
 For Network Adequacy, no standard benchmark exists (such as ann-benchmarks for Nearest Neighbor), so our experimental setup requires a bit more setup.  We use the following steps:
 
-1. We take the same 150,000 point geospatial data set used in the $NN$ experiment (see [Geodesic query points] for details) and assign the points randomly to 15 categories.
-2. We implement our two Network Algorithms (NAIVE-NA and TRILAT-NA) described in [Multilateration NA Algorithms] in the SQL database.
-3. We 
+1. We take the same 150,000 point geospatial data set used in the $NN$ experiment (see [Geodesic query points] for details) and assign the points randomly to 15 categories of varying sizes (see table [Record Counts by Category ID]).
 
+```{r categories, echo=FALSE}
+library(knitr)
+cats <- read.csv('../data/lat_long_categorized.csv')
+cats[cats$Category < 10,'Category'] <- '0-9'
+cats$Category <- as.factor(cats$Category)
+results <- t(table(cats$Category))
+results[1] <- results[1] / 10
+row.names(results) <- c('Record Count')
+kable(results, caption="Record Counts by Category ID")
+```
+
+2. We implement our two Network Algorithms (NAIVE-NA and TRILAT-NA) described in [Multilateration NA Algorithms] in the SQL database.
+3. We execute these over various combinations of categories in our dataset, logging the duration of each combination for comparison.
 
 
 ## Experimental Results
