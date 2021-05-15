@@ -462,3 +462,23 @@ abstract = {Since many years ago, multilateration has been used in precision eng
    volume = {12},
    year = {2018},
 }
+
+@article{Chen2011,
+   abstract = {Similarity search is important in information retrieval applications where objects are usually represented as vectors of high dimensionality. This leads to the increasing need for supporting the indexing of high-dimensional data. On the other hand, indexing structures based on space partitioning are powerless because of the well-known "curse of dimensionality". Linear scan of the data with approximation is more efficient in the high-dimensional similarity search. However, approaches so far have concentrated on reducing I/O, and ignored the computation cost. For an expensive distance function such as Lp norm with fractional p, the computation cost becomes the bottleneck. We propose a new technique to address expensive distance functions by "indexing the function" by pre-computing some key values of the function once. Then, the values are used to develop the upper/lower bounds of the distance between a data vector and the query vector. The technique is extremely efficient since it avoids most of the distance function computations; moreover, it does not involve any extra secondary storage because no index is constructed and stored. The efficiency is confirmed by cost analysis, as well as experiments on synthetic and real data. © 2010 Springer-Verlag London Limited.},
+   author = {Hanxiong Chen and Jianquan Liu and Kazutaka Furuse and Jeffrey Xu Yu and Nobuo Ohbo},
+   doi = {10.1007/s10115-010-0303-2},
+   issn = {02191377},
+   issue = {2},
+   journal = {Knowledge and Information Systems},
+   title = {Indexing expensive functions for efficient multi-dimensional similarity search},
+   volume = {27},
+   year = {2011},
+}
+
+@inproceedings{Weber1998,
+   abstract = {For similarity search in high-dimensional vector spaces (or ``HDVSs''), researchers have proposed a number of new methods (or adaptations of existing methods) based, in the main, on data-space partitioning. However, the performance of these methods generally degrades as dimensionality increases. Although this phenomenon-known as the ``dimensional curse''-is well known, little or no quantitative analysis of the phenomenon is available. In this paper, we provide a detailed analysis of partitioning and clustering techniques for similarity search in HDVSs. We show formally that these methods exhibit linear complexity at high dimensionality, and that existing methods are outperformed on average by a simple sequential scan if the number of dimensions exceeds around 10. Consequently, we come up with an alternative organization based on approximations to make the unavoidable sequential scan as fast as possible. We describe a simple vector approximation scheme, called VA-file, and report on an experimental evaluation of this and of two tree-based index methods (an R -tree and an X-tree).},
+   author = {Roger Weber and Hans J Schek and Stephen Blott},
+   journal = {Proceedings of the 24rd International Conference on Very Large Data Bases},
+   title = {A Quantitative Analysis and Performance Study for Similarity-Search Methods in High-Dimensional Spaces},
+   year = {1998},
+}

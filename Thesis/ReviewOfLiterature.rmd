@@ -57,7 +57,7 @@ The nearest neighbor ($NN$) problem should need no introduction.  For our perspe
 
 Given a non-empty set of points $P$, a non-empty set of query points $Q$ in a metric space $M$, and a distance function $D(a, b)$ describing the distance between points $a$ and $b$ for $a \in M$ and $b \in M$, the "Nearest Neighbor" of a given point $q \in Q$ is the point $p \in P$ such that $D(p, q)$ is the lowest value of $D(p', q)$ over all points $p' \in P$ (i.e. $D(p, q) < D(p',q) \forall p'$ with $p \ne p'$.
 
-Note that it is possible that such a point does not exist if there are multiple points with the same lowest distance; we do not explore that situation here, as it does not affect our examination.
+Note that it is possible that such a point does not exist if there are multiple points with the same lowest distance; we do not explore that situation here.
 
 The k-nearest neighbors ($kNN$) of a given point $q$ as above is the list of $k$ points $R = p_1..p_k \in P$ such that $D(p_k, q)$ is the lowest value of $D(p, q)$ over all $p \in P$ such that $D(p', q)$ for $p' \ne p$ and $p' \not \in R$.  It should be evident that $NN = kNN$ when $k = 1$.
 
@@ -153,6 +153,15 @@ As with LSH, Graph search methods differ in their specific choices; typically th
 4. Insertion/Move Complexity: This doesn't seem closely studied, but in principle inserting a new row costs the time to re-evaluate the $kNN$ graph for that point, and update any points for which the $kNN$ graph would change with its addition.  We expect this should roughly be between $O(k\log{n})$ and $O(k^2 \log{n})$
 
 
+#### Dealing with Expensive distance functions
+
+We have found only one approach in the literature that focuses squarely on the same problem that we do here; namely: optimizing an NN algorithm when the distance function $D$ itself is very expensive.  Where "very" here is loosely imagined as meaning that it is costly enough to change the relative efficiencies of existing NN algorithms.
+
+In the article "Indexing expensive functions for efficient multi-dimensional similarity search"[@Chen2011], the authors write "[...] _approaches so far have concentrated on reducing I/O, and ignored the computation cost. For an expensive distance function such as Lp norm with fractional p, the computation cost becomes the bottleneck_", and from their experimentation: "_the computation cost of the functions affects the performance as significant as the I/O cost_".  This is in line with our analysis, and was the root driver of both of our approaches.
+
+At first glance their approach has similar goals as ours, but the resulting algorithm differs in several key ways.  First, Chen, et. al's approach relies a technique called Vector Approximation (VA) files, pioneered by [@Weber1998].  The VA structure is designed, according to the authors, to improve sequential scans on high dimensional data sets.  In this way it somewhat differs from our algorithms which apply to costly distance functions _even on low dimensionality data_.  The second primary difference between our and Chen et. al's approach, which is that we use data structures and sorted indexes explicitly to avoid sequential scans, with the intent of executing significantly less than $n$ comparisons in the average case (even with a proxy distance function).  By comparison, chen's approach, we believe, _requires_ one full sequential pass to establish a subset of points that may require comparison with the expensive distance function.  
+
+Still, this remains the approach most similar to ours thats we can find.
 
 ## Network Adequacy
 

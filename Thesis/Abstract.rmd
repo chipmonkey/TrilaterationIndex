@@ -1,7 +1,16 @@
+---
+title: "University of Louisville - 2021/04/04"
+author: "Chip Lynch"
+output:
+  pdf_document: default
+  html_document: default
+---
 # A Multilateration Alternate Coordinate System {-}
 
 ## Abstract {-}
-We present an alternative method for pre-processing and storing multilateration point data, particularly for Geospatial points, by storing distances to fixed points rather than coordinates such as Latitude and Longitude.  We explore the use of this data to improve query performance for some distance related queries such as nearest neighbor and query-within-radius (i.e. "find all points in a set $P$ within distance $d$ of query point $q$").
+We present an alternative method for pre-processing and storing point data, particularly for Geospatial points, by storing multilateration distances to fixed points rather than coordinates such as Latitude and Longitude.  We explore the use of this data to improve query performance for some distance related queries such as nearest neighbor and query-within-radius (i.e. "find all points in a set $P$ within distance $d$ of query point $q$").
+
+Further, we discuss the problem of "Network Adequacy" common to medical and communications businesses, to analyze questions such as "are at least 90% of patients living within 50 miles of a covered emergency room".  This is in fact the class of question that led to the creation of our pre-processing and algorithms, and is a generalization of a class of Nearest-Neighbor problems.
 
 Our construction includes storing the distances from fixed points (typically three, as in trilateration) as an alternative to Latitude and Longitude.  This effectively creates a coordinate system where the coordinates are the trilateration distances.  We explore this alternative coordinate system and the theoretical, technical, and practical implications of using it.  Multilateration itself is a common technique in surveying and geolocation widely used in cartography, surveying, and orienteering, although algorithmic use of these concepts for NN-style problems are scarce.  GPS uses the concept of detecting the distance of a device to multiple satellites to determine the location of the device; a concept known as true-range multilateration.  However while the approach is common, the distance values from multilateration are typically immediately converted to Latitude/Longitude and then discarded.  Here we attempt to use those intermediate distance values to computational benefit.  Conceptually, our multilateration construction is applicable to metric spaces in any number of dimensions.
 
@@ -9,6 +18,4 @@ Rather than requiring the complex pre-calculated tree structures, or high cost p
 
 Outside of SQL, our approach shows significant performance gains - 30x performance using the ann-benchmark tool for nearest-neighbors - when the cost of the atomic distance calculation itself is high, such as with geodesic distances on earth using accurate elliptical, rather than spherical or euclidean models of the earth.  Of note, our algorithms do not  improve on the time-complexity of nearest-neighbor searches; we remain $O(n)$ in the worst case.  The main point of improvement is that we can substitute simple subtraction for the distance function itself, after performing $d*n$ distance calculations to create our initial multilateration structure.  In effect, remembering that $O(C*f(x)) == O(f(x))$ where $C$ is a constant, our approach focuses on reducing $C$ rather than reducing the time complexity of $f(x)$ itself.
 
-Further, we discuss the problem of "Network Adequacy" common to medical and communications businesses, to analyze questions such as "are at least 90% of patients living within 50 miles of a covered emergency room".  This is in fact the class of question that led to the creation of our pre-processing and algorithms, and is a generalization of a class of Nearest-Neighbor problems.
-
-While we focus primarily on geospatial data, potential applications to this approach extend to any distance-measured n-dimensional metric space, and we touch on those (briefly, here, to constrain our scope).  For example, we consider applying the technique to Levenshtein distance, MINST datasets via cosine-similarity, and even facial recognition or taxicab systems where distances do not follow the triangle inequality.
+While we focus primarily on geospatial data, potential applications to this approach extend to any distance-measured n-dimensional metric space where the distance function itself has a high computational cost.
