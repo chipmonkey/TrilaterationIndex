@@ -76,6 +76,8 @@ In any case, comparing performance those are our parameters... the size of $Q$, 
 ```{r QP_size_comparison_d01, echo=FALSE, message=FALSE, fig.cap="SQL Timings By Category (s) - d=0.1 - lower is better", fig.width=10, fig.height=5}
 library(ggplot2)
 library(data.table)
+library('tidyverse')
+
 
 data <- read.csv('../postgresql/query_timings.csv')
 names(data)[3] <- 'timing_s'
@@ -94,7 +96,6 @@ data <- data[data$algorithm != 'None',]
 data$dist <- as.factor(data$dist)
 
 
-library('tidyverse')
 data$leftcat <- as.factor(data$leftcat)
 data$rightcat <- as.factor(data$rightcat)
 

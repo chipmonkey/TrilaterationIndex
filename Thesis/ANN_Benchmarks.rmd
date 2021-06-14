@@ -39,7 +39,7 @@ So like 5 seconds per query.  (?!)
 -->
 ```
 
-## Geodesic query points:
+### Geodesic query points:
 
 We have created a dataset specifically to test Geodesic queries.  The dataset is a synthetic set of 150,000 geospatial points spread across and near Kentucky with roughly the distribution of the population.
 
@@ -111,7 +111,7 @@ p
 ```
 
 
-## Random 20-dimension euclidean distance:
+### Random 20-dimension euclidean distance:
 
 The ann-benchmark tool includes support for a randomly generated 20-dimension euclidean dataset, which is one of its most basic tests.  We note that our performance here is abysmal for the initial "Trilateration" algorithm, even failing to beat the brute force approach.  This seems to be due to the overhead we incur determining which candidates to test next.  Remember that we traded a number of subtractions and some array navigation in exchange for fewer distance function calls.  In this case, when the distance function itself is extremely fast, that overhead is a net loss.
 
@@ -151,7 +151,7 @@ p <- ggplot(data=times, aes(x=Algorithm, y=QPS)) +
 p
 ```
 
-## Glove 25-dimension Angular distance
+### Glove 25-dimension Angular distance
 
 The GloVe ("Global Vectors for Word Representation") dataset "is an unsupervised learning algorithm for obtaining vector representations for words. Training is performed on aggregated global word-word co-occurrence statistics from a corpus, and the resulting representations showcase interesting linear substructures of the word vector space" according to the authors. [@pennington2014glove]
 
