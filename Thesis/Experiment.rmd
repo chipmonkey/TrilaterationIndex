@@ -42,6 +42,55 @@ kable(results, caption="Record Counts by Category ID")
 2. We implement our two Network Algorithms (NAIVE-NA and TRILAT-NA) described in [Multilateration NA Algorithms] in the SQL database.
 3. We execute these over various combinations of categories in our dataset, logging the duration of each combination for comparison.
 
+
+### Experimental data - Geodesic query points:
+
+We have created a dataset specifically to test Geodesic queries.  The dataset is a synthetic set of 150,000 geospatial points spread across and near Kentucky with roughly the distribution of the population.
+
+```{r kentucky_map, echo=FALSE, fig.cap="Geodesic Sample Data", fig.width=6, fig.height=4, dev='png'}
+library('maps')
+library('mapproj')
+library(ggplot2)
+
+m = map("state", fill = TRUE, plot = FALSE)
+usa <- map_data("usa")
+states <- map_data("state")
+kentucky <- subset(states, region %in% "kentucky")
+sampleLL <- read.csv('../data/lat_long_synthetic.csv')
+sampleLL$Color = 'black'
+minlong <- min(kentucky$long)
+minlat <- min(kentucky$lat)
+maxlong <- max(kentucky$long)
+maxlat <- max(kentucky$lat)
+x <- which (sampleLL$Longitude > minlong &
+                   sampleLL$Longitude < maxlong &
+                   sampleLL$Latitude > minlat &
+                   sampleLL$Latitude < maxlat)
+sampleLL <- sampleLL[x,]
+
+counties <- map_data('county')
+ky_counties <- subset(counties, region == "kentucky")
+ggplot() + 
+  geom_polygon(data=kentucky, aes(x = long, y = lat, group = group), fill = "white", color = "black") + 
+  coord_fixed(1.3) +
+  #  Not sure why I can't get these next two lines to work in one:
+  geom_point(data=sampleLL[sampleLL$Color=='black',], color='black', shape=16,
+             aes(x=Longitude, y=Latitude), alpha = 0.1, size=1) +
+  geom_polygon(data=ky_counties, aes(x=long, y=lat, group=group), fill = NA, color = "white")
+```
+
+\newpage
+
+```{r child = 'NearestNeighbor.rmd'}
+```
+
+
+\newpage
+
+```{r child = 'NetworkAdequacyExperiment.rmd'}
+```
+
+
 \newpage
 
 ## Experimental Results
@@ -52,3 +101,5 @@ kable(results, caption="Record Counts by Category ID")
 \newpage
 
 ```{r child = 'SQL_Results.rmd'}
+```
+

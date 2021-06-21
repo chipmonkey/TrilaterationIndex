@@ -158,9 +158,9 @@ To help understand the above values, the following chart shows the distances for
 ```
 
 
-### Geospatial Example 
+### Geospatial Trilateration Index
 
-Applying this to real sample points; let the following be the initial reference points on the globe: 
+Applying this to real sample points; we propose a standard geospatial trilateration index to allow for comparability across data sets by setting the following specific initial reference points on the globe: 
 
 Point 1: $90.000000, 0.000000$ (The geographic north pole) 
 

@@ -1,0 +1,95 @@
+---
+title: "Introduction"
+author: "Chip Lynch"
+date: "6/12/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Introduction
+
+## Problem Space 1 - Satellite Communication and Expensive Distance Functions
+
+Imagine a constellation of thousands of communications satellites traveling around the earth in overlapping elliptical orbits.  These need to communicate directly to one another, and to terminals on the ground.  To communicate quickly and effectively, several important questions must be constantly answered at all times:
+
+* For any given satellite what is the nearest satellite to which it can communicate?
+* For any given ground station, if redundancy is needed, what are the nearest 5 satellites?
+* If a satellite can communicate with ground stations within a radius of, say, 500 km, at any given time are all ground stations within 500km of a satellite's communications center?
+
+The first two are well known problems in computer science - the Nearest Neighbor (NN) question (which satellite is nearest), and the k-Nearest Neighbor question (which 5 satellites are closest).  We explore this in the [Nearest Neighbor](#Nearest-Neighbor) section.
+
+The third bullet above is related but somewhat less common - we refer to it as "Network Adequacy" (NA) - in short: are there enough resources within the needed distance of objects that need them?  See our section [Network Adequacy](#Network-Adequacy) for a thorough discussion.
+
+There are many existing solutions to the nearest neighbor problem in computer science literature, and the network adequacy question can be solved with repeated application of nearest neighbor algorithms.  (If every ground station's closest satellite is within the required distance, the network is adequate).  However there are aspects of the satellite problem which make it particularly vexing to existing NN and NA solutions:
+
+* Satellites are constantly moving.  Many existing state-of-the-art algorithms to determine the nearest neighbor require expensive pre-processing that excludes them for use in a fast moving system.
+* Calculating the instantaneous distance between two satellites, or a satellite and a ground station to a precision required for laser communications is computationally expensive (due to the ellipsoidal shape of the earth and specific orbits of satellites), with one calculation taking some 500 times as long as a simple euclidean distance calculation.  Existing algorithms ignore this computational cost of the distance function which, in many real-world scenarios, makes them less efficient.
+
+## Problem Space 2 - Healthcare and Network Adequacy for Overlapping Sets
+
+We find it interesting that satellite communications shares a computational problem with the US healthcare system, but that is exactly what we have found.
+
+Consider a healthcare system as a system of people (who may need medical care) and service provider.  In the US, the government seeks to maintain an adequate network of medical service providers so that people have reasonable access to them.  This is called "Network Adequacy" in the Medicare/Medicaid literature, and is where we originally encountered the term.  Metrics that the government seeks to maintain for a given insurance company may look like:
+
+* 90% of members must live within 50 miles of a covered emergency room
+* 80% of female members over the age of 13 must live within 25 miles of a covered OB/GYN
+* 80% of members under the age of 16 must live within 25 miles of a covered pediatrician
+* etc.
+
+On its surface, if we ask questions like "how many people are within 50 miles of a hospital", it seems similar to our satellite question about "how many ground stations are within communications distance of a satellite".  Healthcare would seem easier in two ways:
+
+* Healthcare doesn't require nearly the accuracy of satellite communications - a person a half mile closer to a hospital isn't significantly different than one a half mile further (while a laser pointing only a few feet away from a satellite will miss it entirely).
+* People and service providers don't really move; certainly not constantly at tens of thousands of miles per hour like satellites.  We can formulate questions about these based on fixed addresses.
+
+At the same time, there are some patterns in the data and questions that make this computationally interesting:
+
+* Most distance related questions deal with only two sets (computationally generally referred to as $P$ and $Q$, the "population" and "query" set).  These would refer to the satellites and the ground stations, or the patients and hospitals.  However in reality the questions we ask in healthcare are interested in only a small group of the people or service providers.  Looking at our example questions for example, the first (90% people must be within 50 miles of an emergency room) deals with all people, but only a small set of service providers (i.e. emergency rooms).  Other questions may concern only a subset of either group: people are divided by gender, age, race; and a subset of service providers: hospitals, pharmacies, oncologists, pediatricians, and so on.  What's noteworthy about these groups is that they overlap... any one person will be a member of a gender group, one or more age groups, one or more racial groups, etc.  Medical providers may or may not be grouped - a hospital will contain many individual services, while individual practitioners may have standalone offices.  As we discuss in our [Review of Current Literature](#Review-of-Current-Literature) section, there is little investigation of optimizing for answering these questions with these real life overlapping sets.
+* The questions proposed for Network Adequacy, while they relate to counting objects by distance, differ from Nearest Neighbor in two particular ways:
+  1. Adequacy questions don't specify _which_ itens are in proximity, only that there exist services of a given type within a given distance, while Nearest Neighbor is very specific about identifying the specific points that qualify.
+  2. We aren't really interested in individual answers so much as the collective percent of coverage.  In satellite communcation, every component _must_ know it's nearest points so that it can at least knows which way to point.  Here, it is presumed too expensive to have _everyone_ within a quick drive of every possible healthcare convenience, so only a threshold percentage matters.  We discuss this in our [Network Adequacy Threshold](#Network-Adequacy-Threshold) section, and show how real-life implementations for healthcare, using SQL databases, can gain from our approaches in our [SQL Network Adequacy Results](#SQL-Network-Adequacy-Results) section.
+
+
+
+We explore these questions and ultimately present a practical response: the Multilateration Coorinate System and Index.
+
+## Proposed Solution: Multilateration Coordinate System and Index
+
+If you ever find yourself lost in the woods, and you have a map, and you can see the peaks of three mountains (or other features - not in a line) that appear on the map, you can precisely calculate your position by comparing the angles at which you observe the mountains, without having to estimate their distance.  This is a process called "triangulation".
+
+If, rather than observing the angles, you can calculate the specific distances to three points, you can also identify your position.  For example, there will be only one point where the mountain peak is 500 meters away, the fire tower is 1000 meters away, and the radio tower is 200 meters away.  Any other possible combinations of distances would be a different, unique point.  This approach is called trilateration.  If you were in a park, with that mountain, fire tower, and radio tower, you could map every point in the park by the distances to each of those features.  This could even be a valid coordinate system, just like a cartesian or polar coordinate system; a replacement for latitude and longitude.
+
+And this is exactly what we propose; storing multilateration distances as an alternative coordinate system to Latitude and Longitude.  Specifically, for any point on earth, we measure the distances from these three points, and treat those three distances as coordinates:
+
+* Point 1: $90.000000, 0.000000$ (The geographic north pole) 
+* Point 2: $38.260000, -85.760000$ (Louisville, KY on the Ohio River) 
+* Point 3: $-19.22000, 159.93000$ (Sandy Island, New Caledonia)
+
+Storing those coordinates for analysis is a data structure we call a Trilateration Index.  We explore this idea in depth in this paper, and in our sections on [Introducing the Multilateration Index](#Introducing-the-Multilateration-Index).
+
+## Practical Advantages
+
+This formulation provides some significant advantages over Latitude and Longitude when answering the types of questions we identified above in our satellites and healthcare networks examples.  We will explore these in more detail, but in short:
+
+* It is very easy to calculate relatively tight bounds on distances between two points knowing only their trilateration coordinates.  For example, if you are 300 miles from Louisville, KY and your friend is 1000 miles from Louisville, KY, you cannot be closer than 700 miles apart.
+* Similarly, if your distance from points 1, 2, and 3 differ from your friends distances from those points by less than 20 miles each, then you are (very likely) within 20 miles of one another.
+* Since these trialteration values are themselves distances, we can store them along with attributes such as gender, age, and facility type allow us to partition and calculate on distances and attributes at the same time.  Some algorithms pre-process on distances first, building trees or network graphs or other data structures based on distance alone.  We can exploit the overlapping nature of various attributes to enhance performance across multiple queries by avoiding high pre-processing costs.
+
+These facts imply algorithmic improvements for solving Nearest Neighbor (NN) and Network Adequacy (NA), respectively.  Operations on the trilateration index can take complex distance functions and convert them to basic comparison (i.e. a single mathematical subtraction per dimension). This offers a huge computational savings for each distance function avoided by these estimates.
+
+We propose, discuss, and implement specific algorithms using these constructs to solve general NN and NA problems, and we can show significant improvement in real-world scenarios over other state-of-the art methods when complex distance functions are involved.  While we build on common basic geometry and while we are not the first to observe the challenges expensive distances can make for these classes of problems, we believe our final algorithms and the trilateration index construct is a unique and novel approach.
+
+## Implementation Details
+
+The rest of this paper will be a guide through the more technical details of the Multilateration Index and its application to improving NN and NA algorithms.
+
+* Chapter 2: [Review of Current Literature](#Review-of-Current-Literature) begins by examining existing papers on [Geospatial Computations](#Geospatial-Computations) to establish them as a candidate for high calculation cost distance metrics.  We further review literature on [Multilateration](#Multilateration) and establish baselines for existing algorithms for [Nearest Neighbor](#Nearest-Neighbor) algorithms and describe our search (and lack of significant existing literature) on [Network Adequacy](#Network-Adequacy-Minimal-Literature) algorithms.
+
+* Chapter 3: [Network Adequacy](#Network-Adequacy) formally introduces Network Adequacy since there was little literature describing the computational approach as a distinct problem from Nearest Neighbor, when we believe the two are distinct.
+
+* Chapter 4: [Introduces the Multilateration Index](#Introducing-the-Multilateration-Index) in a formal way, including proposing a standard to compare to standard Latitude and Longitude standardized in ISO-6709.  We provide a detailed example in 2 dimensions and walk through the math and theory with a 10-data point example.  We break down several common distance queries as sub-algorithms on top of the Multilateration Index to show how they can quickly answer the questions we described in our satellite and healthcare examples.  We provide detailed descriptions and illustrations to help describe the index and how to query it.  We perform numerical analysis and theoretical analysis of the time complexity of our algorithms.  While we focus on the NN and NA algorithms, we mention some other areas where a Multilateration Index may be useful while leaving them for future exploration.
+
+* Chapter 5: [Experimentation](#Experimentation) describes the specific experiments we intend to run to test our algorithms performance, and the results.  We test both Cython and SQL implementations of four NN algorithms and one algorithm tuned for NA queries based on the Multilateration Index.  We compare the results against traditional solutions in those spaces.  We find that we are in fact able to improve performance in certain situations (those with expensive distance functions), and we discuss the circumstances and degree of our improvements.
+
+
+
