@@ -42,6 +42,8 @@ kable(results, caption="Record Counts by Category ID")
 2. We implement our two Network Algorithms (NAIVE-NA and TRILAT-NA) described in [Multilateration NA Algorithms] in the SQL database.
 3. We execute these over various combinations of categories in our dataset, logging the duration of each combination for comparison.
 
+Note that the above categories are used to simulate the answers to the questions we had from our healthcare examples... rather than "90% of the members must live within 50 miles of a covered emergency room", we ask if "90% of the points in category 10 are within 50 miles of a point in category 13".  The charts in our [Result Charts](#Result-Charts) section effectively describe the performance of calculating the percent for various distances for these sorts of questions.
+
 
 ### Experimental data - Geodesic query points:
 
@@ -78,6 +80,8 @@ ggplot() +
              aes(x=Longitude, y=Latitude), alpha = 0.1, size=1) +
   geom_polygon(data=ky_counties, aes(x=long, y=lat, group=group), fill = NA, color = "white")
 ```
+
+
 
 \newpage
 

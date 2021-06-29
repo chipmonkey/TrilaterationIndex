@@ -33,3 +33,8 @@ arcs <- data.frame(cbind(points[c(1,2,3), c('lat', 'long')],
 globejs(bg="blue", arcs = arcs,
         arcsHeight = 0.4, arcsLwd = 3, arcsOpacity = 0.7,
         arcsColor = 'white', img=earth, fov=30)
+
+globejs(arcs = arcs,
+        arcsHeight = 0.4, arcsLwd = 3, arcsOpacity = 0.2,
+        arcsColor = 'white', img = system.file("images/world.jpg", package = "threejs"), fov=30)
+

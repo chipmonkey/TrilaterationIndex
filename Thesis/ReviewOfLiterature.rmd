@@ -98,7 +98,7 @@ The naive approach to solving k-nn is a brute-force algorithm, iterating over ev
 
 1. Training Time Complexity: Zero; i.e. $O(1)$  No pre-processing is performed.
 2. Memory Space: $|P|$, which is simply the cost of storing the list of points $p \in P$
-3. Prediction Time Complexity: $O(n)$ - each query must process every point; this is not a worst case, but the every-time case for brute force
+3. Prediction Time Complexity: $O(|P|)$ - each query must process every point; this is not a worst case, but the every-time case for brute force
 4. Insertion/Move Complexity: $O(1)$ - a list element can be added to the end of an array, or a location can be updated in place.  There is no complexity to changing a point.
 
 
@@ -148,7 +148,7 @@ As these are relatively new, and as implementations focus on real-world performa
 As with LSH, Graph search methods differ in their specific choices; typically the mechanism for generating the search graph.  In general, these graphs are called "Monotonic Search Networks" (MSNETs)...  [@Fu2018] compares "Monotonic Relative Neighborhood Graphs" (MRNGs) and "Navigating Spreading-out Graphs" (NSGs).
 
 1. Training Time Complexity: [@Fu2018] reports $O(|P|^2\log(|P|)+|P|^2*c)$ for an "MRNG" where $c$ is the average out-degree of [the graph]".  For NSGs, this can be reduced to $O(k|P|\frac{1+d}{d}log(|P|^\frac{1}{d})+|P|^{1.16})$ and  $O(k|P|\frac{1+d}{d}\log(|P|^\frac{1}{d})+|P|*\log(|P|))$ for FAISS.  Note that these are all by far the largest preparation complexities of all our reviewed algorithms.
-2. Memory Space: Efficient graph storage requires storing $k$ edges for each of $n$ points for a base space complexity of $O(kn)$
+2. Memory Space: Efficient graph storage requires storing $k$ edges for each of $|P|$ points for a base space complexity of $O(k*|P|)$
 3. Prediction Time Complexity: [@Fu2018] reports theoretical results for $NSG$s as $O(c|P|^{\frac{1+\epsilon}{d}}\log{|P|^\frac{1}{d}})$, which, for large $d$ approaches $O(\log |P|)$, which matches their experimental results.
 4. Insertion/Move Complexity: This doesn't seem closely studied, but in principle inserting a new row costs the time to re-evaluate the $kNN$ graph for that point, and update any points for which the $kNN$ graph would change with its addition.  We expect this should roughly be between $O(k\log{|P|})$ and $O(k^2 \log{|P|})$
 

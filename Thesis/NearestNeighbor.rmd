@@ -13,6 +13,29 @@ For each of these Trilateration algorithms, complexity is:
 3. Prediction Time Complexity is, as with other $kNN$ algorithms, bounded by worst-case of $O(n)$.  The algorithms may differ in their average case performance.
 4. Insertion Complexity is $O(|P|)$ - being the cost if inserting or updating an element in the sorted array of distances for each $p \in P$.
 
+For comparison, we assign a somewhat arbitrary numeric scale to the $O()$ complexity values researched in our earlier review.  This helps exemplify how we sacrifice worst-case prediction complexity, but gain some average prediction time, in exchange for Training and Insertion performance improvements.
+
+```{r o_comparison_table, echo=FALSE}
+library(knitr)
+k = data.frame(Algorithm=c("Brute-Force", "Space Partitioning Trees",
+                           "Locality Sensitive Hashing", "Graph Based Search",
+                           "Multilateration"),
+               TrainingTime = c(0, 2, 2, 5, 1),
+               MemorySpace = c(1, 1, 3, 3, 1),
+               WorstPredictionTime = c(5, 2, 3, 1, 5),
+               AveragePredictionTime = c(5, 2, 2, 1, 3),
+               InsertionTime = c(1, 2, 3, 5, 2))
+
+kable(k, caption="Approximate relative complexity on a 1-5 scale")
+```
+
+We explore four variations to explore various possible optimizations that we imagined prior to experimentation, since the experiment was required to determine which would perform best under which circumstances.  While we go into more detail later, in short:
+* TRI - search along a sorted 1-dimensional ($d_1) distance until the worst 1d distance is farther than the top-k nearest so far
+* TIA - an approximate solution based solely on a 1-dimensional distance (this turns out not to be very good)
+* TIE - set a low and high bound on a radius (r) using the efficient $Within()$ function to bisect the range until $~k$ records remain
+* TIE2 - start with a radius $r$ being the distance of the closest point along 1-dimension and select the next multiple of $k$ (a "chunk") points along that dimension at a time until $k$ nearest records are identified
+
+
 #### Trilateration (TRI)
 
 The main trilateration algorithm for exact Nearest-Neighbor solutions takes the Trilateration Index (recall - the distances stored in a sorted array form from all points in $P$ with respect to $d+1$ fixed reference points -- 3 in the case of 2-d Trilateration) and applies the following for a query point $q$.  This provides simple a simple $O(log(n))$ binary search by distance, along with the ability to quickly iterate through points consecutively closer or farther from a given point in list order using common array operations.[@Tainiter1963]
