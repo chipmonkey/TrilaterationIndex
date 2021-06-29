@@ -6,6 +6,7 @@ output:
   pdf_document: default
   html_document: default
 ---
+\pagebreak
 
 ## SQL Network Adequacy Results
 
@@ -25,10 +26,12 @@ names(cat_data) <- c('category', 'record count')
 kable(cat_data, caption="Record counts by category used in experiment")
 ```
 
+\newpage
+
 Recall that we are calculating the Network Adequacy Percent (NAP), which requires a distance $d$, and we performed expriments with $d \in (0.1, 1, 10, 100)$.  At a high level, our TRILAT-NA algoritm performs well against the naive algorithm as shown in our "SQL Timings" figure.
 
 
-```{r sql_results, echo=FALSE, fig.cap="SQL Timings (s) - lower is better", fig.width=6, fig.height=4}
+```{r sql_results, echo=FALSE, fig.cap="SQL Timings (s) - lower is better", fig.width=6, fig.height=3}
 library(data.table)
 library(ggplot2)
 

@@ -15,7 +15,7 @@ header-includes:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, fig.pos = 'H')
 # knitr::opts_chunk$set(fig.pos = 'H')
 # knitr::opts_chunk$set(fig.pos = "!H", out.extra = "")
 ```

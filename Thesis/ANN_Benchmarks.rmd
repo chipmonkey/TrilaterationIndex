@@ -5,7 +5,17 @@ date: "2/23/2021"
 output: pdf_document
 ---
 
-## ANN Benchmarks
+## ANN-Benchmarks
+
+We used the "Ann-Benchmarks" software - a widely available open source benchmark designed for timing Nearest Neighbor algorithms - to compare our algorithm to others in the NN space. [@Amueller2020]  We tested three scenarios:
+
+* Our Geodesic dataset using the (expensive but accurate) Karney distance algorithm [@Karney2013] coded in the geopy package [@geopy]
+* A standard 20-dimension Euclidean distance test provided by the ANN-Benchmarks software
+* A 25-dimension Angular distance test ("Glove") provided by the ANN-Benchmarks software
+
+We expect that our algorithm will not fare well in the second and third tests as those are widely available and other algorithms are highly tuned for them.  We note, however, that the individual distance functions in those cases are relatively fast to calculate, so we expect our algorithms, designed to handle more expensive functions, will do well in the Geodesic test.
+
+### 3D Geodesic 150k points
 
 ```{html echo=FALSE}
 <!--
@@ -184,3 +194,10 @@ p <- ggplot(data=times, aes(x=Algorithm, y=QPS)) +
   coord_flip()
 p
 ```
+
+### NN Results Summary
+
+As we hoped, we outperformed generic algorithms on Geodesic distance queries, however the degree to which we outperformed them -- some 30 times -- exceeded our expectations.  Moreso we were able to do so with a training time some five times less than the next best performing Ball tree algorithm (58 seconds training time for Trilateration, 258 seconds for Ball Tree).
+
+Our algorithm severely underperformed on the Euclidean and Angular distance functions, but this is unsurprising, as the existing algorithms have been heavily tuned for those use cases.
+
