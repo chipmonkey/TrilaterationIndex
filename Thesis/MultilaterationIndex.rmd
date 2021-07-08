@@ -174,41 +174,4 @@ Optional Point 5: $-48.87000, -123.39000$ (Point Nemo)
 
 Note that the reference points are defined precisely, as exact latitude and longitude to stated decimals (all remaining decimal points are 0).  This is to avoid confusion, and why the derivation of the points is immaterial (Point Nemo, for example is actually at a nearby location requiring more than two digits of precision).
 
-Only three points are required for trilateration (literally; thus the "tri" prefix of the term), but we include 5 points to explore the pros and cons of n-fold geodistance indexing for higher values of n.
-
-
-## Theoretical Discussion 
-
-### Theoretical benefits: 
-
-**Precision**: Queries are not constrained by precision choices dictated by the index, as can be the case in Grid Indexes and similar R-tree indexes.  R-tree indexes improve upon naïve Grid Indexes in this area, by allowing the data to dictate the size of individual grid elements, and even Grid Indexes are normally tunable to specific data requirements.  Still, this involves analysis of the data ahead of time for optimal sizing, and causes resistance to changes in the data.
-
-**Distributed Computing**: Trilateration distances can be used as hash values, compatible with distributed computing (I.e. MongoDB shards or Teradata AMP Hashes). 
-
-**Geohashing**: Trilateration distances can be used as the basis for Geohashes, which improve somewhat on Latitude/Longitude geohashes in that distances between similar geohashes are more consistent in their proximity. 
-
-**Bounding Bands**: The intersection of Bounding Bands create effective metaphors to bounding boxes, without having to artificially nest or constrain them, nor build them in advance. 
-
-**Readily Indexed (B-Tree compatible)**: Trilateration distances can be stored in traditional B-Tree indexes, rather than R-tree indexes, which can improve the sorting, merging, updating, and other functions performed on the data. 
-
-**Fault Tolerant**: This coordinate system is somewhat self-checking, in that many sets of coordinates that are individually within the correct bounds, cannot be real, and can therefore be identified as data quality issues.  For example, a point cannot be 5 kilometers from the north pole (fixed point F1) and 5 kilometers from Louisville, KY (fixed point F2) at the same time.  A point stored with those distances could be easily identified as invalid. 
-
-Theoretical shortcomings: 
-
-**Index Build Cost**: Up front calculation of each trilateration is expensive, when translating from standard coordinates. Each point requires three (at least) distance calculations from fixed points and the sorting of the resulting three lists of distances.  This results in `O(n*logn)` just to set up the index.
-
-*This could be mitigated by upgrading sensor devices and pushing the calculations back to the data acquisition step, in much the way that Latitude and Longitude are now trivial to calculate in practice by use of GPS devices.  Also, we briefly discuss how GPS direct measurements (prior to converstion to Lat/Long) may be useful in constructing trilateration values. 
-
-**Storage**: The storing of three distances (32- or 64- bits per distance) is potentially a sizeable percent increase in storage requirement from storing only Latitude/Longitude and some R-Tree or similar index structure. 
-
-*Note that if the distances are stored instead of the Lat/Long, rather than in addition to them, storage need not increase. 
-
-**Projection-Bound**: The up-front distance calculations means that transforming from one spatial reference system (I.e. map projection – geodetic – get references to be specific) to another requires costly recalculations bearing no benefit from the calculation.  For example a distance on a spherical projection of the earth between a given lat/long combination will be different than the distance calculated on the earth according to the standard WGS84 calculations). 
-
-*This said, we expect in most real-world situations, cross-geodetic comparisons are rare. 
-
-**Difficult Bounding Band Intersection**: Bounding Bands intersect in odd shapes, which, particularly on ellipsoids, but even on 2D grids, are difficult to describe mathematically.  Bounding boxes on the other hand, while they distort on ellipsoids, are still easily understandable as rectangles. 
-
-
-
- 
+Only three points are required for trilateration (literally; thus the "tri" prefix of the term), but we include 5 points to explore the pros and cons of n-fold geodesic indexing for higher values of n.

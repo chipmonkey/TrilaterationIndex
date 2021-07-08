@@ -34,7 +34,7 @@ Note that this function is in PostgreSQL syntax; it requires slight moderation b
 
 Also note the $1609.34$ - this is to convert the distance from meters to miles, which is not core to the algorithm, but left here since these are the units we work with in our experimental results, and as an example.
 
-
+\newpage
 ### TRILAT-NA
 
 Recall that we require fixed reference points for Trilateration, and per our previous construction, we selected these:

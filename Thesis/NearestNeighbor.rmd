@@ -1,10 +1,12 @@
 ## Multilateration NN Algorithms
 
-We create a total of four similar algorithms to exploit the Multilateration Index, in particular for geodesic distances (although our implementations are applicable to any distance function):  [Trilateration (TRI)], [TrilaterationApprox (TIA)], [TrilaterationExpand (TIE)], and [TrilaterationExpand2 (TIE2)].
+We present a new [Trilateration (TRI)] algorithm, which uses the Trilateration Index to solve the Nearest Neighbor problem.
+
+We include three other algorithms derived from the original TRI algorithm, but with various algorithmic changes which we describe in depth below.  These were the result of speculation on our part for potential improvements, our [Experimentation] section will describe how these perform in various dimensions and metric spaces.  In particular we describe three variations on our TRI algorithm: [TrilaterationApprox (TIA)], [TrilaterationExpand (TIE)], and [TrilaterationExpand2 (TIE2)].  These are based on simple core well established algorithms - sorted list searches, heaps, and the base index algorithms we described in [Simple Multilateration Index Operations].
 
 ### Comparing Algorithms
 
-Recall from our Review of Literature, we are comparing $NN$ algorithms by four areas Training Time Complexity, Memory Space, Prediction Time Complexity, Insertion/Move Complexity.
+Recall from our [Review of Literature], we are comparing $NN$ algorithms by four areas Training Time Complexity, Memory Space, Prediction Time Complexity, Insertion/Move Complexity.
 
 For each of these Trilateration algorithms, complexity is:
 

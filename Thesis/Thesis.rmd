@@ -54,6 +54,11 @@ knitr::opts_chunk$set(echo = TRUE, fig.pos = 'H')
 ```{r child = 'Experiment.rmd'}
 ```
 
+\newpage
+
+```{r child = 'ConclusionsAndFutureWork.rmd'}
+```
+
 
 ***
 

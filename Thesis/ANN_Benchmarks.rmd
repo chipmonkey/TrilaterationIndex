@@ -15,6 +15,8 @@ We used the "Ann-Benchmarks" software - a widely available open source benchmark
 
 We expect that our algorithm will not fare well in the second and third tests as those are widely available and other algorithms are highly tuned for them.  We note, however, that the individual distance functions in those cases are relatively fast to calculate, so we expect our algorithms, designed to handle more expensive functions, will do well in the Geodesic test.
 
+Lastly note that all algorithms in our results section are 100% accurate.  The TIA was the only one which sacrificed accuracy for speed, and that algorithm performed so poorly we excluded it from the results entirely.
+
 ### 3D Geodesic 150k points
 
 ```{html echo=FALSE}
