@@ -83,6 +83,8 @@ times <- times[order(times$Algorithm),]
 
 p <- ggplot(data=times, aes(x=Algorithm, y=QPS)) +
   geom_bar(stat="identity", col='black', fill='grey') +
+  geom_text(aes(label = round(QPS,3)), hjust = 0, colour = "black") +
+  ylim(0, 80) +
   coord_flip()
 p
 ```

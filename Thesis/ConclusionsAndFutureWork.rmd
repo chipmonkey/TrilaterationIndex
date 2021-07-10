@@ -1,18 +1,25 @@
 # Conclusions
 
-We find that we were able to achieve our original goal, of designing data structures and related algorithms using Multilateration to improve upon Nearest Neighbor and Network Adequacy algorithms in situations where the distance function is computationally expensive.
+We find that we were able to achieve our original goal, of designing data structures and related algorithms using Multilateration to improve upon Nearest Neighbor and Network Adequacy algorithms in situations where the distance function is computationally expensive.  We summarize the following results:
+
+* On Geodesic data for Nearest Neighbor search, our index and algorithm is ~30 times faster than the next best (a tuned Ball-Tree algorithm)
+* On Euclidean and Angular data for NN, our performance is significantly worse - between 3% and 50% as fast as alternatives
+* For Geodesic data answering Network Adequacy questions, our SQL index and algorithm is 50% faster in sparse data (when the coverage percent is <= ~50%) than competing algorithms
+* For Geodesic NA questions, our performance is roughly equivalent of standard SQL approaches for dense data (when the coverage percent is >> ~50%).
+
+So our results are mixed, but for certain use cases which are predictable in advance, our treatment shows definite improvement.
 
 # Future Work
 
-## Theoretical benefits: 
+There are a number of areas that we speculate, with minimal investiagtion, that Multilateration indexes and algorithms have benfits worth exploring.  A brief list of such areas that may be good for future investigation include:
 
-**Precision**: Queries are not constrained by precision choices dictated by the index, as can be the case in Grid Indexes and similar R-tree indexes.  R-tree indexes improve upon naïve Grid Indexes in this area, by allowing the data to dictate the size of individual grid elements, and even Grid Indexes are normally tunable to specific data requirements.  Still, this involves analysis of the data ahead of time for optimal sizing, and causes resistance to changes in the data.
+**Precision**: Queries are not constrained by precision choices dictated by the index, as can be the case in Grid Indexes and similar R-tree indexes, which must be tuned for .  R-tree indexes improve upon naïve Grid Indexes in this area, by allowing the data to dictate the size of individual grid elements, and even Grid Indexes are normally tunable to specific data requirements.  Still, this involves analysis of the data ahead of time for optimal sizing, and causes resistance to changes in the data.
 
-**Distributed Computing**: Trilateration distances can be used as hash values, compatible with distributed computing (I.e. MongoDB shards or Teradata AMP Hashes). 
+**Geohashing**: Trilateration distances can be used as the basis for Geohashes, which improve somewhat on Latitude/Longitude geohashes in that distances between similar geohashes are more consistent in their proximity.  Geohashing is a mechanism of encoding a location into a short string of letters or numbers - a "geohash", based on structures proposed in 1966.[@Morton1966]  The Trilateration index could be converted to such a hash by selecting the most significant digits of each Trilateration distance to some precision and concatenating them. I.e. point #1 in our 10-point sample set had d1=56.13720, d2=40.89001, and d3=54.19130.  A 1-digit hash would be 545; a 2-digit would be 564054, and so on.   The advantage of this is that two geohashes can be quickly be compared for distance.  For example a point hashed to 545 would be closer to a point that hashes to 656 than it would to one hashed 577.
 
-**Geohashing**: Trilateration distances can be used as the basis for Geohashes, which improve somewhat on Latitude/Longitude geohashes in that distances between similar geohashes are more consistent in their proximity. 
+**Distributed Computing**: Those geohashes can be used as hash values, compatible with distributed computing (I.e. MongoDB shards or Teradata AMP Hashes).  Our algorithms can also be effective when distributed - that is; if the data is divided across N workers, each can independently apply the Multilateration index and algorithms, and the case of combining data from the N workers is a fairly trivial merge sort.  Also, simple message passing could be implemented to pass upper bounds on distances as nodes improve their individual top-k, allowing other nodes to quickly prune results.
 
-**Bounding Bands**: The intersection of Bounding Bands create effective metaphors to bounding boxes, without having to artificially nest or constrain them, nor build them in advance. 
+**Bounding Bands**: The intersection of Bounding Bands (the rings radiating fixed distances from the trilateration index points) overlap in shapes that are effective metaphors to bounding boxes, without having to artificially nest or constrain them, nor build them in advance as with KD- and Ball-Trees.
 
 **Readily Indexed (B-Tree compatible)**: Trilateration distances can be stored in traditional B-Tree indexes, rather than R-tree indexes, which can improve the sorting, merging, updating, and other functions performed on the data. 
 
