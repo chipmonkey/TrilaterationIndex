@@ -39,7 +39,7 @@ Consider a healthcare system as a system of people (who may need medical care) a
 
 On its surface, if we ask questions like "how many people are within 50 miles of a hospital", it seems similar to our satellite question about "how many ground stations are within communications distance of a satellite".  Healthcare would seem easier in two ways:
 
-* Healthcare doesn't require nearly the accuracy of satellite communications - a person a half mile closer to a hospital isn't significantly different than one a half mile further (while a laser pointing only a few feet away from a satellite will miss it entirely).
+* Healthcare doesn't require nearly the accuracy of satellite communications - a person a half mile closer to a hospital isn't that much different than one a half mile further (while a laser pointing only a few feet away from a satellite will miss it entirely).
 * People and service providers don't really move; certainly not constantly at tens of thousands of miles per hour like satellites.  We can formulate questions about these based on fixed addresses.
 
 At the same time, there are some patterns in the data and questions that make this computationally interesting:
@@ -77,13 +77,13 @@ This formulation provides some significant advantages over Latitude and Longitud
 
 These facts imply algorithmic improvements for solving Nearest Neighbor (NN) and Network Adequacy (NA), respectively.  Operations on the trilateration index can take complex distance functions and convert them to basic comparison (i.e. a single mathematical subtraction per dimension). This offers a huge computational savings for each distance function avoided by these estimates.
 
-We propose, discuss, and implement specific algorithms using these constructs to solve general NN and NA problems, and we can show significant improvement in real-world scenarios over other state-of-the art methods when complex distance functions are involved.  While we build on common basic geometry and while we are not the first to observe the challenges expensive distances can make for these classes of problems, we believe our final algorithms and the trilateration index construct is a unique and novel approach.
+We propose, discuss, and implement specific algorithms using these constructs to solve general NN and NA problems, and we can show significant (2-30x performance increase) improvement in real-world scenarios over other state-of-the art methods when complex distance functions are involved.  While we build on common basic geometry and while we are not the first to observe the challenges expensive distances can make for these classes of problems, we believe our final algorithms and the trilateration index construct is a unique and novel approach.
 
 ## Implementation Details
 
 The rest of this paper will be a guide through the more technical details of the Multilateration Index and its application to improving NN and NA algorithms.
 
-* Chapter 2: [Review of Current Literature](#Review-of-Current-Literature) begins by examining existing papers on [Geospatial Computations](#Geospatial-Computations) to establish them as a candidate for high calculation cost distance metrics.  We further review literature on [Multilateration](#Multilateration) and establish baselines for existing algorithms for [Nearest Neighbor](#Nearest-Neighbor) algorithms and describe our search (and lack of significant existing literature) on [Network Adequacy](#Network-Adequacy-Minimal-Literature) algorithms.
+* Chapter 2: [Review of Current Literature](#Review-of-Current-Literature) begins by examining existing papers on [Geospatial Computations](#Geospatial-Computations) to establish them as a candidate for high calculation cost distance metrics.  We further review literature on [Multilateration](#Multilateration) and establish baselines for existing algorithms for [Nearest Neighbor](#Nearest-Neighbor) algorithms and describe our search (and dearth of existing literature) on [Network Adequacy](#Network-Adequacy-Minimal-Literature) algorithms.
 
 * Chapter 3: [Network Adequacy](#Network-Adequacy) formally introduces Network Adequacy since there was little literature describing the computational approach as a distinct problem from Nearest Neighbor, when we believe the two are distinct.
 

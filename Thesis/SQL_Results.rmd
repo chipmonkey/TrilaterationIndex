@@ -65,17 +65,65 @@ Given the importance of the sizes of the $P$ and $Q$ datasets, it's quite inform
 library(data.table)
 library(knitr)
 dnap <- data.table(d=c(0.1,1,10,100),
-                   NAP=c(0.42, 0.88, 0.98, 1.00))
+                   NAP=c('42%', '88%', '98%', '100%'))
 kable(dnap, caption="d vs. ~NAP")
 ```
 
-Of course this varies with the size of the dataset, but the rough bounds are important.  The data set comprises points in Kentucky which is roughly 400 miles east-west and 200 miles north-south.  When $d$ is 100 miles, even with 100 points (our smallest sample), 100% coverage is all but guaranteed.  At 10 miles, we see some holes in coverage, but not many -- thus the 98.4% value.  When we get down to the one mile and one tenth of a mile ranges, coverages drop precipitously.  Even with our largest two categories, NAP is only 88% at 1 mile and 42% at 0.1 miles.  If we had been using real world data, imagine that we ask the question "what percent of people live within 1 mile of a pharmacy" to get an idea what these numbers could mean (if this were not synthetic data).
+Of course this varies with the size of the dataset, but the rough bounds are important.  The data set comprises points in Kentucky which is roughly 400 miles east-west and 200 miles north-south.  When $d$ is 100 miles, even with 100 points (our smallest sample), 100% coverage is all but guaranteed.  At 10 miles, we see some holes in coverage, but not many -- thus the 98% value.  When we get down to the one mile and one tenth of a mile ranges, coverages drop precipitously.  Even with our largest two categories, NAP is only 88% at 1 mile and 42% at 0.1 miles.  If we had been using real world data, imagine that we ask the question "what percent of people live within 1 mile of a pharmacy" to get an idea what these numbers could mean (if this were not synthetic data).
 
 These percentages are akin to those we need to answer the healthcare questions set forth in the introduction.  For example to answer "80% of members under the age of 16 must live within 25 miles of a covered pediatrician" we would set d=25 miles, and identify the sets of points for "members under the age of 16", and "covered pediatrician" - those sets could be compared to some categories here, (i.e. category 11 and category 14).  The charts below show how efficiently we could calculate the percent, to determine if it is more or less than 80%, and answer the question.
 
 ### Result Charts
 In any case, comparing performance those are our parameters... the size of $Q$, size of $P$, and the distance $d$.  We chart the results here, for both the NAIVE-NA and TRILAT-NA queries:
 
+```{r QP_size_comparison_boxall, echo=FALSE, message=FALSE, fig.cap="Overall Timings By Category (s) - log10 scale - lower is better", fig.width=10, fig.height=4}
+library(ggplot2)
+library(data.table)
+library(ggdist)
+
+data <- read.csv('../postgresql/query_timings.csv')
+names(data)[3] <- 'timing_s'
+
+data$dist <- 0
+data[data$notes %like% 'dist: 0.1','dist'] <- 0.1
+data[data$notes %like% 'dist: 1','dist'] <- 1
+data[data$notes %like% 'dist: 10','dist'] <- 10
+data[data$notes %like% 'dist: 100','dist'] <- 100
+
+data <- data[data$notes %like% 'Adequ',]
+data$algorithm = 'None'
+data[data$notes %like% 'CatAdequacy','algorithm'] = 'st_distance'
+data[data$notes %like% 'CatTrilatAdequacy', 'algorithm'] = 'Trilateration'
+data <- data[data$algorithm != 'None',]
+data$dist <- as.factor(data$dist)
+
+
+library('tidyverse')
+data$leftcat <- as.factor(data$leftcat)
+data$rightcat <- as.factor(data$rightcat)
+
+data$leftcount <- as.factor(data$leftcount)
+data$rightcount <- as.factor(data$rightcount)
+
+plotdata <- aggregate(data$timing_s,
+          by = list(data$leftcount, data$rightcount, data$algorithm, data$dist),
+          FUN=median)
+names(plotdata) <- c('leftcount', 'rightcount', 'algorithm', 'dist', 'timing_s')
+
+# Thank you https://www.r-bloggers.com/2021/07/ggdist-make-a-raincloud-plot-to-visualize-distribution-in-ggplot2/#google_vignette
+boxp <- ggplot(data=plotdata, aes(x=algorithm, y=timing_s, fill=algorithm)) +
+  geom_boxplot(outlier.colour="black", outlier.shape=16,
+             outlier.size=2, notch=TRUE, width=0.25, alpha=0.5) +
+  ggdist::stat_halfeye(adjust = 0.2, justification = -.2,
+    .width = 0, point_color = NA
+  ) +
+  xlab('Timing in seconds') +
+  scale_y_continuous(trans='log10') +
+  coord_flip()
+boxp
+```
+
+This initial boxplot shows the Trilateration performance against the st_distance function overall.  Note that we're on a log scale - some of the Trilateration improvements are 100 times faster in the best case, and overall notably faster in aggregate.  The pattern depends significantly on the sizes of $|Q|$, $|P|$, and $d$, so let's look at charts that split those out:
 
 ```{r QP_size_comparison_d01, echo=FALSE, message=FALSE, fig.cap="SQL Timings By Category (s) - d=0.1 - lower is better", fig.width=10, fig.height=5}
 library(ggplot2)
@@ -156,8 +204,21 @@ mydist=0.1
     )
     # scale_fill_gradient2(midpoint = 100, low = "blue", mid = "white", high = "red", space = "Lab" )
     # facet_wrap(~notes)
-  
+
   grid.arrange(p1, p2, nrow=1, ncol=2)
+
+# boxp <- ggplot(data=plotdata[plotdata$dist==mydist,], aes(x=algorithm, y=timing_s, fill=algorithm)) +
+#   geom_boxplot(outlier.colour="black", outlier.shape=16,
+#              outlier.size=2, notch=TRUE, width=0.25, alpha=0.5) +
+#   ggdist::stat_halfeye(adjust = 0.2, justification = -.2,
+#     .width = 0, point_color = NA
+#   ) +
+#   xlab('Timing in seconds') +
+#   scale_y_continuous(trans='log10') +
+#   coord_flip()
+# 
+#   grid.arrange(boxp, p1, p2, widths = c(1,1,1),
+#                layout_matrix = rbind(c(1,1), c(2,3)))
 
 ```
 
@@ -443,11 +504,11 @@ Let's look at the actual NAP values for that row:
 library(data.table)
 library(knitr)
 dnap <- data.table(P=c(100, 900, 2000, 5000, 10000, 32000),
-                   NAP=c(36.27, 70.81, 76.37, 83.66, 100.00, 93.50))
-kable(dnap, caption="P vs. ~NAP for d=0.1, Q=10000")
+                   NAP=c('36.27%', '70.81%', '76.37%', '83.66%', '100.00%', '93.50%'))
+kable(dnap, caption="P vs. ~NAP for d=0.1, Q=10000", digits=3)
 ```
 
-With only 100 candidate points, only 36% of $Q$ is within 0.1 miles of a point in $P$.  The other 64% must iterate all $|P|*|Q|$ comparisons (in the NAIVE-NA implementation), resulting in $0.64*10000*100=640,000$ comparisons plus a portion of the other 36% which is at most $0.36*10000*100=360,000$.  Applying the same math for $|P|=900$, at 70.8% (29.2 inadequate) we get $0.292*10000*900=2,628,000$.  So.  We see no direct theoretical observation that would make this make sense.
+With only 100 candidate points, only 36.27% of $Q$ is within 0.1 miles of a point in $P$.  The other 63.73% must iterate all $|P|*|Q|$ comparisons (in the NAIVE-NA implementation), resulting in $0.6473*10000*100=647,300$ comparisons plus a portion of the other 36.27% which is at most $0.3627*10000*100=362,700$.  Applying the same math for $|P|=900$, at 70.81% (29.19% inadequate) we get $0.2919*10000*900=2,627,100$.  So, we see no direct theoretical observation that would make this make sense.
 
 Sooo... we have to look at the SQL query plan:
 
@@ -531,6 +592,4 @@ The higher the number of points in $P$, the more points culled as a result of th
 
 #### NA Performance Conclusions
 
-The TRILAT-NA algoritm was as fast or faster in almost every test we ran; the only major outlier was when $d=0.1$ and $|P|=100$, in two cases ($|Q|=2000$ and $|Q|=10000$), TRILAT-NA was slower by 2 and 14 seconds (about 7% and 10%) respectively.  When $d=1$, $|P|=100$ again, and $|Q|=900$, $|Q|=5000$, or $|Q|=10000$, TRILAT-NA was slower by 1 second or less in each case.  Given that our resolution is 1-second, these are statistically minor.  Even for the larger discrepancies, it seems that the TRILAT-NA algoritm is only slower for very small values of $|P|$, which is where optimization is least needed in the first place.  When the workload takes the longest, the TRILAT-NA algoritm performs significantly faster than the naive algorithm.
-
-
+The TRILAT-NA algoritm was as fast or faster in almost every test we ran; the only major outlier was when $d=0.1$ and $|P|=100$, in two cases ($|Q|=2000$ and $|Q|=10000$), TRILAT-NA was slower by 2 and 14 seconds (about 7% and 10%) respectively.  When $d=1$, $|P|=100$ again, and $|Q|=900$, $|Q|=5000$, or $|Q|=10000$, TRILAT-NA was slower by 1 second or less in each case.  Given that our resolution is 1-second, these are statistically minor.  Even for the larger discrepancies, it seems that the TRILAT-NA algoritm is only slower for very small values of $|P|$, which is where optimization is least needed in the first place.  When the workload takes the longest, the TRILAT-NA algoritm performs significantly faster (up to 100 times, per these charts) than the naive algorithm.

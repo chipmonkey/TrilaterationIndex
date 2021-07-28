@@ -12,12 +12,17 @@ institute: University of Louisville
 bibliography: references.bib
 header-includes: 
   - \renewcommand\refname{References}
+  - \usepackage{placeins}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.pos = 'H')
 # knitr::opts_chunk$set(fig.pos = 'H')
 # knitr::opts_chunk$set(fig.pos = "!H", out.extra = "")
+# Keep figures from floating - thank you https://gist.github.com/burchill/8873d2ade156b27e92a238a774ce2758:
+knitr::knit_hooks$set(plot = function(x, options)  {
+  paste0(knitr::hook_plot_tex(x, options), "\n\\FloatBarrier\n")
+})
 ```
 
 \newpage

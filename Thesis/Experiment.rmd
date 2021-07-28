@@ -13,6 +13,8 @@ output:
 
 We plan experiments for Network Adequacy in SQL databases, and Nearest Neighbor applications using Python.
 
+We describe the experiment, setup, process, and results here in detail, but note that our [Appendix] includes links to the specific code and sample data used, which should answer any particular implementation detail.
+
 ### Experiment 1: Python Nearest Neighbors with ANN
 
 1. We adapt the popular Python package scikit-learn to execute our Trilateration Index and perform nearest-neighbor search.
@@ -98,6 +100,8 @@ ggplot() +
 \newpage
 
 ## Experimental Results
+
+We implemented our new algorithms in Cython/Python and SQL as described in previous sections.  The source code used for this analysis is linked in the [Appendix].
 
 ```{r child = 'ANN_Benchmarks.rmd'}
 ```

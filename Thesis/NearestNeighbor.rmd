@@ -71,7 +71,7 @@ Basically, looking only along one distance dimension (proximity to d1), find the
 
 In an attempt to gain benefit from the relaxed constraints of an "approximate" $aNN$ approach, we experiment with an algorithm that effectively excludes the distance calculations altogether, from our TRI algorithm altogether.  Recall that, for a given $d_x$ distance to reference point $r_x$, a point $p$ can be _no closer than_ $q_{dx} - p_{dx}$; if we treat the approx_distance $(q, p) = \frac{\sum_{x=1}^{m}{q_{dx} - p_{dx}}}{|d|}$ (the mean of the relative distances from $q$ to all reference points $r_x$), or, more aggressively, the minimum such distance, we can return an approximate result without ever having to call the distance function itself (after the index is created).
 
-We ended up abandoning this approach after only a few tests - there was a significant drop in recall (the mechanism by which ann-benchmarks measures effectiveness of $aNN$ algorithms), with no particular improvement in performance.  This effectively removed $aNN$ from our consideration; our results are primarily focused on exact $NN$ results as a consequence.
+We ended up abandoning this approach after only a few tests - there was a significant drop in recall (the mechanism by which ann-benchmarks measures effectiveness of $aNN$ algorithms) - up to 99%, which is unacceptable for these approximations - with no particular improvement in performance.  This effectively removed $aNN$ from our consideration; our results are primarily focused on exact $NN$ results as a consequence.
 
 #### TrilaterationExpand (TIE)
 

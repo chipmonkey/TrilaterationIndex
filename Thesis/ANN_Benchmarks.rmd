@@ -7,7 +7,7 @@ output: pdf_document
 
 ## ANN-Benchmarks
 
-We used the "Ann-Benchmarks" software - a widely available open source benchmark designed for timing Nearest Neighbor algorithms - to compare our algorithm to others in the NN space. [@Amueller2020]  We tested three scenarios:
+We used the "Ann-Benchmarks" software - a widely available open source benchmark designed for timing Nearest Neighbor algorithms - to compare our algorithm to others in the NN space. [@Amueller2020]  We specifically modified the popular "scikit-learn" package to implement our algorithms, as it was already the basis for many benchmarks in this suite.[@scikit-learn]  We tested three scenarios:
 
 * Our Geodesic dataset using the (expensive but accurate) Karney distance algorithm [@Karney2013] coded in the geopy package [@geopy]
 * A standard 20-dimension Euclidean distance test provided by the ANN-Benchmarks software
@@ -130,6 +130,8 @@ p <- ggplot(data=times, aes(x=Algorithm, y=QPS)) +
 p
 ```
 
+We are somewhat disappointed in our results here, but not terribly surprised.  Recall that our intent was to optimize for expensive distance functions... this particular experiment is using a standard euclidean function which, even in 20-dimensions, has a closed form straightforward calculation, which has benefited from years of optimization.  The per-distance-function call is relatively inexpensive -- not the domain our algorithms target -- but we felt it was important to include the results for comparison.
+
 ### Glove 25-dimension Angular distance
 
 The GloVe ("Global Vectors for Word Representation") dataset "is an unsupervised learning algorithm for obtaining vector representations for words. Training is performed on aggregated global word-word co-occurrence statistics from a corpus, and the resulting representations showcase interesting linear substructures of the word vector space" according to the authors. [@pennington2014glove]
@@ -198,6 +200,8 @@ p <- ggplot(data=times, aes(x=Algorithm, y=QPS)) +
   coord_flip()
 p
 ```
+
+Similar to the Euclidean distance function, our underperformance here is not particularly surprising as, again, this is not a particularly expensive calculation at the individual level.  FAISS, BallTree, and KD-Tree algorithms trade off more pre-processing time for pruning techniques to divide their search area quickly when querying.  This approach does not necessarily optimize for fewer calls to the distance function, so when that function is more expensive, those calls have more impact.  While our algorithm substitutes subtraction as a proxy for the distance function, we see great improvements when that substitution has high savings, but less improvement when the distance cost was already low.
 
 ### NN Results Summary
 
