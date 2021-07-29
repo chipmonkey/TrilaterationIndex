@@ -9,6 +9,8 @@ We find that we were able to achieve our original goal, of designing data struct
 
 So our results are mixed, but for certain use cases which are predictable in advance, our treatment shows definite improvement.
 
+***
+
 # Future Work
 
 There are a number of areas that we speculate, with minimal investiagtion, that Multilateration indexes and algorithms have benfits worth exploring.  A brief list of such areas that may be good for future investigation include:

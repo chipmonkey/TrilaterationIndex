@@ -12,6 +12,8 @@ output:
 
 We conducted our experiment as described, resulting in 36 combinations of point ($P$) and query ($Q$) sets from the same 150,000 point sample we've used for $NN$ experiments.  The datasets are categorized and range from 100 to 32,000 points, as shown here:
 
+\singlespacing
+
 ```{r category_counts_sql, echo=FALSE}
 library(knitr)
 library(data.table)
@@ -26,55 +28,11 @@ names(cat_data) <- c('category', 'record count')
 kable(cat_data, caption="Record counts by category used in experiment")
 ```
 
-\newpage
-
-Recall that we are calculating the Network Adequacy Percent (NAP), which requires a distance $d$, and we performed expriments with $d \in (0.1, 1, 10, 100)$.  At a high level, our TRILAT-NA algoritm performs well against the naive algorithm as shown in our "SQL Timings" figure.
-
-
-```{r sql_results, echo=FALSE, fig.cap="SQL Timings (s) - lower is better", fig.width=6, fig.height=3}
-library(data.table)
-library(ggplot2)
-
-data <- read.csv('../postgresql/query_timings.csv')
-names(data)[3] <- 'timing_s'
-
-data$dist <- 0
-data[data$notes %like% 'dist: 0.1','dist'] <- 0.1
-data[data$notes %like% 'dist: 1','dist'] <- 1
-data[data$notes %like% 'dist: 10','dist'] <- 10
-data[data$notes %like% 'dist: 100','dist'] <- 100
-
-data <- data[data$notes %like% 'Adequ',]
-data$algorithm = 'None'
-data[data$notes %like% 'CatAdequacy','algorithm'] = 'st_distance'
-data[data$notes %like% 'CatTrilatAdequacy', 'algorithm'] = 'Trilateration'
-# table(data$algorithm)
-data <- data[data$algorithm != 'None',]
-data$dist <- as.factor(data$dist)
-
-ggplot(data=data, aes(x=dist, y=timing_s, fill=algorithm)) +
-    geom_bar(stat='identity', position=position_dodge()) +
-    scale_fill_manual(values=gray.colors(4))
-
-```
-
-
-Given the importance of the sizes of the $P$ and $Q$ datasets, it's quite informative to compare the algorithms with respect to those sizes.  Also very important is the value of $d$.  It's worth noting that the actual NAP for $d$ varies in this dataset; using $|P|=32000$ and $|Q|=10000$ we find:
-
-```{r d_NAP_chart, echo=FALSE}
-library(data.table)
-library(knitr)
-dnap <- data.table(d=c(0.1,1,10,100),
-                   NAP=c('42%', '88%', '98%', '100%'))
-kable(dnap, caption="d vs. ~NAP")
-```
-
-Of course this varies with the size of the dataset, but the rough bounds are important.  The data set comprises points in Kentucky which is roughly 400 miles east-west and 200 miles north-south.  When $d$ is 100 miles, even with 100 points (our smallest sample), 100% coverage is all but guaranteed.  At 10 miles, we see some holes in coverage, but not many -- thus the 98% value.  When we get down to the one mile and one tenth of a mile ranges, coverages drop precipitously.  Even with our largest two categories, NAP is only 88% at 1 mile and 42% at 0.1 miles.  If we had been using real world data, imagine that we ask the question "what percent of people live within 1 mile of a pharmacy" to get an idea what these numbers could mean (if this were not synthetic data).
-
-These percentages are akin to those we need to answer the healthcare questions set forth in the introduction.  For example to answer "80% of members under the age of 16 must live within 25 miles of a covered pediatrician" we would set d=25 miles, and identify the sets of points for "members under the age of 16", and "covered pediatrician" - those sets could be compared to some categories here, (i.e. category 11 and category 14).  The charts below show how efficiently we could calculate the percent, to determine if it is more or less than 80%, and answer the question.
+\doublespacing
 
 ### Result Charts
-In any case, comparing performance those are our parameters... the size of $Q$, size of $P$, and the distance $d$.  We chart the results here, for both the NAIVE-NA and TRILAT-NA queries:
+
+Recall that we are calculating the Network Adequacy Percent (NAP), which requires a distance $d$, and we performed expriments with $d \in (0.1, 1, 10, 100)$.  At a high level, our TRILAT-NA algorithm performs well against the naive algorithm overall.  This initial density boxplot shows the Trilateration performance against the st_distance function overall.  Note that this figure is on a log scale - some of the Trilateration improvements are 100 times faster in the best case, and overall notably faster in aggregate:
 
 ```{r QP_size_comparison_boxall, echo=FALSE, message=FALSE, fig.cap="Overall Timings By Category (s) - log10 scale - lower is better", fig.width=10, fig.height=4}
 library(ggplot2)
@@ -123,9 +81,59 @@ boxp <- ggplot(data=plotdata, aes(x=algorithm, y=timing_s, fill=algorithm)) +
 boxp
 ```
 
-This initial boxplot shows the Trilateration performance against the st_distance function overall.  Note that we're on a log scale - some of the Trilateration improvements are 100 times faster in the best case, and overall notably faster in aggregate.  The pattern depends significantly on the sizes of $|Q|$, $|P|$, and $d$, so let's look at charts that split those out:
+\newpage
+It turns out that the relative performance of these queries depends strongly on the value of $d$, and the resulting NAP that $d$ implies.  Charts of our results against $d$ show this impact quite strongly:  
 
-```{r QP_size_comparison_d01, echo=FALSE, message=FALSE, fig.cap="SQL Timings By Category (s) - d=0.1 - lower is better", fig.width=10, fig.height=5}
+```{r sql_results, echo=FALSE, fig.cap="SQL Timings (s) relative to dist (d) - lower is better", fig.width=6, fig.height=3}
+library(data.table)
+library(ggplot2)
+
+data <- read.csv('../postgresql/query_timings.csv')
+names(data)[3] <- 'timing_s'
+
+data$dist <- 0
+data[data$notes %like% 'dist: 0.1','dist'] <- 0.1
+data[data$notes %like% 'dist: 1','dist'] <- 1
+data[data$notes %like% 'dist: 10','dist'] <- 10
+data[data$notes %like% 'dist: 100','dist'] <- 100
+
+data <- data[data$notes %like% 'Adequ',]
+data$algorithm = 'None'
+data[data$notes %like% 'CatAdequacy','algorithm'] = 'st_distance'
+data[data$notes %like% 'CatTrilatAdequacy', 'algorithm'] = 'Trilateration'
+# table(data$algorithm)
+data <- data[data$algorithm != 'None',]
+data$dist <- as.factor(data$dist)
+
+ggplot(data=data, aes(x=dist, y=timing_s, fill=algorithm)) +
+    geom_bar(stat='identity', position=position_dodge()) +
+    scale_fill_manual(values=gray.colors(4))
+
+```
+
+
+It's worth noting that the actual NAP for $d$ varies in this dataset; using $|P|=32000$ and $|Q|=10000$ we find:
+
+\singlespacing
+
+```{r d_NAP_chart, echo=FALSE}
+library(data.table)
+library(knitr)
+dnap <- data.table(d=c(0.1,1,10,100),
+                   NAP=c('42%', '88%', '98%', '100%'))
+kable(dnap, caption="d vs. ~NAP")
+```
+
+\doublespacing
+
+Of course this varies with the size of the dataset, but the rough bounds are important.  The data set comprises points in Kentucky which is roughly 400 miles east-west and 200 miles north-south.  When $d$ is 100 miles, even with 100 points (our smallest sample), 100% coverage is all but guaranteed.  At 10 miles, we see some holes in coverage, but not many -- thus the 98% value.  When we get down to the one mile and one tenth of a mile ranges, coverages drop precipitously.  Even with our largest two categories, NAP is only 88% at 1 mile and 42% at 0.1 miles.  If we had been using real world data, imagine that we ask the question "what percent of people live within 1 mile of a pharmacy" to get an idea what these numbers could mean (if this were not synthetic data).
+
+These percentages are akin to those we need to answer the healthcare questions set forth in the introduction.  For example to answer "80% of members under the age of 16 must live within 25 miles of a covered pediatrician" we would set d=25 miles, and identify the sets of points for "members under the age of 16", and "covered pediatrician" - those sets could be compared to some categories here, (i.e. category 11 and category 14).  The charts below show how efficiently we could calculate the percent, to determine if it is more or less than 80%, and answer the question.
+
+\newpage
+In any case, comparing performance those are our parameters... the size of $Q$, size of $P$, and the distance $d$.  We chart the results here, for both the NAIVE-NA and TRILAT-NA queries:
+
+```{r QP_size_comparison_d01, echo=FALSE, message=FALSE, fig.cap="SQL Timings By Category (s) for distance d=0.1 - lower is better.  Each square represents a query with a given number of search points P (x-axis) and query points Q (y-axis) with fixed adequacy distance d.  The numbers represent the time (in seconds) to determine the NAP: percent of points in Q within distance d of any point in P.", fig.width=10, fig.height=4}
 library(ggplot2)
 library(data.table)
 library('tidyverse')
@@ -222,8 +230,7 @@ mydist=0.1
 
 ```
 
-
-```{r QP_size_comparison_d1, echo=FALSE, message=FALSE, fig.cap="SQL Timings By Category (s) - d=1 - lower is better", fig.width=10, fig.height=5}
+```{r QP_size_comparison_d1, echo=FALSE, message=FALSE, fig.cap="SQL Timings By Category (s) for distance d=1 - lower is better.", fig.width=10, fig.height=4}
 library(ggplot2)
 library(data.table)
 
@@ -305,8 +312,7 @@ mydist = 1
 
 ```
 
-
-```{r QP_size_comparison_d10, echo=FALSE, message=FALSE, fig.cap="SQL Timings By Category (s) - d=10 - lower is better", fig.width=10, fig.height=5}
+```{r QP_size_comparison_d10, echo=FALSE, message=FALSE, fig.cap="SQL Timings By Category (s) for distance d=10 - lower is better. Note how query times go up quickly as the query point size (y-axis) increases, but shows a decrease then increase as the search point cardinality (x-axis) increases.", fig.width=10, fig.height=4}
 library(ggplot2)
 library(data.table)
 
@@ -388,7 +394,7 @@ mydist = 10
 
 ```
 
-```{r QP_size_comparison_d100, echo=FALSE, message=FALSE, fig.cap="SQL Timings By Category (s) - d=100 - lower is better", fig.width=10, fig.height=5}
+```{r QP_size_comparison_d100, echo=FALSE, message=FALSE, fig.cap="SQL Timings By Category (s) for distance d=100 - lower is better", fig.width=10, fig.height=4}
 library(ggplot2)
 library(data.table)
 
@@ -500,6 +506,8 @@ Why?  We've run these tests repeatedly, in random order, back to back, to rule o
 
 Let's look at the actual NAP values for that row:
 
+\singlespacing
+
 ```{r d_1_NAP_chart, echo=FALSE}
 library(data.table)
 library(knitr)
@@ -508,9 +516,13 @@ dnap <- data.table(P=c(100, 900, 2000, 5000, 10000, 32000),
 kable(dnap, caption="P vs. ~NAP for d=0.1, Q=10000", digits=3)
 ```
 
+\doublespacing
+
 With only 100 candidate points, only 36.27% of $Q$ is within 0.1 miles of a point in $P$.  The other 63.73% must iterate all $|P|*|Q|$ comparisons (in the NAIVE-NA implementation), resulting in $0.6473*10000*100=647,300$ comparisons plus a portion of the other 36.27% which is at most $0.3627*10000*100=362,700$.  Applying the same math for $|P|=900$, at 70.81% (29.19% inadequate) we get $0.2919*10000*900=2,627,100$.  So, we see no direct theoretical observation that would make this make sense.
 
 Sooo... we have to look at the SQL query plan:
+
+\singlespacing
 
 ```{SQL explain_d_p900}
  Aggregate  (cost=37295851666.13..37295851666.14 rows=1 width=16)
@@ -576,6 +588,8 @@ Aggregate  (cost=3107991549.46..3107991549.47 rows=1 width=16)
 
 Time: 43708.659 ms (00:43.709)
 ```
+
+\doublespacing
 
 There are two key differences here - the inner (second) "Rows Removed by Filter" which, for $|P|=100$ is $95609$ and for $|P|=900$ is $43992$.  The other, related, difference being the actual time in the loops - $86693.568$ for the outer and $8.649$ for the inner when $|P|=100$ and $43705.837$ outer, $4.349$ inner for $|P|=900$.  This indicates that our analysis was flawed; the SQL optimizer swapped what we presumed were the inner and outer loops, and given the percents, the inner loop is more expensive when $|P|=100$ (by about double).
 

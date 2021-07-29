@@ -1,7 +1,9 @@
 ---
 title: "Multilateration Index - Masters Thesis"
-author: "Chip Lynch"
-date: "06/20/2021"
+author: |
+  | Chip Lynch
+  | University of Louisville
+date: "07/20/2021"
 output:
   pdf_document:
     toc: true
@@ -10,9 +12,11 @@ output:
   html_document: default
 institute: University of Louisville
 bibliography: references.bib
+geometry: "left=1.5in,right=1in,top=1in,bottom=0.5in"
 header-includes: 
   - \renewcommand\refname{References}
   - \usepackage{placeins}
+  - \usepackage{setspace}
 ---
 
 ```{r setup, include=FALSE}
@@ -20,13 +24,27 @@ knitr::opts_chunk$set(echo = TRUE, fig.pos = 'H')
 # knitr::opts_chunk$set(fig.pos = 'H')
 # knitr::opts_chunk$set(fig.pos = "!H", out.extra = "")
 # Keep figures from floating - thank you https://gist.github.com/burchill/8873d2ade156b27e92a238a774ce2758:
-knitr::knit_hooks$set(plot = function(x, options)  {
-  paste0(knitr::hook_plot_tex(x, options), "\n\\FloatBarrier\n")
+knitr::knit_hooks$set(plot = function (x, options) {
+  float_correct <- function(f, y, opts)  {
+    if (is.null(opts$regfloat) || opts$regfloat==FALSE)
+      paste0(f(y, opts), "\n\n\\FloatBarrier\n")
+    else
+      f(y, opts)
+  }
+  if (!is.null(options$out.width) || !is.null(options$out.height) ||
+      !is.null(options$out.extra) || options$fig.align != "default" ||
+      !is.null(options$fig.subcap)) {
+    if (is.null(options$fig.scap))
+      options$fig.scap = NA
+    return(float_correct(knitr:::hook_plot_tex, x, options))
+  }
+  return(float_correct(knitr:::hook_plot_md_base, x, options))
 })
 ```
 
 \newpage
 
+\doublespacing
 ```{r child = 'Abstract.rmd'}
 ```
 
@@ -65,7 +83,7 @@ knitr::knit_hooks$set(plot = function(x, options)  {
 ```
 
 
-***
+\newpage
 
 ```{r child = 'Appendix.rmd'}
 ```

@@ -22,7 +22,9 @@ From this point, create a regular $n+1$-gon (triangle here) which touches the ci
 
 The point $y=0$, $x=50$ is the first point of the equilateral triangle.  The slope of the triangle's line is $tan(\frac{pi}{3})$, so setting the equation of the circle: 
 
-$(x-50)^2+(y-50)^2=50^2$ equal to the lines: $y=tan(\frac{\pi}{3})(x-50)$ gives $x=25(2+\sqrt{3})$ on the right  and $y=tan(\frac{-\pi}{3})(x-50)$ gives $x=-25(\sqrt{3}-2)$ on the left, and of course the original $(0,50)$ point.  Applying $x$ to our earlier equations for $y$ we get a final set of three points: 
+$(x-50)^2+(y-50)^2=50^2$ equal to the lines: $y=tan(\frac{\pi}{3})(x-50)$ gives $x=25(2+\sqrt{3})$ on the right  and $y=tan(\frac{-\pi}{3})(x-50)$ gives $x=-25(\sqrt{3}-2)$ on the left, and of course the original $(0,50)$ point.  Applying $x$ to our earlier equations for $y$ we get a final set of three points:
+
+\singlespacing
 
 $$F_1 = (x=50,y=0)$$
 
@@ -30,12 +32,11 @@ $$F_2 = (x=25(2+\sqrt{3}), y=tan(\frac{\pi}{3})((25(2+\sqrt{3}))-50)$$
 
 $$F_3 = (x=-25(\sqrt{3}-2), y=tan(\frac{-\pi}{3})((-25(\sqrt{3}-2))-50) $$
 
-```{r trianglePlot, fig.align="center", echo=FALSE}
+```{r trianglePlot, fig.align="center", echo=FALSE, fig.cap="Example calculation of reference points in 2d area.  Three reference points (red) are derived from an equilateral triangle (blue) inscribed in the largest circle possible in the bounded area."}
 library(plotrix)
 
 plot(x=NULL, y=NULL, xlim=c(0,100), ylim=c(0,100), asp = 1,
-     xlab='X', ylab='Y',
-     main = "Example calculation of reference points in 2d area")
+     xlab='X', ylab='Y')
 draw.circle(x = 50, y = 50, radius = 50)
 abline(h=0)
 abline(h=100)
@@ -60,7 +61,9 @@ draw.circle(x = 25*(2+sqrt(3)), y = tan(pi/3)*((25*(2+sqrt(3)))-50), radius = 1,
 draw.circle(x = -25*(sqrt(3)-2), y = tan(-pi/3)*((-25*(sqrt(3)-2))-50), radius = 1, lwd = 1, col="red")
 ```
 
-Remember, any three non-colinear points will do, but this construction spaces them fairly evenly throughout the space, which may be beneficial later* [Add section (reference) with discussions of precision and examples where reference points are very near one another]. 
+\doublespacing
+
+Remember, any three non-colinear points will do, but this construction spaces them fairly evenly throughout the space, which may be beneficial to provide more variety in the indexed distances. 
 
 The trilateration of any given point X in the space, now, is given by: 
 
@@ -71,6 +74,8 @@ That is, the set of (three) distances $d$ from $X$ to $F_1$, $F_2$, and $F_3$ re
 #### 10 Random Points
 
 As a quick example of the trilateration calculations, we use a basic collection of 10 data points:
+
+\singlespacing
 
 ```{r rand10points, echo=FALSE}
   library(knitr)
@@ -93,8 +98,11 @@ As a quick example of the trilateration calculations, we use a basic collection 
   kable(myPoints, caption = "10 Random Points")
 ```
 
+\doublespacing
 
 The trilateration of those points, that is, the three points $d_1, d_2, d_3 = {d(F_1, X), d(F_2, X), d(F_3,X)}$ are (next to the respective $x_n$):
+
+\singlespacing
 
 ```{r distanceexample, echo=FALSE}
   myTrilat <- data.frame(d1=NULL, d2=NULL, d3=NULL)
@@ -109,14 +117,16 @@ The trilateration of those points, that is, the three points $d_1, d_2, d_3 = {d
   kable(myTrilateration, caption="Multilateration Index of 10 Random Points WRT Fixed points F")
 ```
 
+\doublespacing
+
 Note that we do not need to continue to store the original latitude and longitude.  We can convert the three $d_n$ distances back to Latitude and Longitude within some $\epsilon$ based on the available precision.  Geospatial coordinates in Latitude and Longitude with six digits of precision are accurate to within $<1\ meter$, and 8 digits is accuract to within $<1\ centimeter$, although this varies based on the latitude and longitude itself; latitudes closer to the equator are less accurate than those at the poles.  The distance values $d_x$ are more predictable, since they measure distances directly.  While the units in this sample are arbitrary, $F(x)$ in a real geospatial example could be in kilometers, so three decimal digits would precisely relate to $1\ meter$, and so on.  This is one reason that we will later examine using the trilateration values as an outright replacement for Longitude and Latitide, and this feature is important when considering storage requirements for this data in large real-world database applications.
 
 For now, continuing with the example, those $10$ points are shown here in blue with the three reference points $F_1, F_2, F_3$ in red:
 
-```{r plot10Points, fig.align="center", echo=FALSE}
+```{r plot10Points, fig.align="center", echo=FALSE, fig.cap="Sample Reference points (red) and Data Points (blue)"}
 
   plot(x=NULL, y=NULL, xlim=c(0,100), ylim=c(0,100), asp = 1,
-       xlab='X', ylab='Y', main = "Sample Reference and Data Points")
+       xlab='X', ylab='Y')
   points(myTrilateration, col="blue", pch=16, asp=1)
   text(myTrilateration, pos = 1)
   
@@ -130,11 +140,11 @@ For now, continuing with the example, those $10$ points are shown here in blue w
 
 To help understand the above values, the following chart shows the distances for points $x_2$ and $x_10$ above.  Specifically, the distances $d_1$ from point $F_1$ are shown as arcs in red, the distances $d_2$ from point $F_2$ in blue, and $d_3$ from point $F_3$ in green.  
 
-```{r distanceExamples, fig.align="center", echo=FALSE}
+```{r distanceExamples, fig.align="center", echo=FALSE, fig.cap = "Distance Arcs to Two Sample Points (X2, X10) from Reference points F1 (red bands), F2 (blue bands) and F3 (green bands)"}
 # Arcs around two points:
   
   plot(x=NULL, y=NULL, xlim=c(0,100), ylim=c(0,100), asp = 1,
-       xlab='X', ylab='Y', main = "Distance Arcs to Two Sample Points")
+       xlab='X', ylab='Y')
   points(myTrilateration[c(2,10),'x'], myTrilateration[c(2,10),'y'], col="blue", pch=16, asp=1)
   text(myTrilateration[2,'x'], myTrilateration[2,'y'], labels = 'x2', pos=4)
   text(myTrilateration[10,'x'], myTrilateration[10,'y'], labels = 'x10', pos=2)
@@ -160,7 +170,9 @@ To help understand the above values, the following chart shows the distances for
 
 ### Geospatial Trilateration Index
 
-Applying this to real sample points; we propose a standard geospatial trilateration index to allow for comparability across data sets by setting the following specific initial reference points on the globe: 
+Applying this to real sample points; we propose a standard geospatial trilateration index to allow for comparability across data sets by setting the following specific initial reference points on the globe:
+
+\singlespacing
 
 Point 1: $90.000000, 0.000000$ (The geographic north pole) 
 
@@ -171,6 +183,8 @@ Point 3: $-19.22000, 159.93000$ (Sandy Island, New Caledonia)
 Optional Point 4: $-9.42000, 46.33000$ (Aldabra)
 
 Optional Point 5: $-48.87000, -123.39000$ (Point Nemo)
+
+\doublespacing
 
 Note that the reference points are defined precisely, as exact latitude and longitude to stated decimals (all remaining decimal points are 0).  This is to avoid confusion, and why the derivation of the points is immaterial (Point Nemo, for example is actually at a nearby location requiring more than two digits of precision).
 

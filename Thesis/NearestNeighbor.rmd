@@ -6,7 +6,7 @@ We include three other algorithms derived from the original TRI algorithm, but w
 
 ### Comparing Algorithms
 
-Recall from our [Review of Literature], we are comparing $NN$ algorithms by four areas Training Time Complexity, Memory Space, Prediction Time Complexity, Insertion/Move Complexity.
+Recall from our [Review of Current Literature], we are comparing $NN$ algorithms by four areas Training Time Complexity, Memory Space, Prediction Time Complexity, Insertion/Move Complexity.
 
 For each of these Trilateration algorithms, complexity is:
 
@@ -16,6 +16,8 @@ For each of these Trilateration algorithms, complexity is:
 4. Insertion Complexity is $O(|P|)$ - being the cost if inserting or updating an element in the sorted array of distances for each $p \in P$.
 
 For comparison, we assign a somewhat arbitrary numeric scale to the $O()$ complexity values researched in our earlier review.  This helps exemplify how we sacrifice worst-case prediction complexity, but gain some average prediction time, in exchange for Training and Insertion performance improvements.
+
+\singlespacing
 
 ```{r o_comparison_table, echo=FALSE}
 library(knitr)
@@ -28,11 +30,16 @@ k = data.frame(Algorithm=c("Brute-Force", "Space Partitioning Trees",
                AveragePredictionTime = c(5, 2, 2, 1, 3),
                InsertionTime = c(1, 2, 3, 5, 2))
 
-kable(k, caption="Approximate relative complexity on a 1-5 scale")
+kable(k, booktabs = T, caption="Approximate relative complexity on a 1-5 scale",
+      col.names = c('Algorithm', 'Training Time', 'Memory Space', 'Worst Prediction Time',
+                    'Average Prediction Time', 'Insertion Time'))
 ```
 
+\doublespacing
+
 We explore four variations to explore various possible optimizations that we imagined prior to experimentation, since the experiment was required to determine which would perform best under which circumstances.  While we go into more detail later, in short:
-* TRI - search along a sorted 1-dimensional ($d_1) distance until the worst 1d distance is farther than the top-k nearest so far
+
+* TRI - search along a sorted 1-dimensional ($d_1$) distance until the worst 1d distance is farther than the top-k nearest so far
 * TIA - an approximate solution based solely on a 1-dimensional distance (this turns out not to be very good)
 * TIE - set a low and high bound on a radius (r) using the efficient $Within()$ function to bisect the range until $~k$ records remain
 * TIE2 - start with a radius $r$ being the distance of the closest point along 1-dimension and select the next multiple of $k$ (a "chunk") points along that dimension at a time until $k$ nearest records are identified
@@ -41,6 +48,8 @@ We explore four variations to explore various possible optimizations that we ima
 #### Trilateration (TRI)
 
 The main trilateration algorithm for exact Nearest-Neighbor solutions takes the Trilateration Index (recall - the distances stored in a sorted array form from all points in $P$ with respect to $d+1$ fixed reference points -- 3 in the case of 2-d Trilateration) and applies the following for a query point $q$.  This provides simple a simple $O(log(n))$ binary search by distance, along with the ability to quickly iterate through points consecutively closer or farther from a given point in list order using common array operations.[@Tainiter1963]
+
+\singlespacing
 
 ```{r trilateration_nn_psudocode, eval=FALSE, attr.source='.numberLines'}
 Calculate qd1..qdn as the distances from point q to the n reference points r1..rn
@@ -65,6 +74,8 @@ While LOW_IDX > LOW_IDX_POSSIBLE or HIGH_IDX < HIGH_IDX_POSSIBLE:
 Return HEAP
 ```
 
+\doublespacing
+
 Basically, looking only along one distance dimension (proximity to d1), find the closest k points to q (which is very quick along a sorted array - O(log n) to find the first point and O(1) to add and subtract k/2 to the indices to get the boundary).  Expand the low and high values (selecting the next point as the closest of the 2 along d1) until we have k points such that the farthest (worst) distance to one of those points is closer than the distance along d1 for any other point (which is bounded by LOW_IDX_POSSIBLE and HIGH_IDX_POSSIBLE, since that distance is our sort order).
 
 #### TrilaterationApprox (TIA)
@@ -78,6 +89,8 @@ We ended up abandoning this approach after only a few tests - there was a signif
 We theorized that the TRI approach may be slowed down by the overhead of having to iterate one point at a time, and by not utilizing more than one reference point early in the process.  Given the efficiency of the $Within()$ function (see [Time Complexity]), we wondered if we should treat the distance $d$ as the target variable, and use an incremental search to zero in on the proper value to result in $k$ neighbors within $d$.
 
 This turns out to be a silly idea, once we get the results back, but here we are.  The algorithm would look like:
+
+\singlespacing
 
 ```{r trilateration_tie_psudocode, eval=FALSE, attr.source='.numberLines'}
 set radius = 0.5
@@ -94,12 +107,15 @@ while x != k:
 return Within(radius, q, P)
 ```
 
+\doublespacing
 
 #### TrilaterationExpand2 (TIE2)
 
 Another approach to minimizing the overhead of expanding the range in the TRI algorithm by one at a time is to simply expand by some fixed amount $> 1$.  This actually shows performance gains when the distance functions are inexpensive, although not enough to really be competitive with other $NN$ solutions, but shows no benefit (in fact, it incurs quite the cost) when using our expensive geodesic distance functions.  See our results section for more details.
 
 Fundamentally, the change to the TRI algoritm is that we expand by $k$ (which is a convenient constant), or some larger constant, at a time, rather than $1$ point along $d_1$ in $TI$.  In effect:
+
+\singlespacing
 
 ```{r trilateration_tie2_psudocode, eval=FALSE, attr.source='.numberLines'}
 Set CHUNK equal to the greater of k or 500
@@ -134,6 +150,8 @@ While LOW_IDX > LOW_IDX_POSSIBLE or HIGH_IDX < HIGH_IDX_POSSIBLE:
     recalculate LOW_IDX_POSSIBLE and HIGH_IDX_POSSIBLE
 Return HEAP
 ```
+
+\doublespacing
 
 #### Implementation Notes
 

@@ -93,7 +93,7 @@ ggplot() +
   geom_circle(aes(x0=x, y0=y, r=qp2dist), data=querypoint, linetype="dashed") +
   geom_segment(data=ref_lines, mapping=aes(x=x, y=y, xend=xend, yend=yend), linetype="dotted") +
   coord_fixed(ratio = 1, xlim=c(0,120), ylim=c(-5, 100)) +
-  ggtitle("Only four points remain")
+  ggtitle(paste0("Only four points remain within ", round(qp2dist,4), " units"))
 
 
 #------------------------
@@ -117,7 +117,7 @@ ggplot() +
   geom_circle(aes(x0=x, y0=y, r=qp2dist), data=querypoint, linetype="dashed") +
   geom_segment(data=ref_lines, mapping=aes(x=x, y=y, xend=xend, yend=yend), linetype="dotted") +
   coord_fixed(ratio = 1, xlim=c(0,120), ylim=c(-5, 100)) +
-  ggtitle("Only four points remain") +
+  ggtitle(paste0("Only four points remain within ", qp2dist)) +
   theme(legend.position = "none")
 
 #------------------------
@@ -191,7 +191,7 @@ ggplot() +
   
   geom_segment(data=ref_lines, mapping=aes(x=x, y=y, xend=xend, yend=yend), linetype="dotted") +
   coord_fixed(ratio = 1, xlim=c(0,120), ylim=c(-5, 100)) +
-  ggtitle("Only three points remain") +
+  ggtitle(paste0("Only three points remain closer than point 7 at ", round(qp7dist, 4), " units")) +
   theme(legend.position = "none")
 
 
