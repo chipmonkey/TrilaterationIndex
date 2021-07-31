@@ -1,10 +1,12 @@
+$$\\[0.5in]$$
+
 # Introducing the Multilateration Index
 
 ## Multilateration Index – General Definition 
 
 Given an n-dimensional metric space $(M, d)$ comprising universe of points $M$ in the space and a distance function $d(x, y)$ which respects the triangle inequality, a typical point $X$ in the coordinate system will be described by coordinates ${x_1, x_2, …, x_n}$, which, typically, represents the decomposition of a vector $V$ from an "origin" point $O: {0, 0, … ,0}$ to $X$ into orthogonal vectors $\{x1,0,..,0\}, \{0,x2,0,..,0\}, …, \{0,0,..,0,xn\}$ along each of the n dimensional axes of the space.
 
-The Multilateration of points in the space requires $n+1$ fixed reference points $F_p$ ($p$ from $1$ to $n+1$), which contains no subset of any length $m$ which all lie on the same $m-2$ hyperplane.  (i.e. in a 3d coordinate system, with four reference points, the four points cannot lie on the same plane, no three points can lie on the same line, and, trivially, no two points can be the same).  The Multilateration Coordinate $X'$ for the point $X$ is then: $X'=\{t_1, t_2, …, t_{n+1}\}$ where $t_i$ is the distance $d(X, F_i)$ (in units applicable to the system).
+The Multilateration of points in the space requires $n+1$ fixed reference points $F_p$ ($p$ from $1$ to $n+1$), which contains no subset of any length $m$ which all lie on the same $m-2$ hyper-plane.  (i.e. in a 3d coordinate system, with four reference points, the four points cannot lie on the same plane, no three points can lie on the same line, and, trivially, no two points can be the same).  The Multilateration Coordinate $X'$ for the point $X$ is then: $X'=\{t_1, t_2, …, t_{n+1}\}$ where $t_i$ is the distance $d(X, F_i)$ (in units applicable to the system).
 
 A "Multilateration Index" is a data structure which, for a given set of points $p \in M$ stores the Multilateration Coordinates.  Depending on implementation and use, these can be stored in a single structure sorted by one of $t_i$, or in multiple structures sorted individually by each $t_i$, or some other variant.  See [Multilateration NN Algorithms] and [Multilateration NA Algorithms] for our specific implementations.
 
@@ -14,11 +16,11 @@ Consider a 2-dimensional grid – a flattened map, a video game map, or any math
 
 Since the space has dimension $n=2$, we need $3$ fixed points $F_p$.  While the Geospatial example on Earth has a specific prescription for the fixed points, an arbitrary space does not.  We therefore prescribe the following construction for bounded spaces: 
 
-Construct a circle (hypersphere for other dimensions) with the largest area inscribable in the space.  In this example, that will be the circle centered at $(50,50)$ with radius $r=50$. 
+Construct a circle (hyper-sphere for other dimensions) with the largest area inscribable in the space.  In this example, that will be the circle centered at $(50,50)$ with radius $r=50$. 
 
 Select the point at which the circle touches the boundary at the first dimension (for spaces with uneven boundary ratios, select the point at which the circle touches the earliest boundary $x_i$).  Such a point is guaranteed to exist since the circle is largest (if it does not, then the circle can be expanded since there is space between every point on the circle and an axis, and it is not a largest possible circle).
 
-From this point, create a regular $n+1$-gon (triangle here) which touches the circle at $n+1$ points.  These are the points we will use as $F_p$.  They are, by construction, not all co-linear (or in general do not all exist on the same $n$-dimensional hyperplane) satisfying our requirement [proof]. 
+From this point, create a regular $n+1$-gon (triangle here) which touches the circle at $n+1$ points.  These are the points we will use as $F_p$.  They are, by construction, not all co-linear (or in general do not all exist on the same $n$-dimensional hyper-plane) satisfying our requirement [proof]. 
 
 The point $y=0$, $x=50$ is the first point of the equilateral triangle.  The slope of the triangle's line is $tan(\frac{pi}{3})$, so setting the equation of the circle: 
 
@@ -119,7 +121,7 @@ The trilateration of those points, that is, the three points $d_1, d_2, d_3 = {d
 
 \doublespacing
 
-Note that we do not need to continue to store the original latitude and longitude.  We can convert the three $d_n$ distances back to Latitude and Longitude within some $\epsilon$ based on the available precision.  Geospatial coordinates in Latitude and Longitude with six digits of precision are accurate to within $<1\ meter$, and 8 digits is accuract to within $<1\ centimeter$, although this varies based on the latitude and longitude itself; latitudes closer to the equator are less accurate than those at the poles.  The distance values $d_x$ are more predictable, since they measure distances directly.  While the units in this sample are arbitrary, $F(x)$ in a real geospatial example could be in kilometers, so three decimal digits would precisely relate to $1\ meter$, and so on.  This is one reason that we will later examine using the trilateration values as an outright replacement for Longitude and Latitide, and this feature is important when considering storage requirements for this data in large real-world database applications.
+Note that we do not need to continue to store the original latitude and longitude.  We can convert the three $d_n$ distances back to Latitude and Longitude within some $\epsilon$ based on the available precision.  Geospatial coordinates in Latitude and Longitude with six digits of precision are accurate to within $<1\ meter$, and 8 digits is accurate to within $<1\ centimeter$, although this varies based on the latitude and longitude itself; latitudes closer to the equator are less accurate than those at the poles.  The distance values $d_x$ are more predictable, since they measure distances directly.  While the units in this sample are arbitrary, $F(x)$ in a real geospatial example could be in kilometers, so three decimal digits would precisely relate to $1\ meter$, and so on.  This is one reason that we will later examine using the trilateration values as an outright replacement for Longitude and Latitude, and this feature is important when considering storage requirements for this data in large real-world database applications.
 
 For now, continuing with the example, those $10$ points are shown here in blue with the three reference points $F_1, F_2, F_3$ in red:
 

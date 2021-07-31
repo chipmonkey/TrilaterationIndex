@@ -10,7 +10,7 @@ output:
 
 ## SQL Network Adequacy Results
 
-We conducted our experiment as described, resulting in 36 combinations of point ($P$) and query ($Q$) sets from the same 150,000 point sample we've used for $NN$ experiments.  The datasets are categorized and range from 100 to 32,000 points, as shown here:
+We conducted our experiment as described, resulting in 36 combinations of point ($P$) and query ($Q$) sets from the same 150,000 point sample we've used for $NN$ experiments.  The data sets are categorized and range from 100 to 32,000 points, as shown here:
 
 \singlespacing
 
@@ -32,7 +32,7 @@ kable(cat_data, caption="Record counts by category used in experiment")
 
 ### Result Charts
 
-Recall that we are calculating the Network Adequacy Percent (NAP), which requires a distance $d$, and we performed expriments with $d \in (0.1, 1, 10, 100)$.  At a high level, our TRILAT-NA algorithm performs well against the naive algorithm overall.  This initial density boxplot shows the Trilateration performance against the st_distance function overall.  Note that this figure is on a log scale - some of the Trilateration improvements are 100 times faster in the best case, and overall notably faster in aggregate:
+Recall that we are calculating the Network Adequacy Percent (NAP), which requires a distance $d$, and we performed experiments with $d \in (0.1, 1, 10, 100)$.  At a high level, our TRILAT-NA algorithm performs well against the naive algorithm overall.  This initial density box-plot shows the Trilateration performance against the st_distance function overall.  Note that this figure is on a log scale - some of the Trilateration improvements are 100 times faster in the best case, and overall notably faster in aggregate:
 
 ```{r QP_size_comparison_boxall, echo=FALSE, message=FALSE, fig.cap="Overall Timings By Category (s) - log10 scale - lower is better", fig.width=10, fig.height=4}
 library(ggplot2)
@@ -112,7 +112,7 @@ ggplot(data=data, aes(x=dist, y=timing_s, fill=algorithm)) +
 ```
 
 
-It's worth noting that the actual NAP for $d$ varies in this dataset; using $|P|=32000$ and $|Q|=10000$ we find:
+It's worth noting that the actual NAP for $d$ varies in this data set; using $|P|=32000$ and $|Q|=10000$ we find:
 
 \singlespacing
 
@@ -126,7 +126,7 @@ kable(dnap, caption="d vs. ~NAP")
 
 \doublespacing
 
-Of course this varies with the size of the dataset, but the rough bounds are important.  The data set comprises points in Kentucky which is roughly 400 miles east-west and 200 miles north-south.  When $d$ is 100 miles, even with 100 points (our smallest sample), 100% coverage is all but guaranteed.  At 10 miles, we see some holes in coverage, but not many -- thus the 98% value.  When we get down to the one mile and one tenth of a mile ranges, coverages drop precipitously.  Even with our largest two categories, NAP is only 88% at 1 mile and 42% at 0.1 miles.  If we had been using real world data, imagine that we ask the question "what percent of people live within 1 mile of a pharmacy" to get an idea what these numbers could mean (if this were not synthetic data).
+Of course this varies with the size of the data set, but the rough bounds are important.  The data set comprises points in Kentucky which is roughly 400 miles east-west and 200 miles north-south.  When $d$ is 100 miles, even with 100 points (our smallest sample), 100% coverage is all but guaranteed.  At 10 miles, we see some holes in coverage, but not many -- thus the 98% value.  When we get down to the one mile and one tenth of a mile ranges, coverage drop precipitously.  Even with our largest two categories, NAP is only 88% at 1 mile and 42% at 0.1 miles.  If we had been using real world data, imagine that we ask the question "what percent of people live within 1 mile of a pharmacy" to get an idea what these numbers could mean (if this were not synthetic data).
 
 These percentages are akin to those we need to answer the healthcare questions set forth in the introduction.  For example to answer "80% of members under the age of 16 must live within 25 miles of a covered pediatrician" we would set d=25 miles, and identify the sets of points for "members under the age of 16", and "covered pediatrician" - those sets could be compared to some categories here, (i.e. category 11 and category 14).  The charts below show how efficiently we could calculate the percent, to determine if it is more or less than 80%, and answer the question.
 
@@ -488,7 +488,7 @@ As the size of the query data set ($Q$) increases along the y-axis, it's clear t
 
 #### The diagonal is strangely fast.
 
-This we originally thought of as a flaw in our experimental design, but now that we analyze it it's quite interesting and we chose not to change it.  The situation along the diagonal is that we're using the same category for $P$ and $Q$; this means that the datasets are identical, and that there is a 100% chance, always, of finding a point $p$ within $d$ of $q \forall q \in Q$ namely the point itself - since it is in the dataset and we made no effort to restrict this.  There may or may not be a second point within distance, but recall that our definition only requires one (since we did not extend to $k-NA$).  But why is this so fast?  Given the guaranteed success of finding at least one qualifying point in every dataset, we surmise that the performance improvement is a statistical result of almost never having to iterate over the entire set $P$.  The average time to find a point if one is guaranteed to exist, should be roughly half the time (over repeated iterations) of searching the whole set.  The entire query time is then some statistical fraction of a prior expectation of the likelihood of finding a match.
+This we originally thought of as a flaw in our experimental design, but now that we analyze it it's quite interesting and we chose not to change it.  The situation along the diagonal is that we're using the same category for $P$ and $Q$; this means that the data sets are identical, and that there is a 100% chance, always, of finding a point $p$ within $d$ of $q \forall q \in Q$ namely the point itself - since it is in the data set and we made no effort to restrict this.  There may or may not be a second point within distance, but recall that our definition only requires one (since we did not extend to $k-NA$).  But why is this so fast?  Given the guaranteed success of finding at least one qualifying point in every data set, we surmise that the performance improvement is a statistical result of almost never having to iterate over the entire set $P$.  The average time to find a point if one is guaranteed to exist, should be roughly half the time (over repeated iterations) of searching the whole set.  The entire query time is then some statistical fraction of a prior expectation of the likelihood of finding a match.
 
 Given our chart of $d$ vs. $NAP$ earlier, it makes sense that the diagonal's relative value is higher when $d$ is low.  That is, when $d=100$ every point is adequate, even without itself as a guaranteed qualifying point, so there is no real performance gain -- we never have to search every $p$ for a match.  When $d=0.1$, on the other hand, we have to search the entire data set, in vain, over 50% of the time (per our chart), wasting an entire scan of $P$.  Along the diagonal this never happens, and the time results mirror this fact.
 
@@ -502,7 +502,7 @@ The reason for this seems straightforward... the smaller the distance $d$, the l
 
 A more complicated relationship exists as we walk the charts from left to right.  Examine the chart where $d=1$ for a moment.  On every but the bottom line (where zeroes probably hide this as a rounding problem), on the NAIVE-NA chart, the query time is HIGHER for $|P|=100$ than it is for $|P| \in (900, 2000, 5000, 10000)$, however it picks UP again when $|P|=32000$.
 
-Why?  We've run these tests repeatedly, in random order, back to back, to rule out hot/cold cache issues or other startup problems.
+Why?  We've run these tests repeatedly, in random order, back to back, to rule out hot/cold cache issues or other start-up problems.
 
 Let's look at the actual NAP values for that row:
 
@@ -600,10 +600,10 @@ The pattern is similar, but not identical, in the right half of the graphs - tho
 
 If we examine the top rows for $d=0.1$ and $d=1$, where runtime is longest, the NAIVE-NA algorithm as we described may slightly increase performance for low $|P|$, but quickly sees a runtime increase as $|P|$ increases.  The TRILAT-NA algorithm, however, while it isn't monotonic for $|P| \in (100, 900)$, it actually _decreases_ as $|P|$ increases from then on (with the exception of items on the diagonal, which are special as we discussed before).
 
-This is easier to explain... the addition of the filters using the $refdist_i$ distances causes a much quicker elimination of points outside of the $d$ radius from each $q$.  More points in $P$ makes the efficiency of these culls more pronounced.  That is, if we look at the "Rows Removed by Filter" as we did in the explain before, and remember the figure [Monte Carlo Estimating Ring Overlap Area], we see that those three additional refdist filters will exclude a high percent of candidate records quickly.  The _remaining_ points, subject to the expensive st_distance calculation, have a high percent chance of being within $d$ of $q$.
+This is easier to explain... the addition of the filters using the $refdist_i$ distances causes a much quicker elimination of points outside of the $d$ radius from each $q$.  More points in $P$ makes the efficiency of these culls more pronounced.  That is, if we look at the "Rows Removed by Filter" as we did in the explain before, and remember the figure [Monte Carlo Estimating Ring Overlap Area], we see that those three additional $refdist$ filters will exclude a high percent of candidate records quickly.  The _remaining_ points, subject to the expensive st_distance calculation, have a high percent chance of being within $d$ of $q$.
 
-The higher the number of points in $P$, the more points culled as a result of the refdist filters that no longer have to have st_distance called, compared to the NAIVE-NA query, resulting in the performance gains we see.
+The higher the number of points in $P$, the more points culled as a result of the $refdist$ filters that no longer have to have st_distance called, compared to the NAIVE-NA query, resulting in the performance gains we see.
 
 #### NA Performance Conclusions
 
-The TRILAT-NA algoritm was as fast or faster in almost every test we ran; the only major outlier was when $d=0.1$ and $|P|=100$, in two cases ($|Q|=2000$ and $|Q|=10000$), TRILAT-NA was slower by 2 and 14 seconds (about 7% and 10%) respectively.  When $d=1$, $|P|=100$ again, and $|Q|=900$, $|Q|=5000$, or $|Q|=10000$, TRILAT-NA was slower by 1 second or less in each case.  Given that our resolution is 1-second, these are statistically minor.  Even for the larger discrepancies, it seems that the TRILAT-NA algoritm is only slower for very small values of $|P|$, which is where optimization is least needed in the first place.  When the workload takes the longest, the TRILAT-NA algoritm performs significantly faster (up to 100 times, per these charts) than the naive algorithm.
+The TRILAT-NA algorithm was as fast or faster in almost every test we ran; the only major outlier was when $d=0.1$ and $|P|=100$, in two cases ($|Q|=2000$ and $|Q|=10000$), TRILAT-NA was slower by 2 and 14 seconds (about 7% and 10%) respectively.  When $d=1$, $|P|=100$ again, and $|Q|=900$, $|Q|=5000$, or $|Q|=10000$, TRILAT-NA was slower by 1 second or less in each case.  Given that our resolution is 1-second, these are statistically minor.  Even for the larger discrepancies, it seems that the TRILAT-NA algorithm is only slower for very small values of $|P|$, which is where optimization is least needed in the first place.  When the workload takes the longest, the TRILAT-NA algorithm performs significantly faster (up to 100 times, per these charts) than the naive algorithm.

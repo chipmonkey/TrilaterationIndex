@@ -8,7 +8,7 @@ output: pdf_document
 
 ## Underlying Theory Concepts and Problem Statement
 
-The benefit of storing geographic points as a set of trilateration distances rather than latitude and longitude boils down to the simplification of comparing distances between points by shortcutting complex distance queries using simple subtractions.  We discuss the math behind the geospatial queries, to exhibit their complexity, and set some theoretical bounds on quick distance calculations using the trilateration index.
+The benefit of storing geographic points as a set of trilateration distances rather than latitude and longitude boils down to the simplification of comparing distances between points by short-cutting complex distance queries using simple subtractions.  We discuss the math behind the geospatial queries, to exhibit their complexity, and set some theoretical bounds on quick distance calculations using the trilateration index.
 
 
 ### Problem: High Cost of Geospatial Calculations
@@ -38,13 +38,13 @@ What we mean by 'simple distance functions' is one of the following primitive fu
 * $D(p, q)$: returns the distance between points p and q
 * $Within(d, q, P)$:  returns the set of all points in $P$ within distance $d$ of query point $q$
 ** $CountWithin(d, q, P)$:  returns the count of the set of points from $Within(d, q, P)$
-* $AnyWithin(d, q, P)$: returns a boolean result - True if $Within(d, q, P)$ is non-empty; False otherwise
+* $AnyWithin(d, q, P)$: returns a Boolean result - True if $Within(d, q, P)$ is non-empty; False otherwise
 
 ### Distance Function
 
 How can we use the Trilateration Index ($TI$) to improve the performance of a single distance function $D(p, q)$?  In the simplest case, we cannot... the construction of the $TI$ structures requires three distance functions to be calculated each for $p$ and $q$ (to the three fixed reference points).
 
-However, for large datasets with fixed points where many distances need to be calculated between them, particularly if the distance function itself is computationally intensive (such as geospatial distances on an accurate ellipsoid model of earth) [@Lambert1942], we can use the $TI$ structure to create approximate distances, and provide upper and lower bounds on exact values.
+However, for large data sets with fixed points where many distances need to be calculated between them, particularly if the distance function itself is computationally intensive (such as geospatial distances on an accurate ellipsoid model of earth) [@Lambert1942], we can use the $TI$ structure to create approximate distances, and provide upper and lower bounds on exact values.
 
 For example, let's take our sample data:
 
@@ -63,7 +63,7 @@ kable(data)
 
 \doublespacing
 
-Here, X and Y are euclidean cartesian coordinates, and d1, d2, d3 are the distances from these points to our three reference points respectively.  See [2-D Bounded Example] for more details on the construction.  Note that in this case we have sorted the data by $d1$ -- this is essential, and incurs only $O(n*log(n))$ overhead.  This equates to how database indexes or arrays will hold the data in memory.
+Here, X and Y are euclidean Cartesian coordinates, and d1, d2, d3 are the distances from these points to our three reference points respectively.  See [2-D Bounded Example] for more details on the construction.  Note that in this case we have sorted the data by $d1$ -- this is essential, and incurs only $O(n*log(n))$ overhead.  This equates to how database indexes or arrays will hold the data in memory.
 
 
 ### Distance between two points
@@ -73,11 +73,11 @@ If we compare points 1 and 2 here (lines 4 and 2 in the $d1$-sorted table), what
 
 It's similarly easy to use this mechanism to approximate answers to "which points are within distance $d$ of query point $Q$?" and, relatedly, "is there at least one point in $P$ within distance $d$ to point $Q$?".
 
-Looking back at our table, let's examine the question "which points are within distance 20 of point 5?".  Point 5 has coordinates $(86.12714, 52.201894)$, and is $63.60981$ units from $d1$.  Since we've stored the list sorted by $d1$, we can instantly limit our search to a sequential walk from points between $43.60981$ and $83.60981$ -- that is, points $(7, 1, 4, 9, 6)$ (excluding 5 itself).  This is, immediately, a 50% reduction in the dataset.
+Looking back at our table, let's examine the question "which points are within distance 20 of point 5?".  Point 5 has coordinates $(86.12714, 52.201894)$, and is $63.60981$ units from $d1$.  Since we've stored the list sorted by $d1$, we can instantly limit our search to a sequential walk from points between $43.60981$ and $83.60981$ -- that is, points $(7, 1, 4, 9, 6)$ (excluding 5 itself).  This is, immediately, a 50% reduction in the data set.
 
 While performing the walk, we look for $d2$ between $24.08779 \pm 20$ and $d3$ between $82.65970 \pm 20$.  $d2$ rules out points $(7, 4, 6)$ and $d3$ rules out $(1)$, leaving only $(9)$ for consideration. To be completely certain, we can calculate $d = \sqrt{(86.12714 - 85.13531)^2 + (64.090063 - 78.065907)^2} =$ `r sqrt((86.12714 - 85.13531)^2 + (64.090063 - 78.065907)^2)` which is, indeed, within 20.
 
-In pseudocode:
+In pseudo-code:
 
 \singlespacing
 
@@ -104,9 +104,9 @@ If we were answering the "is there at least one point..." $AnyWithin$ version, i
 
 ### Alternate Order Indexes
 
-For an additional possible performance improvement, we can create alternate indexes which store the data in sorted order along $d2$ and $d3$ (or any/all distances for arbitarty dimensions).  We search for the low and high indexes as before, but now we do so along each sorted index (for distances to each reference point).  Once we have the lists of individual candidates from each index, we need to find any point that is common to all candidate lists.  In practice we have not seen this behave as effectively as the single-index function, but this seems to come down to the cost of merging n-lists to find common elements.
+For an additional possible performance improvement, we can create alternate indexes which store the data in sorted order along $d2$ and $d3$ (or any/all distances for arbitrary dimensions).  We search for the low and high indexes as before, but now we do so along each sorted index (for distances to each reference point).  Once we have the lists of individual candidates from each index, we need to find any point that is common to all candidate lists.  In practice we have not seen this behave as effectively as the single-index function, but this seems to come down to the cost of merging n-lists to find common elements.
 
-In pseudocode:
+In pseudo-code:
 
 \singlespacing
 
@@ -207,7 +207,7 @@ ggplot() +
 
 Comparing this to our sample data, the length of the dashed lines correspond to the sort order in the $TI$ index.  That is, $8, 4, 6, 2, 7, 1, 9, 5, 3, 10$ are increasingly distant from $r_1$.  This is how we quickly prune the list -- points within $d$ distance of $q$ are, by definition, between $q_{d1}-d$ and $q_{d1}+d$ distance from $r_1$ - namely, points $4, 6, 2, 7, 1$.  The rest can be no closer than this.  In this case, all the points in the ring happen to also be within $d$ of $q$, but of course that will not always be the case.
 
-Clearly there are antagonistic datasets that would thwart any benefit.  If the data were arranged in a circle all near distance $d$ from $r_1$, we would have culled no points from this approach.  In that particular case, the alternate $WithinMulti$ construction would be beneficial.
+Clearly there are antagonistic data sets that would thwart any benefit.  If the data were arranged in a circle all near distance $d$ from $r_1$, we would have culled no points from this approach.  In that particular case, the alternate $WithinMulti$ construction would be beneficial.
 
 If the points were randomly distributed, however, then the expected culling ratio of the index becomes the area of the ring divided by the area of the total point space.  On an infinite plane, of course, this approaches zero, but in finite spaces, such as this example (and geospatial coordinates), we can calculate the area.  Here, we use a common Monte Carlo method to estimate that, for this distance, on the $100x100$ grid, the ring covers about 48.7% of the area.[@Wasserstein1989]  Given that we had to check five of our ten points, this seems reasonable.
 
@@ -273,7 +273,7 @@ Here, culling points along the three distances respectively we get:
 * $r_2$: $1, 7, 6, 2, 4$
 * $r_3$: $1, 4, 6$
 
-It's clear that $r_3$ is the most restrictive; examining the images, it's easy to see why... points 2 and 7 reside within the rings aroudn $r_1$ and $r_2$, but not that of $r_3$.   The final step, of finding which elements are common to these three lists is, unfortunately, not efficient.  We can start with the smallest list, which is some help, but as these are sorted in different orders, finding the intersection of all of the lists is, algorithimcally, non-trivial.  Given $m$ sets containing $N$ elements total which result in $o$ points in the intersection, modern research indicates space complexity of at least $O(N \log(N))$ and time complexity $O(\sqrt{N*o} + o))$.[@Cohen2010]
+It's clear that $r_3$ is the most restrictive; examining the images, it's easy to see why... points 2 and 7 reside within the rings around $r_1$ and $r_2$, but not that of $r_3$.   The final step, of finding which elements are common to these three lists is, unfortunately, not efficient.  We can start with the smallest list, which is some help, but as these are sorted in different orders, finding the intersection of all of the lists is, algorithimcally, non-trivial.  Given $m$ sets containing $N$ elements total which result in $o$ points in the intersection, modern research indicates space complexity of at least $O(N \log(N))$ and time complexity $O(\sqrt{N*o} + o))$.[@Cohen2010]
 
 
 Still, the improvement in the initial cull may be worth it.  Recall that, using a single reference point, the time complexity was a result of the area of the ring divided by the area of the space.  In the multi-reference-point version, with $m$ reference points, the result is $m$ times the area of the intersection of the $m$ rings, divided by the area of the space.
@@ -365,4 +365,4 @@ ggplot() +
   theme(legend.position = "none")
 ```
 
-Again, these numbers will vary with $d$ more than anything else, but the concept here is that for low $d$, the area of the ring can be significantly less than that of the entire search area, even moreso the intersection of the area of three such rings, benefitting the actual time complexity of the query.
+Again, these numbers will vary with $d$ more than anything else, but the concept here is that for low $d$, the area of the ring can be significantly less than that of the entire search area, even more so the intersection of the area of three such rings, benefiting the actual time complexity of the query.

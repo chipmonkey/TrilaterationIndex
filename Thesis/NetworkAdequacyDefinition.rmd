@@ -3,6 +3,8 @@ output:
   pdf_document: default
   html_document: default
 ---
+$$\\[0.5in]$$
+
 # Network Adequacy
 
 The trilateration index was originally designed to improve efficiency of the "network adequacy" (NA) problem for health care.  Network adequacy is a common legal requirement for medicare or insurance companies with constraints such as:
@@ -29,7 +31,7 @@ and so forth.
 
 ## Formalization of Network Adequacy
 
-Since we coud not find formal mathematical definitions in existing literature, we now formalize the concept of "Network Adequacy" here as:
+Since we could not find formal mathematical definitions in existing literature, we now formalize the concept of "Network Adequacy" here as:
 
 Given a non-empty set of points $P$ and a non-empty set of query points $Q$ in a metric space $M$ (where $P \cap Q$ comprises the 'network'), the network is 'completely adequate' for a distance $d$ and a distance function $D(a, b)$ describing the distance between points $a$ and $b$ for $a \in M$ and $b \in M$ if for every point $q$ (where $q \in Q$) $\exists$ at least one point $p$ ($p \in P$) $\ni D(p, q) <= d$.  Otherwise the network is 'inadequate'.
 
@@ -43,7 +45,7 @@ If, within $P$, we consider the largest subset $P' \in P$ where $P'$ is 'complet
 ### Network Adequacy Threshold
 We can generalize this slightly more by describing a network as 'adequate with threshold $T$' by introducing a percent $T$ ($0<=T<=1$) such that the same network is adequate if at least $T*|Q|$ (or $T$ percent of points in $Q$) are individually 'adequate'.
 
-Another way of saying this is that the netwrk is 'adequate with threshold $T$' if the Network Adequacy Percent ${NAP} > T$.
+Another way of saying this is that the network is 'adequate with threshold $T$' if the Network Adequacy Percent ${NAP} > T$.
 
 In this case, if $T == 1$ we have the original case.  If $T == 0$ we have a trivial case where the network is always adequate (even if $Q$ and/or $P$ are empty, which is generally disallowed).
 

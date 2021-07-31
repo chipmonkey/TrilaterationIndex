@@ -32,9 +32,9 @@ The most basic SQL query, in a database that has Geospatial extensions, to calcu
 
 This assumes two tables - "q_points" and "p_points" containing the points in $Q$ and $P$ respectively.  Each has a field "st_geompoint" containing a geospatial position for each point.  The "st_distance" function is a SQL function to calculate the distance between two points - in our case we need to ensure the database uses the accurate Geodesic calculation from our research.[@Karney2013]
 
-This returns the number of records in $Q$ as qcount and the number of records in $P$ as tcount.  The Network Adequacy Percent is then $\frac{tcount}{qcount}$.
+This returns the number of records in $Q$ as $qcount$ and the number of records in $P$ as $tcount$.  The Network Adequacy Percent is then $\frac{tcount}{qcount}$.
 
-Note that this function is in PostgreSQL syntax; it requires slight moderation but otherwise works (we tested) in Microsoft SQL Server and MySQL.  It likely works with little modification in any database which supports the SQL:1999 standard for lateral joins and geospatial points and distance functions.  One thing that is NOT identical between database implementations is the ability or effectiveness of database indexes on this query.  In postgres, we have experimented and found that 
+Note that this function is in PostgreSQL syntax; it requires slight moderation but otherwise works (we tested) in Microsoft SQL Server and MySQL.  It likely works with little modification in any database which supports the SQL:1999 standard for lateral joins and geospatial points and distance functions.  One thing that is NOT identical between database implementations is the ability or effectiveness of database indexes on this query.  In PostgreSQL, we have experimented and found that 
 
 Also note the $1609.34$ - this is to convert the distance from meters to miles, which is not core to the algorithm, but left here since these are the units we work with in our experimental results, and as an example.
 
@@ -47,7 +47,7 @@ Recall that we require fixed reference points for Trilateration, and per our pre
 * Point 2: $38.260000, -85.760000$ (Louisville, KY on the Ohio River) 
 * Point 3: $-19.22000, 159.93000$ (Sandy Island, New Caledonia)
 
-The "NAIVE-NA" query requires no real setup, other than storing the data from the $P$ and $Q$ datasets.  Not so here -- we require additional fields added to the database in the q_points and p_points tables to store the distances from each point to these reference points.  We name those fields $refdist1$, $refdist2$, and $refdist3$.  Recall that this is a one-time setup requiring $3*|P|+3*|Q|$ calls to st_distance.
+The "NAIVE-NA" query requires no real setup, other than storing the data from the $P$ and $Q$ data sets.  Not so here -- we require additional fields added to the database in the q_points and p_points tables to store the distances from each point to these reference points.  We name those fields $refdist1$, $refdist2$, and $refdist3$.  Recall that this is a one-time setup requiring $3*|P|+3*|Q|$ calls to st_distance.
 
 The SQL implementation of the TRILAT-NA algorithm then looks like this:
 
@@ -69,11 +69,11 @@ The SQL implementation of the TRILAT-NA algorithm then looks like this:
 
 \doublespacing
 
-Note that this is identical to the query for NAIVE-NA, with the addition of the three lines comparing the refdist values.
+Note that this is identical to the query for NAIVE-NA, with the addition of the three lines comparing the $refdist$ values.
 
 These accomplish two things:
 
 1.  They allow SQL to optimize using normal (non-geospatial) database indexes when comparing between the two points $p$ and $q$, using simple subtraction rather than a complicated geodesic query.  
-2.  They allow for three opportunities to reduce the dataset size before the high cost geodesic query is performed.  Recall our figure [Monte Carlo Estimating Ring Overlap Area] that exhibited how the area of the three overlapping rings of width $d$ was $<<$ the area of the search space; a similar thing happens here... For a given distance $d$, the set of points where $q.refdist_i - p.refdist_i <= d$, is the intersection of those three rings of width $d$ with centers on the three reference points and with diameters such that the middle of each ring passes through $q$.  This eliminates most points if $d$ is relatively small - small enough that some points $q$ are inadequate is generally a good test.
+2.  They allow for three opportunities to reduce the data set size before the high cost geodesic query is performed.  Recall our figure [Monte Carlo Estimating Ring Overlap Area] that exhibited how the area of the three overlapping rings of width $d$ was $<<$ the area of the search space; a similar thing happens here... For a given distance $d$, the set of points where $q.refdist_i - p.refdist_i <= d$, is the intersection of those three rings of width $d$ with centers on the three reference points and with diameters such that the middle of each ring passes through $q$.  This eliminates most points if $d$ is relatively small - small enough that some points $q$ are inadequate is generally a good test.
 
 See the [Experimentation] and [Experimental Results] sections for details on our specific implementations, tests, and results.

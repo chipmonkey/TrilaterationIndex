@@ -1,0 +1,18 @@
+---
+title: "Acknowledgements"
+author: "Chip Lynch"
+date: "7/30/2021"
+output: pdf_document
+---
+$$\\[2.5in]$$
+
+\centering
+
+# Acknowledgments {.unlisted .unnumbered}
+
+\justify
+
+Thanks to my Wifey - Mary Ann Lynch - for putting up with and supporting the hours of late nights in front of my laptop.  Thanks also to my family and friends who I'm sure I ignored more than I should while I worked on this, and to the teams at Passport Health Plan and SpaceX for having real-world problems to solve that led to an interesting thesis topic.  And of course I appreciate the help and guidance of all the teachers, professors, and mentors I've had.  But mostly still thanks to my Wifey.
+
+
+

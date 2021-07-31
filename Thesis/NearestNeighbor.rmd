@@ -37,7 +37,7 @@ kable(k, booktabs = T, caption="Approximate relative complexity on a 1-5 scale",
 
 \doublespacing
 
-We explore four variations to explore various possible optimizations that we imagined prior to experimentation, since the experiment was required to determine which would perform best under which circumstances.  While we go into more detail later, in short:
+We explore four variations to explore various possible optimization that we imagined prior to experimentation, since the experiment was required to determine which would perform best under which circumstances.  While we go into more detail later, in short:
 
 * TRI - search along a sorted 1-dimensional ($d_1$) distance until the worst 1d distance is farther than the top-k nearest so far
 * TIA - an approximate solution based solely on a 1-dimensional distance (this turns out not to be very good)
@@ -82,7 +82,7 @@ Basically, looking only along one distance dimension (proximity to d1), find the
 
 In an attempt to gain benefit from the relaxed constraints of an "approximate" $aNN$ approach, we experiment with an algorithm that effectively excludes the distance calculations altogether, from our TRI algorithm altogether.  Recall that, for a given $d_x$ distance to reference point $r_x$, a point $p$ can be _no closer than_ $q_{dx} - p_{dx}$; if we treat the approx_distance $(q, p) = \frac{\sum_{x=1}^{m}{q_{dx} - p_{dx}}}{|d|}$ (the mean of the relative distances from $q$ to all reference points $r_x$), or, more aggressively, the minimum such distance, we can return an approximate result without ever having to call the distance function itself (after the index is created).
 
-We ended up abandoning this approach after only a few tests - there was a significant drop in recall (the mechanism by which ann-benchmarks measures effectiveness of $aNN$ algorithms) - up to 99%, which is unacceptable for these approximations - with no particular improvement in performance.  This effectively removed $aNN$ from our consideration; our results are primarily focused on exact $NN$ results as a consequence.
+We ended up abandoning this approach after only a few tests - there was a significant drop in recall (the mechanism by which ANN-benchmarks measures effectiveness of $aNN$ algorithms) - up to 99%, which is unacceptable for these approximations - with no particular improvement in performance.  This effectively removed $aNN$ from our consideration; our results are primarily focused on exact $NN$ results as a consequence.
 
 #### TrilaterationExpand (TIE)
 
@@ -113,7 +113,7 @@ return Within(radius, q, P)
 
 Another approach to minimizing the overhead of expanding the range in the TRI algorithm by one at a time is to simply expand by some fixed amount $> 1$.  This actually shows performance gains when the distance functions are inexpensive, although not enough to really be competitive with other $NN$ solutions, but shows no benefit (in fact, it incurs quite the cost) when using our expensive geodesic distance functions.  See our results section for more details.
 
-Fundamentally, the change to the TRI algoritm is that we expand by $k$ (which is a convenient constant), or some larger constant, at a time, rather than $1$ point along $d_1$ in $TI$.  In effect:
+Fundamentally, the change to the TRI algorithm is that we expand by $k$ (which is a convenient constant), or some larger constant, at a time, rather than $1$ point along $d_1$ in $TI$.  In effect:
 
 \singlespacing
 
@@ -159,6 +159,6 @@ There's a lot to digest in these algorithms; many choices were made, and various
 
 As mentioned before, the TIA algorithm failed dominantly because either performance or recall were too slow... recall was a problem when only 1 reference point was used, and performance faltered with multiple reference points due to the high cost of calculating the intersection of candidate point lists from multiple reference points.
 
-The implementation on both "Expanding" algorithms (TIE and TIE2) presented many choices.  Initially we sought to find a reasonable initial guess for the candidate $radius$, however no suitable algorithm presented itslef that was superior to guessing "0.5" as a first guess (curiously true regardless of the coordinate scale).  Similarly, the value of 500 for $CHUNK$ size was found reasonable via trial and error, although heuristics to arrive at the number, rather than hard-coding it, could probably benefit specific cases.
+The implementation on both "Expanding" algorithms (TIE and TIE2) presented many choices.  We sought to find an initial guess for the candidate $radius$, however no suitable algorithm presented itself that was superior to guessing "0.5" (curiously true regardless of the coordinate scale).  Similarly, the value of 500 for $CHUNK$ size was found reasonable via trial and error, although heuristics to arrive at the number, rather than hard-coding it, could probably benefit specific cases.
 
 See [Experimental Results] and [Experimentation] for the results and specifics of how we tested these algorithms.

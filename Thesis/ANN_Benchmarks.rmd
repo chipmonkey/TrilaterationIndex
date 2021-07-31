@@ -9,7 +9,7 @@ output: pdf_document
 
 We used the "Ann-Benchmarks" software - a widely available open source benchmark designed for timing Nearest Neighbor algorithms - to compare our algorithm to others in the NN space. [@Amueller2020]  We specifically modified the popular "scikit-learn" package to implement our algorithms, as it was already the basis for many benchmarks in this suite.[@scikit-learn]  We tested three scenarios:
 
-* Our Geodesic dataset using the (expensive but accurate) Karney distance algorithm [@Karney2013] coded in the geopy package [@geopy]
+* Our Geodesic data set using the (expensive but accurate) Karney distance algorithm [@Karney2013] coded in the geopy package [@geopy]
 * A standard 20-dimension Euclidean distance test provided by the ANN-Benchmarks software
 * A 25-dimension Angular distance test ("Glove") provided by the ANN-Benchmarks software
 
@@ -92,9 +92,9 @@ p
 
 ### Random 20-dimension euclidean distance:
 
-The ann-benchmark tool includes support for a randomly generated 20-dimension euclidean dataset, which is one of its most basic tests.  We note that our performance here is abysmal for the initial "Trilateration" algorithm, even failing to beat the brute force approach.  This seems to be due to the overhead we incur determining which candidates to test next.  Remember that we traded a number of subtractions and some array navigation in exchange for fewer distance function calls.  In this case, when the distance function itself is extremely fast, that overhead is a net loss.
+The ANN-benchmark tool includes support for a randomly generated 20-dimension euclidean data set, which is one of its most basic tests.  We note that our performance here is abysmal for the initial "Trilateration" algorithm, even failing to beat the brute force approach.  This seems to be due to the overhead we incur determining which candidates to test next.  Remember that we traded a number of subtractions and some array navigation in exchange for fewer distance function calls.  In this case, when the distance function itself is extremely fast, that overhead is a net loss.
 
-It is worth noting that we tuned the two expansion based algorithms here as well.  "TrialterationExpand" performs far better than the stock Trilateration algorithm, but still just below the Brute Force algorithm.  The "TrilaterationExpand2" algorithm, however, is actually competitive here, more than doubling the queries per second of the Brute Force approach, and reaching more than 60% as fast as some tree algorithms.
+It is worth noting that we tuned the two expansion based algorithms here as well.  "TrilaterationExpand" performs far better than the stock Trilateration algorithm, but still just below the Brute Force algorithm.  The "TrilaterationExpand2" algorithm, however, is actually competitive here, more than doubling the queries per second of the Brute Force approach, and reaching more than 60% as fast as some tree algorithms.
 
 For Euclidean distances, however, we cannot recommend our algorithms against competitors.
 
@@ -134,15 +134,15 @@ We are somewhat disappointed in our results here, but not terribly surprised.  R
 
 ### Glove 25-dimension Angular distance
 
-The GloVe ("Global Vectors for Word Representation") dataset "is an unsupervised learning algorithm for obtaining vector representations for words. Training is performed on aggregated global word-word co-occurrence statistics from a corpus, and the resulting representations showcase interesting linear substructures of the word vector space" according to the authors. [@pennington2014glove]
+The GloVe ("Global Vectors for Word Representation") data set "is an unsupervised learning algorithm for obtaining vector representations for words. Training is performed on aggregated global word-word co-occurrence statistics from a corpus, and the resulting representations showcase interesting linear substructures of the word vector space" per the authors. [@pennington2014glove]
 
-It is one of the built-in datasets in the ann-benchmark tool.  Under the hood, this isusing a euclidean distance function, once the angular coordinates are transformed, so the relative performance is similar to the euclidean dataset.
+It is one of the built-in data sets in the ANN-benchmark tool.  Under the hood, this issuing a euclidean distance function, once the angular coordinates are transformed, so the relative performance is similar to the euclidean data set.
 
 Of note, we include only results that were full (not approximate) nearest neighbor solutions.
 
-These results include the addition of the FAISS algorithm, one of the graph index based NN solvers which came out of Facebook Research in recent years.[@FAISS2017]  On these datasets, FAISS is a beast, but unfortunately it is a very highly tuned GPU-based implementation which makes it difficult to adapt to unsupported distance functions, such as the Geodesic we target with Trilateration.  We leave it here for information, but are unable to compare it on our core task.
+These results include the addition of the FAISS algorithm, one of the graph index based NN solvers which came out of Facebook Research in recent years.[@FAISS2017]  On these data sets, FAISS is a beast, but unfortunately it is a very highly tuned GPU-based implementation which makes it difficult to adapt to unsupported distance functions, such as the Geodesic we target with Trilateration.  We leave it here for information, but are unable to compare it on our core task.
 
-Note that our performance has suffered again similarly to with the random euclidean dataset.  Trilateration is extremely slow; as is TrilaterationExpand.  TrilaterationExpand2 beats BruteForce and is somewhat shy of the Tree-based algorithms.  But we are not competitive in this space.
+Note that our performance has suffered again similarly to with the random euclidean data set.  Trilateration is extremely slow; as is TrilaterationExpand.  TrilaterationExpand2 beats BruteForce and is somewhat shy of the Tree-based algorithms.  But we are not competitive in this space.
 
 ```{html echo=FALSE}
 <!--
@@ -201,11 +201,11 @@ p <- ggplot(data=times, aes(x=Algorithm, y=QPS)) +
 p
 ```
 
-Similar to the Euclidean distance function, our underperformance here is not particularly surprising as, again, this is not a particularly expensive calculation at the individual level.  FAISS, BallTree, and KD-Tree algorithms trade off more pre-processing time for pruning techniques to divide their search area quickly when querying.  This approach does not necessarily optimize for fewer calls to the distance function, so when that function is more expensive, those calls have more impact.  While our algorithm substitutes subtraction as a proxy for the distance function, we see great improvements when that substitution has high savings, but less improvement when the distance cost was already low.
+Similar to the Euclidean distance function, our under-performance here is not particularly surprising as, again, this is not a particularly expensive calculation at the individual level.  FAISS, BallTree, and KD-Tree algorithms trade off more pre-processing time for pruning techniques to divide their search area quickly when querying.  This approach does not necessarily optimize for fewer calls to the distance function, so when that function is more expensive, those calls have more impact.  While our algorithm substitutes subtraction as a proxy for the distance function, we see great improvements when that substitution has high savings, but less improvement when the distance cost was already low.
 
 ### NN Results Summary
 
-As we hoped, we outperformed generic algorithms on Geodesic distance queries, however the degree to which we outperformed them -- some 30 times -- exceeded our expectations.  Moreso we were able to do so with a training time some five times less than the next best performing Ball tree algorithm (58 seconds training time for Trilateration, 258 seconds for Ball Tree).
+As we hoped, we outperformed generic algorithms on Geodesic distance queries, however the degree to which we outperformed them -- some 30 times -- exceeded our expectations.  More-so we were able to do so with a training time some five times less than the next best performing Ball tree algorithm (58 seconds training time for Trilateration, 258 seconds for Ball Tree).
 
-Our algorithm severely underperformed on the Euclidean and Angular distance functions, but this is unsurprising, as the existing algorithms have been heavily tuned for those use cases.
+Our algorithm severely under performed on the Euclidean and Angular distance functions, but this is unsurprising, as the existing algorithms have been heavily tuned for those use cases.
 

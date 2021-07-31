@@ -4,10 +4,11 @@ author: "Chip Lynch"
 date: "2/26/2021"
 output: pdf_document
 ---
+$$\\[0.5in]$$
 
 # Review of Current Literature
 
-We divide our current literature review into sevveral major sections:
+We divide our current literature review into several major sections:
 
 1. Geospatial computational considerations
 2. Multilateration
@@ -18,23 +19,23 @@ We divide our current literature review into sevveral major sections:
 
 The key to our problem is accurate distance calculation on the Earth.  In particular, we explore the topic of the computational complexity of a single call to the distance function for geospatial distances.
 
-In general, the difficulty of determining distances on the earth goes back to the origins of sailing and before, with modern geography tracing its origins to Eratosthenes, whose claim is to be the first to calculate the circumference of the earth arund 200BC, and who himself was building on the ideas of a spherical earth from Pythagoras and others around 500BC.  [@Kaplan2018]
+In general, the difficulty of determining distances on the earth goes back to the origins of sailing and before, with modern geography tracing its origins to Eratosthenes, whose claim is to be the first to calculate the circumference of the earth around 200BC, and who himself was building on the ideas of a spherical earth from Pythagoras and others around 500BC.  [@Kaplan2018]
 
 ### Haversine
-The Haversine is the measurement of distances along a sphere; particularly great-circle (minimum) distances on a spherical earth's surface.  Tables of the Haversine were published around 1800AD, although the term was not coined until aroudn 1835 by James Inman.[@VanBrummelen2012]
+The Haversine is the measurement of distances along a sphere; particularly great-circle (minimum) distances on a spherical earth's surface.  Tables of the Haversine were published around 1800AD, although the term was not coined until around 1835 by James Inman.[@VanBrummelen2012]
 
 Given the radius of a spherical representation of the earth as $r = 6356.752 km$ and the coordinates of two points (latitude, longitude) given by $(\phi_1, \lambda_1)$ and $(\phi_2, \lambda_2)$, the distance $d$ between those points along the surface of the earth is [@gade2010]:
 
 $$d = 2r\sin^{-1}(\sqrt{\sin^2(\frac{\phi_2-\phi_1}{2}) +\cos(\phi_1)\cos(\phi_2)\sin^2(\frac{\lambda_2-\lambda_1}{2})})$$
 
-Obviously this is somewhat computationally complex, comprising five trigonometric functions, two subtractions and a square root.  While it is a closed form solution, it causes an error over long distances of up to 0.3%, which can mean distances are off by up to 3 meters over distances of 1000 kilometers.  From the equator to the north pole, which on a sphere is defined as precisely 10,000 km, the actual distance is off by over 2 km, which is a sizeable error for even the most robust applications.
+Obviously this is somewhat computationally complex, comprising five trigonometric functions, two subtractions and a square root.  While it is a closed form solution, it causes an error over long distances of up to 0.3%, which can mean distances are off by up to 3 meters over distances of 1000 kilometers.  From the equator to the north pole, which on a sphere is defined as precisely 10,000 km, the actual distance is off by over 2 km, which is a sizable error for even the most robust applications.
 
 ### Vincenty's Formula
 The shortcomings of the spherical calculation was thoroughly discussed by Walter Lambert in 1942.[@Lambert1942]  However it wasn't until 1975 that an iterative computational approach came about to give more accurate distance measurements with a model of the earth more consistent with reality.  By considering the earth as an ellipsoid, rather than a sphere, the distance calculations are more complex, but far more precise.  Vincenty was able to create an iterative approach accurate down to the millimeter level on an ideal elliptical earth; far more accurate than the Haversine calculations[@Vincenty1975].  This algorithm, however, was a series which failed to converge for points at near opposite sides of the earth.[@Karney2013]
 
 
 ### Karney's Formula
-Karney was able to improve upon this in 2013 to fix these antipodal non-convergences, and the resulting formulae are now widely available in geospatial software libraries where precision is required (commonly referred to as "Geodesic" distances. [@Karney2013]  This is currently the state-of-the art implementation of precise geospatial distances.  Implementations of this approach have already been implemented in Python (in the Geopy library), which we use in our Python implementations.[@geopy]
+Karney was able to improve upon this in 2013 to fix these antipodal non-convergences, and the resulting formula are now widely available in geospatial software libraries where precision is required (commonly referred to as "Geodesic" distances. [@Karney2013]  This is currently the state-of-the art implementation of precise geospatial distances.  Implementations of this approach have already been implemented in Python (in the Geopy library), which we use in our Python implementations.[@geopy]
 
 
 ## Multilateration
@@ -48,7 +49,7 @@ There are numerous uses of multilateration as an approach to determining the pos
 * Air Traffic Control [@Strohmeier2018], [@Kazel1972]
 * Machine Learning [@Tillquist2016]
 
-Many of these papers describe mechanisms for taking multilateration measurements, from Radar, Wireless Networks, Lasers, Satellites, etc. and *_transforming them into another coordinate system_*, and acting on that information.  The cost of this transformation is itself expensive, requiring iterative numerical techniques for real world solutions.[@Lee1975]  These perspectives do not address using multilateration data in any more direct way for eventual computations such as to sove Nearest Neighbor or Network Adequacy; we discuss those problems separately next.
+Many of these papers describe mechanisms for taking multilateration measurements, from Radar, Wireless Networks, Lasers, Satellites, etc. and *_transforming them into another coordinate system_*, and acting on that information.  The cost of this transformation is itself expensive, requiring iterative numerical techniques for real world solutions.[@Lee1975]  These perspectives do not address using multilateration data in any more direct way for eventual computations such as to solve Nearest Neighbor or Network Adequacy; we discuss those problems separately next.
 
 
 ## Nearest Neighbor
@@ -61,7 +62,7 @@ Note that it is possible that such a point does not exist if there are multiple 
 
 The k-nearest neighbors ($kNN$) of a given point $q$ as above is the list of $k$ points $R = p_1..p_k \in P$ such that $D(p_k, q)$ is the lowest value of $D(p, q)$ over all $p \in P$ such that $D(p', q)$ for $p' \ne p$ and $p' \not \in R$.  It should be evident that $NN = kNN$ when $k = 1$.
 
-An approximate nearest neighbor ($ANN$) algorithm is one which will provide $k$ points $R' = p_1..p_k \in P$, however it does *_not_* guarantee that there exists no point in $P \not \in R'$ closer than any point in $R'$.  A $c-ANN$ formulation, for example, requires that, if there *_is_* such a point $p'$, that it cannot be more than some $\epsilon < c$ farther from $q$ than any point $p_i \in R'$; that is, a solution must guarantee that $D(p, q) < c*D(p', q)$   In general, $ANN$s are used when we can get a 'close enough' solution algorithmically faster than a perfect $kNN$ solution.  For our purposes, we largely ignore $ANN$s except for their historical value, as our construction did not yield algorithms that exhibited this beneficial tradeoff.  See the "TrilatApprox" algorithm section for some more discussion.
+An approximate nearest neighbor ($ANN$) algorithm is one which will provide $k$ points $R' = p_1..p_k \in P$, however it does *_not_* guarantee that there exists no point in $P \not \in R'$ closer than any point in $R'$.  A $c-ANN$ formulation, for example, requires that, if there *_is_* such a point $p'$, that it cannot be more than some $\epsilon < c$ farther from $q$ than any point $p_i \in R'$; that is, a solution must guarantee that $D(p, q) < c*D(p', q)$   In general, $ANN$s are used when we can get a 'close enough' solution algorithmically faster than a perfect $kNN$ solution.  For our purposes, we largely ignore $ANN$s except for their historical value, as our construction did not yield algorithms that exhibited this beneficial trade-off.  See the "TrilatApprox" algorithm section for some more discussion.
 
 For clarity in this paper we use the common notation $|P|$ and $|Q|$ to refer to the number of points in $P$ and $Q$ respectively.
 
@@ -94,7 +95,7 @@ Also, while worst-case computational analysis of $NN$ algorithms is necessarily 
 ### A History of k-NN Solving Algorithms
 
 #### Brute-Force
-The naive approach to solving k-nn is a brute-force algorithm, iterating over every point $p in P$ and keeping track of the lowest k distances.  This is trivial to examine:
+The naive approach to solving $k-nn$ is a brute-force algorithm, iterating over every point $p in P$ and keeping track of the lowest k distances.  This is trivial to examine:
 
 1. Training Time Complexity: Zero; i.e. $O(1)$  No pre-processing is performed.
 2. Memory Space: $|P|$, which is simply the cost of storing the list of points $p \in P$
@@ -104,7 +105,7 @@ The naive approach to solving k-nn is a brute-force algorithm, iterating over ev
 
 #### Space Partitioning Trees
 
-Space paritioning trees use a trie to arrange points from $p$ into groups with a hierarchical search structure, such that, generally, points which are close to one another exist in nearby hierarchies.  The $k-d$ tree was described in 1975.[@Bentley1975]  This partitions a space by dividing the underlying points at the median point along one of the dimensional axes, recursively, resulting in a searchable trie.  An adaptation of this - the Ball-Tree - partitions the space into hyperspheres, rather than along dimensional axes.[@Liu2006]
+Space partitioning trees use a trie to arrange points from $p$ into groups with a hierarchical search structure, such that, generally, points which are close to one another exist in nearby hierarchies.  The $k-d$ tree was described in 1975.[@Bentley1975]  This partitions a space by dividing the underlying points at the median point along one of the dimensional axes, recursively, resulting in a searchable trie.  An adaptation of this - the Ball-Tree - partitions the space into hyper-spheres, rather than along dimensional axes.[@Liu2006]
 
 These are straightforward structures that are easy to describe and implement.
 
@@ -124,9 +125,9 @@ For a given threshold $\epsilon > 0$, and a hash function $H(p) => S$ maps to a 
 * if $d(p, q) < \epsilon$ then $H(p) = H{q}$ with probability at least $\lambda_1$
 * if $d(p, q) > \epsilon$ then $H(p) \neq H(q)$ with probability at MOST $\lambda_2$
 
-And a value $k$ which is the approximate number of points $p \in P$ which hash to a given value.  [@PJA2010] think of this value as the fraction $sel = k/|P|$: "the selectivity sel is the fraction of the data collection that is returned in the short-list, on average, by the algorithm".[@PJA2010]
+And a value $k$ which is the approximate number of points $p \in P$ which hash to a given value.  [@PJA2010] think of this value as the fraction $sel = k/|P|$: "the selectivity $sel$ is the fraction of the data collection that is returned in the short-list, on average, by the algorithm".[@PJA2010]
 
-LSH as a concept lends itself to no specific complexity analyis, since it is dependent on the particular hash functions chosen. LSH can leverage $L$ multiple hashes, and the selection of the number and type of hashing algorithm is itself the basis of research and variety.[@PJA2010],[@Chen2018]
+LSH as a concept lends itself to no specific complexity analysis, since it is dependent on the particular hash functions chosen. LSH can leverage $L$ multiple hashes, and the selection of the number and type of hashing algorithm is itself the basis of research and variety.[@PJA2010],[@Chen2018]
 
 1. Training Time Complexity: if the hash function(s) take time $t()$, the LSH prep takes $O(|P|*L*O(t))$ - the cost of executing the functions to hash into $L$ buckets against all points $p \in P$
 2. Memory Space: a single hash function typically requires $O(|P|)$ space or for $L$ hashes memory space: $O(L*|P|)$.
@@ -141,7 +142,7 @@ A good overview of this approach was available from Liudmila Prokhorenkova: "Rec
 
 The construction costs of these structures can be very high.  A Brute Force construction of a k-Nearest Neighbor Graph $(kNNG)$ has time complexity $O(n^2)$ which is of course completely untenable for large data sets.  Approaches exist to improve upon this, including improvements resulting in approximate results, but this class still tends to trade the highest construction cost for some of the fastest query times in high dimensions.[@Dong2011], [@Prokhorenkova2019]
 
-One interesting point about FAISS is that it is designed to be highly parallelized, and particularly focused on optimizations available to GPUs.[@FAISS2017]  This may be a disadvantage for comparisons with the ANN Benchmark suite that we use, which forces single-threaded operation, in order to test the algorithm rather than the hardware.[@Amueller2020]
+One interesting point about FAISS is that it is designed to be highly parallel, and particularly focused on optimization available to GPUs.[@FAISS2017]  This may be a disadvantage for comparisons with the ANN Benchmark suite that we use, which forces single-threaded operation, in order to test the algorithm rather than the hardware.[@Amueller2020]
 
 As these are relatively new, and as implementations focus on real-world performance, rather than theoretical, "Graph-based approaches are empirically shown to be very successful for the nearest neighbor search (NNS). However, there has been very little re-search on their theoretical guarantees."[@Prokhorenkova2019]
 
@@ -155,19 +156,19 @@ As with LSH, Graph search methods differ in their specific choices; typically th
 
 #### Dealing with Expensive distance functions
 
-We have found only one approach in the literature that focuses squarely on the same problem that we do here; namely: optimizing an NN algorithm when the distance function $D$ itself is very expensive.  Where "very" here is loosely imagined as meaning that it is costly enough to change the relative efficiencies of existing NN algorithms.
+We have found only one approach in the literature that focuses squarely on the same problem that we do here; namely: optimizing an NN algorithm when the distance function $D$ itself is very expensive.  Where "very" here is loosely imagined as meaning that it is costly enough to change the relative efficiency of existing NN algorithms.
 
-In the article "Indexing expensive functions for efficient multi-dimensional similarity search"[@Chen2011], the authors write "[...] _approaches so far have concentrated on reducing I/O, and ignored the computation cost. For an expensive distance function such as Lp norm with fractional p, the computation cost becomes the bottleneck_", and from their experimentation: "_the computation cost of the functions affects the performance as significant as the I/O cost_".  This is in line with our analysis, and was the root driver of both of our approaches.
+In the article "Indexing expensive functions for efficient multi-dimensional similarity search"[@Chen2011], the authors write "[...] _approaches so far have concentrated on reducing I/O, and ignored the computation cost. For an expensive distance function such as $L_p$ norm with fractional p, the computation cost becomes the bottleneck_", and from their experimentation: "_the computation cost of the functions affects the performance as significant as the I/O cost_".  This is in line with our analysis, and was the root driver of both of our approaches.
 
-At first glance their approach has similar goals as ours, but the resulting algorithm differs in several key ways.  First, Chen, et. al's approach relies a technique called Vector Approximation (VA) files, pioneered by [@Weber1998].  The VA structure is designed, according to the authors, to improve sequential scans on high dimensional data sets.  In this way it somewhat differs from our algorithms which apply to costly distance functions _even on low dimensionality data_.  The second primary difference between our and Chen et. al's approach, which is that we use data structures and sorted indexes explicitly to avoid sequential scans, with the intent of executing significantly less than $n$ comparisons in the average case (even with a proxy distance function).  By comparison, chen's approach, we believe, _requires_ one full sequential pass to establish a subset of points that may require comparison with the expensive distance function.  
+At first glance their approach has similar goals as ours, but the resulting algorithm differs in several key ways.  First, Chen, et. al's approach relies a technique called Vector Approximation (VA) files, pioneered by [@Weber1998].  The VA structure is designed, according to the authors, to improve sequential scans on high dimensional data sets.  In this way it somewhat differs from our algorithms which apply to costly distance functions _even on low dimensional data_.  The second primary difference between our and Chen et. al's approach, which is that we use data structures and sorted indexes explicitly to avoid sequential scans, with the intent of executing significantly less than $n$ comparisons in the average case (even with a proxy distance function).  By comparison, Chen's approach, we believe, _requires_ one full sequential pass to establish a subset of points that may require comparison with the expensive distance function.  
 
-Still, this remains the approach most similar to ours thats we can find.
+Still, this remains the approach most similar to ours that we can find.
 
 ## Network Adequacy Minimal Literature
 
-We can find no literature where this topic is solved in a particular algorighmic way.  There are numerous discussions in health care about satisfying network adequacy, but more as policy or health care topics than as computational approaches. [@Wishner2017],[@Mahdavi2011]
+We can find no literature where this topic is solved in a particular algorithmic way.  There are numerous discussions in health care about satisfying network adequacy, but more as policy or health care topics than as computational approaches. [@Wishner2017],[@Mahdavi2011]
 
-In general, it appears that most practical solutions are done in SQL databases which are commonly the source of member and provider data for health care datasets.  Still, there is little published here; this information is anecdotal based on the author's personal direct knowledge and informal research.
+In general, it appears that most practical solutions are done in SQL databases which are commonly the source of member and provider data for health care data sets.  Still, there is little published here; this information is anecdotal based on the author's personal direct knowledge and informal research.
 
 Satellite and cellular network discussions of this problem appear to be proprietary, but again anecdotally, appear to simply apply common Nearest-Neighbor algorithms.
 
