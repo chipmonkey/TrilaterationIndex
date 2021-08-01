@@ -482,6 +482,8 @@ mydist = 100
 
 We find these charts quite interesting.  What is happening?  we make several distinct observations:
 
+#### Accuracy
+First we wanted to reaffirm that the code remained 100% accurate... both algorithms agreed with one another completely, and the NAP and adequacy thresholds were calculated identically.  We focus on performance in our results, then, given the 100% accuracy of all approaches, as expected.
 
 #### Processing time is directly realted to |Q|
 As the size of the query data set ($Q$) increases along the y-axis, it's clear that the computation time increases at roughly the same rate.  The top row is roughly 3x the row below it (the ratio of 32,000:10,000)... the next row is roughly half (10,000:5000), and so on.  This makes sense; if we consider the query a for loop over $Q$, which is how we implement it in another language, the cost should go up proportionately, and it clearly does.

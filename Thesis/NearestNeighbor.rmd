@@ -84,6 +84,8 @@ In an attempt to gain benefit from the relaxed constraints of an "approximate" $
 
 We ended up abandoning this approach after only a few tests - there was a significant drop in recall (the mechanism by which ANN-benchmarks measures effectiveness of $aNN$ algorithms) - up to 99%, which is unacceptable for these approximations - with no particular improvement in performance.  This effectively removed $aNN$ from our consideration; our results are primarily focused on exact $NN$ results as a consequence.
 
+Note that the TIA algorithm is the only one that is not 100% accurate by design, and since it under-performed so much, the remaining analysis does not focus on accuracy, but instead on performance, given that the remaining algorithms are guaranteed by design to be 100% accurate.
+
 #### TrilaterationExpand (TIE)
 
 We theorized that the TRI approach may be slowed down by the overhead of having to iterate one point at a time, and by not utilizing more than one reference point early in the process.  Given the efficiency of the $Within()$ function (see [Time Complexity]), we wondered if we should treat the distance $d$ as the target variable, and use an incremental search to zero in on the proper value to result in $k$ neighbors within $d$.

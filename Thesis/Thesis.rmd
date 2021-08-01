@@ -4,8 +4,9 @@ author: |
   | Chip Lynch
   |
   | A Thesis Submitted to the University of Louisville
-  | Speed Engineering School
+  | J.B. Speed School of Engineering
   | for the Degree of Master of Science in Computer Science
+  |
 date: "07/20/2021"
 output:
   pdf_document:

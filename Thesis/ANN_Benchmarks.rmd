@@ -17,6 +17,9 @@ We expect that our algorithm will not fare well in the second and third tests as
 
 Lastly note that all algorithms in our results section are 100% accurate.  The TIA was the only one which sacrificed accuracy for speed, and that algorithm performed so poorly we excluded it from the results entirely.
 
+### A Note on Accuracy
+All results below produced 100% accurate results.  All algorithms produced identical results, as the dataset is fully deterministic for $NN$ and $kNN$.  There was a chance that synthetic data would have allowed ties in some situations that could have been broken in different ways but this did not happen in practice.  While the $ANN$ software allows for "approximate" results, it is more than sufficient for exact results, and all of the algorithms used here were measured with exact results, at 100% accuracy.
+
 ### 3D Geodesic 150k points
 
 ```{html echo=FALSE}
