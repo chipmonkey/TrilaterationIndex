@@ -8,7 +8,7 @@ $$\\[2.5in]$$
 
 \centering
 
-# Acknowledgments {.unlisted .unnumbered}
+# ACKNOWLEDGEMENTS {.unlisted .unnumbered}
 
 \justify
 

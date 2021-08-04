@@ -1,13 +1,22 @@
 $$\\[0.5in]$$
 
-# Appendix
+\centering
 
-## Code and datasets
+# REFERENCES {-}
+
+\raggedright
+
+::: {#refs}
+:::
+
+# APPENDIX {.unlisted .unnumbered}
+
+## Code and data sets {.unlisted .unnumbered}
+
+When possible, this document will be published with the code and data referenced below, but the original location for these files, if not attached, are as follows:
 
 All code including markdown and custom sample data files to generate this document are available here: https://github.com/chipmonkey/TrilaterationIndex
 
 A custom fork and branch of scikit-learn which includes the Python/Cython implementation of our Multilateration Nearest-Neighbor and related distance functions is available here: https://github.com/chipmonkey/scikit-learn/tree/feature/chip-test-index
 
 A custom fork and branch of the ANN Benchmarks code which includes hooks to our Multilateration NN implementation (from the custom scikit-learn fork) is available here: https://github.com/chipmonkey/ann-benchmarks
-
-## References

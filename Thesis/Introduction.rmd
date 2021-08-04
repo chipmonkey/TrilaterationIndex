@@ -8,7 +8,7 @@ output:
 ---
 $$\\[0.5in]$$
 
-# Introduction
+# INTRODUCTION
 
 ## Problem Space 1 - Satellite Communication and Expensive Distance Functions
 

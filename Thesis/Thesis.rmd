@@ -1,12 +1,11 @@
 ---
-title: "Multilateration Index"
+title: "MULTILATERATION INDEX"
 author: |
   | Chip Lynch
   |
   | A Thesis Submitted to the University of Louisville
   | J.B. Speed School of Engineering
   | for the Degree of Master of Science in Computer Science
-  |
 date: "07/20/2021"
 output:
   pdf_document:
@@ -15,8 +14,9 @@ output:
   html_document: default
 institute: University of Louisville
 bibliography: references.bib
-geometry: "left=1.5in,right=1in,top=1in,bottom=1in"
+geometry: "left=0cm,right=0cm,top=1in,bottom=0cm"
 indent: false
+toc-title: "TABLE OF CONTENTS"
 header-includes: 
   - \renewcommand\refname{References}
   - \usepackage{placeins}
@@ -24,7 +24,6 @@ header-includes:
   - \usepackage{ragged2e}
   - \AtBeginDocument{\pagenumbering{roman}}
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.pos = 'H')
 # knitr::opts_chunk$set(fig.pos = 'H')
@@ -48,7 +47,6 @@ knitr::knit_hooks$set(plot = function (x, options) {
 })
 ```
 
-\newgeometry{left=0cm,right=0cm,top=0cm,bottom=0cm}
 
 ```{r include=TRUE, fig.align="center", echo=FALSE, out.width="100%", out.height="100%"}
 knitr::include_graphics("./Signature_Sheet_Chip Lynch.pdf")
@@ -60,22 +58,30 @@ knitr::include_graphics("./Signature_Sheet_Chip Lynch.pdf")
 ```
 
 \newpage
+\doublespacing
+```{r child = 'Abstract.rmd'}
+```
+
+\singlespacing
+
+\newpage
+$$\\[0.5in]$$
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
-
+\renewcommand\contentsname{TABLE OF CONTENTS}
 \tableofcontents
 
 \newpage
 
+\renewcommand\listtablename{LIST OF TABLES}
 \listoftables
 
+\renewcommand\listfigurename{LIST OF FIGURES}
 \listoffigures
 
 \newpage
 
 \doublespacing
-```{r child = 'Abstract.rmd'}
-```
 
 \cleardoublepage
 \pagenumbering{arabic}
