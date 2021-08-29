@@ -5,7 +5,7 @@ output:
 ---
 $$\\[0.5in]$$
 
-# Network Adequacy
+# NETWORK ADEQUACY
 
 The trilateration index was originally designed to improve efficiency of the "network adequacy" (NA) problem for health care.  Network adequacy is a common legal requirement for medicare or insurance companies with constraints such as:
 

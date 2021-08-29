@@ -1,0 +1,34 @@
+---
+title: "CurriculumVita"
+author: "Chip Lynch"
+date: "7/30/2021"
+output: pdf_document
+---
+
+\centering
+
+# CURRICULUM VITA {.unlisted .unnumbered}
+
+\justifying
+
+```
+NAME:         Chip Lynch
+
+ADDRESS:      1922 Wrocklage Ave.
+              Louisville, KY, 40205
+
+EDUCATION:    B.S. Mathematics / B.S. Computer Science
+              Xavier University
+              1997
+
+              M.S. Computer Engineering and Computer Science
+              University of Louisville
+              2021
+
+
+PUBLICATIONS:
+```
+
+* "Discrepancies in metabolomic biomarker identification from patient-derived lung cancer revealed by combined variation in data pre-treatment and imputation methods" - Metabolomics
+* "Prediction of lung cancer patient survival via supervised machine learning classification techniques" - International Journal of Medical Informatics
+* "Application of unsupervised analysis techniques to lung cancer patient data" - PubMed / PlosOne

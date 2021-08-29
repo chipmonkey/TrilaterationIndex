@@ -6,7 +6,7 @@ output: pdf_document
 ---
 $$\\[0.5in]$$
 
-# Review of Current Literature
+# REVIEW OF CURRENT LITERATURE
 
 We divide our current literature review into several major sections:
 

@@ -8,7 +8,7 @@ output:
 ---
 $$\\[0.5in]$$
 
-# Experimentation
+# EXPERIMENTATION
 
 ## Experimental Setup
 

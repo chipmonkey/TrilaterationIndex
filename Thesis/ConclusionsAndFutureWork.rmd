@@ -1,6 +1,6 @@
 $$\\[0.5in]$$
 
-# Conclusions
+# CONCLUSIONS
 
 We find that we were able to achieve our original goal, of designing data structures and related algorithms using Multilateration to improve upon Nearest Neighbor and Network Adequacy algorithms in situations where the distance function is computationally expensive.  We summarize the following results:
 
@@ -15,7 +15,7 @@ So our results are mixed, but for certain use cases which are predictable in adv
 \newpage
 $$\\[0.5in]$$
 
-# Future Work
+# FUTURE WORK
 
 There are a number of areas that we speculate, with minimal investigation, that Multilateration indexes and algorithms have benefits worth exploring.  A brief list of such areas that may be good for future investigation include:
 

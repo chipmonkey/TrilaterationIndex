@@ -2,9 +2,13 @@
 title: "MULTILATERATION INDEX"
 author: |
   | Chip Lynch
-  |
+  | B.S. Xavier University, 1997
+  | 
   | A Thesis Submitted to the University of Louisville
+  |
   | J.B. Speed School of Engineering
+  | Department of Computer Engineering and Computer Science
+  |
   | for the Degree of Master of Science in Computer Science
 date: "07/20/2021"
 output:
@@ -12,6 +16,7 @@ output:
     number_sections: true
     extra_dependencies: ["float"]
   html_document: default
+  keep_tex: true
 institute: University of Louisville
 bibliography: references.bib
 geometry: "left=0cm,right=0cm,top=1in,bottom=0cm"
@@ -68,16 +73,26 @@ knitr::include_graphics("./Signature_Sheet_Chip Lynch.pdf")
 $$\\[0.5in]$$
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
-\renewcommand\contentsname{TABLE OF CONTENTS}
+\renewcommand\contentsname{}
+\centering
+# TABLE OF CONTENTS {.unlisted .unnumbered}
+\justifying
 \tableofcontents
 
 \newpage
 
-\renewcommand\listtablename{LIST OF TABLES}
+\renewcommand\listtablename{}
+\centering
+# LIST OF TABLES {.unlisted .unnumbered}
+\justifying
 \listoftables
 
-\renewcommand\listfigurename{LIST OF FIGURES}
+\renewcommand\listfigurename{}
+\centering
+# LIST OF FIGURES {.unlisted .unnumbered}
+\justifying
 \listoffigures
+
 
 \newpage
 
@@ -119,8 +134,12 @@ $$\\[0.5in]$$
 ```{r child = 'ConclusionsAndFutureWork.rmd'}
 ```
 
-
 \newpage
 
 ```{r child = 'Appendix.rmd'}
+```
+
+\newpage
+
+```{r child='CurriculumVita.rmd'}
 ```

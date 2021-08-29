@@ -4,12 +4,17 @@ $$\\[0.5in]$$
 
 # REFERENCES {-}
 
-\raggedright
+\justifying
 
 ::: {#refs}
 :::
 
+\newpage
+\centering
+
 # APPENDIX {.unlisted .unnumbered}
+
+\justifying
 
 ## Code and data sets {.unlisted .unnumbered}
 
