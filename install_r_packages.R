@@ -9,4 +9,4 @@ install.packages(c('ggplot2', 'ggforce', 'rdist'))
 install.packages(c('mapproj', 'maps'))
 
 # SQL_Results.rmd
-install.packages(c('data.table', 'tidyverse', 'gridExtra'))
+install.packages(c('data.table', 'tidyverse', 'gridExtra', 'ggdist'))

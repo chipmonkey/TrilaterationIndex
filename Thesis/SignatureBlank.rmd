@@ -1,0 +1,43 @@
+---
+title: "Signature Page"
+author: "Chip Lynch"
+output:
+  pdf_document: default
+---
+
+$$\\[1.5in]$$
+
+\centering
+A MULTILATERATION ALTERNATE COORDINATE SYSTEM
+
+&nbsp; \newline
+Submitted by:
+
+&nbsp; \newline
+Chip Lynch
+
+&nbsp; \newline
+A Thesis Approved on:
+
+&nbsp; \newline
+2021/07/29
+
+&nbsp; \newline
+By the following Reading and Examination Committee:
+
+
+&nbsp; \newline
+\noindent\rule{10cm}{0.4pt}
+Dr. Mehmed Kantardzic, Thesis Chair
+
+
+&nbsp; \newline
+\noindent\rule{10cm}{0.4pt}
+Dr. Hermann Frieboes, Committee Member
+
+
+&nbsp; \newline
+\noindent\rule{10cm}{0.4pt}
+Dr. Ahmed Desoky, Committee Member
+
+\justifying

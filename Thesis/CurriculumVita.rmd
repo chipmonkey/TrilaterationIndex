@@ -4,10 +4,10 @@ author: "Chip Lynch"
 date: "7/30/2021"
 output: pdf_document
 ---
-
+$$\\[1.5in]$$
 \centering
 
-# CURRICULUM VITA {.unlisted .unnumbered}
+# CURRICULUM VITA {-}
 
 \justifying
 

@@ -1,15 +1,23 @@
 ---
-title: "MULTILATERATION INDEX"
+title: "A MULTILATERATION ALTERNATE COORDINATE SYSTEM"
 author: |
+  | By
   | Chip Lynch
   | B.S. Xavier University, 1997
   | 
-  | A Thesis Submitted to the University of Louisville
+  | A Thesis Submitted to the Faculty of the
+  | J.B. Speed School of Engineering of the University of Louisville
+  | in Partial Fulfillment of the Requirements
+  | for the Degree of
   |
-  | J.B. Speed School of Engineering
+  |
+  | Master of Science
+  | in Computer Science
+  |
   | Department of Computer Engineering and Computer Science
-  |
-  | for the Degree of Master of Science in Computer Science
+  | University of Louisville
+  | Louisville, Kentucky
+
 date: "07/20/2021"
 output:
   pdf_document:
@@ -27,7 +35,13 @@ header-includes:
   - \usepackage{placeins}
   - \usepackage{setspace}
   - \usepackage{ragged2e}
+  - \usepackage{sectsty}
   - \AtBeginDocument{\pagenumbering{roman}}
+  - \AtBeginDocument{\sectionfont{\normalfont}}
+  - \AtBeginDocument{\subsectionfont{\normalfont}}
+  - \AtBeginDocument{\subsubsectionfont{\normalfont}}
+  - \AtBeginDocument{\paragraphfont{\normalfont}}
+  - \AtBeginDocument{\subparagraphfont{\normalfont}}
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.pos = 'H')
@@ -53,12 +67,16 @@ knitr::knit_hooks$set(plot = function (x, options) {
 ```
 
 
-```{r include=TRUE, fig.align="center", echo=FALSE, out.width="100%", out.height="100%"}
-knitr::include_graphics("./Signature_Sheet_Chip Lynch.pdf")
+\newgeometry{left=1.5in,right=1in,top=1in,bottom=1in}
+&nbsp;
+\pagebreak
+\thispagestyle{empty}
+
+\newpage
+```{r child = 'SignatureBlank.rmd'}
 ```
 
-\newgeometry{left=1.5in,right=1in,top=1in,bottom=1in}
-
+\newpage
 ```{r child = 'Acknowledgements.rmd'}
 ```
 
@@ -80,13 +98,15 @@ $$\\[0.5in]$$
 \tableofcontents
 
 \newpage
-
+$$\\[0.5in]$$
 \renewcommand\listtablename{}
 \centering
 # LIST OF TABLES {.unlisted .unnumbered}
 \justifying
 \listoftables
 
+\newpage
+$$\\[0.5in]$$
 \renewcommand\listfigurename{}
 \centering
 # LIST OF FIGURES {.unlisted .unnumbered}

@@ -7,9 +7,16 @@ output:
 ---
 $$\\[0.5in]$$
 
-# A Multilateration Alternate Coordinate System {.unlisted .unnumbered}
+\centering
+# ABSTRACT {.unlisted .unnumbered}
 
-## Abstract {.unlisted .unnumbered}
+## A MULTILATERATION ALTERNATE COORDINATE SYSTEM {.unlisted .unnumbered}
+Chip Lynch
+
+July 20, 2021
+
+\justifying
+
 We present an alternative method for pre-processing and storing point data, particularly for Geospatial points, by storing multilateration distances to fixed points rather than coordinates such as Latitude and Longitude.  We explore the use of this data to improve query performance for some distance related queries such as nearest neighbor and query-within-radius (i.e. "find all points in a set $P$ within distance $d$ of query point $q$").
 
 Further, we discuss the problem of "Network Adequacy" common to medical and communications businesses, to analyze questions such as "are at least 90% of patients living within 50 miles of a covered emergency room".  This is in fact the class of question that led to the creation of our pre-processing and algorithms, and is a generalization of a class of Nearest-Neighbor problems.
